@@ -10,7 +10,7 @@ import com.ideas2it.employeemanagement.model.Employee;
 /**
  * Class to interact with database
  * @author Sharon V
- * @created 13-03-2021
+ * @created 15-03-2021
  */
 public interface EmployeeDao {
       

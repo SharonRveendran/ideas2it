@@ -3,7 +3,7 @@ package com.ideas2it.employeemanagement.model;
 /**
  * Calss for address Pojo
  * @author Sharon v 
- * @version 13/03/2021
+ * @version 15/03/2021
  */
 public class Address {   
     private int addressId;

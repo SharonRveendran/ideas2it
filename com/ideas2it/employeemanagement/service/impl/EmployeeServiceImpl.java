@@ -18,7 +18,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
 /**
  * Class for Employee service
  * @author Sharon V
- * @created 13-03-2021
+ * @created 15-03-2021
  */
 public class EmployeeServiceImpl implements EmployeeService {
     EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
@@ -62,21 +62,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     private String getEmployeeDetails(Employee employee) {
         if (null != employee ) {
             int temporaryAddressCount = 1;
-            String addressesDetails = employee.toString();
+            String employeeDetails = employee.toString();
             List<Address> employeeAddresses = employee.getEmployeeAddresses();
             for (int index = 0; index < employeeAddresses.size(); index++) {
                 if ("permanent".equals(employeeAddresses.get(index).getAddressType())) {
-                    addressesDetails = addressesDetails +
+                    employeeDetails = employeeDetails +
                             "\nPermanent address\n-----------------\n\n";
                 }
                 if ("temporary".equals(employeeAddresses.get(index).getAddressType())) {
-                    addressesDetails = addressesDetails + "\nTemporary address " +
+                    employeeDetails = employeeDetails + "\nTemporary address " +
                             temporaryAddressCount + "\n--------------------\n\n";
                     temporaryAddressCount++;
                 }    
-                addressesDetails = addressesDetails + employeeAddresses.get(index).toString();
+                employeeDetails = employeeDetails + (employeeAddresses.get(index)).toString();
             }
-        return addressesDetails;
+        return employeeDetails;
         } else {
             return null;
         }        
@@ -117,7 +117,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = new ArrayList<Employee>();
         employees = employeeDao.getAllEmployee();
         for(int index = 0; index < employees.size(); index++) {
-            employeesDetails.add(getEmployeeDetails(employees.get(index)));
+            employeesDetails.add(getEmployeeDetails(employees.get(index)));/*System.out.println(
+                                                                                                (
+                                                                                                   ((employees.get(index).getEmployeeAddresses()).get(0)).toString()
+                                                                                                 )
+                                                                                              );
+                                                                           System.out.println(
+                                                                                                (
+                                                                                                   ((employees.get(index).getEmployeeAddresses()).get(1)).toString()
+                                                                                                 )
+                                                                                              );*/
         }
         return employeesDetails;
     }

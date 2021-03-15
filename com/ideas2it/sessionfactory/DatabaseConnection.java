@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * class for providing database connectivity
  * @author Sharon v
- * @created 13/03/2021
+ * @created 15/03/2021
  */
 public class DatabaseConnection {
     private static DatabaseConnection databaseConnection = null;
