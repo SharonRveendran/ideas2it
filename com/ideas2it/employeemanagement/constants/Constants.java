@@ -6,9 +6,9 @@ package com.ideas2it.employeemanagement.constants;
  * @created 15-03-2021
  */
 public class Constants {
-    public final String crudOption = "\nSelect your option\n1 : Create employee\n"
+    public final String crudOption = "\nSelect your option\n\n1 : Create employee\n"
             + "2 : Read employee\n3 : Update employee\n"
- 	    + "4 : Delete employee\n5 : Display all\n6 : Exit\n";
+ 	    + "4 : Delete employee\n5 : Display all\n6 : Recover Employee\n7 : Exit\n";
     public final String updateOption = "\nWhat you want to update\n1 : Name\n"
             + "2 : Designation\n3 : Salary\n4 : DOB\n5 : Mobile\n6 : Address";  
     public final String getNameMessage = "\nEnter Name";

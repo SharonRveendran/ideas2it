@@ -51,8 +51,10 @@ public interface EmployeeDao {
      * Methode to update address
      * @param employeeAddress employee address object
      * @param option user given option for type of address
+     * @param option user given option for address
+     * @return true for successfull employee updation else false
      */
-    public void updateAddress(Address employeeAddress)throws SQLException;
+    public boolean updateAddress(Address employeeAddress, String input)throws SQLException;
   
     /**
      * Methode to get all employee object as a list
@@ -65,4 +67,17 @@ public interface EmployeeDao {
      * @ return true if id present else false
      */
     public boolean isIdExist(int id) throws SQLException;
+
+    /**
+     * Methode to recover deleted employee
+     * @param id employee id
+     */
+    public String recoverEmployee(int id) throws SQLException;
+
+    /**
+     * Methode to get addressList of employee
+     * @param employeeId
+     * @return employee address list.
+     */
+    public List <Address> getAddressList(int employeeId)throws SQLException; 
 }

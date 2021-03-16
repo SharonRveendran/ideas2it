@@ -36,18 +36,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
         preparedStatement.setInt(1, id);         
 	resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        Employee employee = new Employee(resultSet.getString(2),
-                      resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
-                      resultSet.getLong(3), resultSet.getDate(4),employeeAddresses);	                
-        do {
-             List<Address> employeeAddresses = new ArrayList<Address>();
-             Address employeeAddress = new Address(resultSet.getInt(7), resultSet.getInt(8),
-                     resultSet.getString(9), resultSet.getString(10),
-                     resultSet.getString(11),resultSet.getString(12),
-                     resultSet.getString(13), resultSet.getString(14));
-             employeeAddresses.add(employeeAddress);             
-        }while(resultSet.next());                  
-        return employee;
+        if(0 == resultSet.getInt(7)) {
+            Employee employee = new Employee(resultSet.getString(2),
+                          resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
+                          resultSet.getLong(3), resultSet.getDate(4),null);	                
+            List<Address> employeeAddressList = new ArrayList<Address>();
+            do {
+                 Address employeeAddress = new Address(resultSet.getInt(8), resultSet.getInt(9),
+                         resultSet.getString(10), resultSet.getString(11),
+                         resultSet.getString(12),resultSet.getString(13),
+                         resultSet.getString(14), resultSet.getString(15));
+                 employeeAddressList.add(employeeAddress);             
+            }while(resultSet.next());  
+            employee.setEmployeeAddresses(employeeAddressList);                
+            return employee;
+        } else { 
+            return null;
+        }
     }
 
     /**
@@ -59,29 +64,32 @@ public class EmployeeDaoImpl implements EmployeeDao {
         List<Employee> employees = new ArrayList<Employee>(); 
         preparedStatement = connection.prepareStatement
                 ("select * from employee inner join address on "
-                + "employee.id = address.employee_id");         
+                + "employee.id = address.employee_id where employee.is_deleted = 0 and address.is_deleted = 0");         
 	resultSet = preparedStatement.executeQuery();	
-        resultSet.next();               
-	do{       
-            Employee employee = new Employee(resultSet.getString(2),
-                      resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
-                      resultSet.getLong(3), resultSet.getDate(4),null);         
-            int employeeId = resultSet.getInt(1);
-            List<Address> employeeAddresses = new ArrayList<Address>();
-            while(employeeId == resultSet.getInt(1)) {
-                Address employeeAddress = new Address(resultSet.getInt(7), resultSet.getInt(8),
-                         resultSet.getString(9), resultSet.getString(10),
-                         resultSet.getString(11),resultSet.getString(12),
-                         resultSet.getString(13), resultSet.getString(14));
-                employeeAddresses.add(employeeAddress); 
-                if ( !resultSet.next()){
-                    flag = 1;
-                    break;
-                }               
-            } 
-            employee.setEmployeeAddresses(employeeAddresses);
-            employees.add(employee);
-        } while( 0 == flag);
+        if (resultSet.next()) {                     
+	    do{  
+                List<Address> employeeAddresses = new ArrayList<Address>();
+                int employeeId = resultSet.getInt(1);
+                Employee employee = new Employee(resultSet.getString(2),
+                          resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
+                          resultSet.getLong(3), resultSet.getDate(4),null);         
+                employeeId = resultSet.getInt(1);
+                
+                while(employeeId == resultSet.getInt(1)) {
+                    Address employeeAddress = new Address(resultSet.getInt(8), resultSet.getInt(9),
+                             resultSet.getString(10), resultSet.getString(11),
+                             resultSet.getString(12),resultSet.getString(13),
+                             resultSet.getString(14), resultSet.getString(15));
+                    employeeAddresses.add(employeeAddress); 
+                    if ( !resultSet.next()){
+                        flag = 1;
+                        break;
+                    }               
+                } 
+                employee.setEmployeeAddresses(employeeAddresses);
+                employees.add(employee);
+            } while( 0 == flag);
+        }
         return employees;
     }
       
@@ -93,13 +101,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
          List<Address> employeeAddresses = new ArrayList<Address>();
          Address employeeAddress;
 	 preparedStatement = connection.prepareStatement
-                 ("insert into employee values(?, ?, ?, ?, ?, ?)");
+                 ("insert into employee values(?, ?, ?, ?, ?, ?, ?)");
          preparedStatement.setInt(1, employee.getId());
 	 preparedStatement.setString(2, employee.getName());
 	 preparedStatement.setLong(3, employee.getMobile());
          preparedStatement.setDate(4, employee.getDob());
          preparedStatement.setString(5, employee.getDesignation());
 	 preparedStatement.setDouble(6, employee.getSalary());
+         preparedStatement.setInt(7, 0);
          preparedStatement.executeUpdate();
          preparedStatement = connection.prepareStatement
                  ("select max(id) from employee");
@@ -110,7 +119,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
          for (int index = 0; index < employeeAddresses.size(); index++) {
              employeeAddress = employeeAddresses.get(index);
              preparedStatement = connection.prepareStatement
-                     ("insert into address values(?, ?, ?, ?, ?, ?, ?, ?)");
+                     ("insert into address values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
              preparedStatement.setInt(1,0);
              preparedStatement.setInt(2,employeeId);
              preparedStatement.setString(3,employeeAddress.getDoorNumber());
@@ -119,6 +128,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
              preparedStatement.setString(6,employeeAddress.getState());
              preparedStatement.setString(7,employeeAddress.getCountry());
              preparedStatement.setString(8,employeeAddress.getAddressType());
+             preparedStatement.setInt(9,0);
              preparedStatement.executeUpdate();
          }
     }
@@ -129,11 +139,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
      public void deleteEmployee(int id) throws SQLException {
          preparedStatement = connection.prepareStatement
-                 ("delete from employee where id=?");
+                 ("update employee set is_deleted ='1' where id=?");
          preparedStatement.setInt(1, id);
          preparedStatement.executeUpdate();
          preparedStatement = connection.prepareStatement
-                 ("delete from address where employee_id=?");
+                 ("update address set is_deleted ='1' where employee_id=?");
          preparedStatement.setInt(1, id);
          preparedStatement.executeUpdate();
      }   
@@ -197,17 +207,86 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public void updateAddress(Address employeeAddress) throws SQLException {
+    public boolean updateAddress(Address employeeAddress, String input) throws SQLException {
+        int option = Integer.parseInt(input);
         preparedStatement = connection.prepareStatement
-                ("update address set door_number = ?, street = ?, district = ?,"
-                + "state = ?,country = ?, address_type= ? where address_id = ?");
-        preparedStatement.setString(1,employeeAddress.getDoorNumber());
-        preparedStatement.setString(2,employeeAddress.getStreet());
-        preparedStatement.setString(3,employeeAddress.getDistrict());
-        preparedStatement.setString(4,employeeAddress.getState());
-        preparedStatement.setString(5,employeeAddress.getCountry());
-        preparedStatement.setString(6,employeeAddress.getAddressType());
-        preparedStatement.setInt(7,employeeAddress.getAddressId());
-        preparedStatement.executeUpdate();   
+                ("select id from address where employee_id = ? and is_deleted = 0",
+                ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+        preparedStatement.setInt(1, employeeAddress.getEmployeeId());
+        resultSet = preparedStatement.executeQuery();
+        resultSet.last();
+        if (resultSet.getRow() >= option) {
+            resultSet.first();
+            while(option > 1) {
+                resultSet.next();
+                option--;
+            }
+            int address_id = resultSet.getInt(1);
+            preparedStatement = connection.prepareStatement
+                    ("update address set door_number = ?, street = ?, district = ?,"
+                    + "state = ?,country = ?, type= ? where id = ?");
+            preparedStatement.setString(1,employeeAddress.getDoorNumber());
+            preparedStatement.setString(2,employeeAddress.getStreet());
+            preparedStatement.setString(3,employeeAddress.getDistrict());
+            preparedStatement.setString(4,employeeAddress.getState());
+            preparedStatement.setString(5,employeeAddress.getCountry());
+            preparedStatement.setString(6,employeeAddress.getAddressType());
+            preparedStatement.setInt(7,address_id);
+            preparedStatement.executeUpdate();
+            return true;
+        } else { 
+            return false;
+        }  
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public String recoverEmployee(int id) throws SQLException {
+       preparedStatement = connection.prepareStatement
+                ("select * from employee where id = ?"); 
+       preparedStatement.setInt(1,id);
+       resultSet = preparedStatement.executeQuery();
+       if (!resultSet.next()) {
+           return null;
+       } else if (0 == resultSet.getInt(7)) {
+           return "Employee already present";
+       } else {
+           preparedStatement = connection.prepareStatement
+                  ("update employee set is_deleted = 0 where id = ?"); 
+           preparedStatement.setInt(1,id);
+           preparedStatement.executeUpdate();
+           preparedStatement = connection.prepareStatement
+                  ("update address set is_deleted = 0 where employee_id = ?");
+           preparedStatement.setInt(1,id);
+           preparedStatement.executeUpdate(); 
+           return "Recovery Successfull...";
+       }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List <Address> getAddressList(int employeeId)throws SQLException {
+        preparedStatement = connection.prepareStatement
+                ("select * from address where employee_id = ?"); 
+       preparedStatement.setInt(1,employeeId);
+       resultSet = preparedStatement.executeQuery();
+       List <Address> addressList = new ArrayList <Address> ();
+       while(resultSet.next()) {
+           if(1 == resultSet.getInt(9)) {
+               if(!resultSet.next()) {
+                   break;
+               }
+            }
+            Address address = new Address(resultSet.getInt(1), resultSet.getInt(2),
+                         resultSet.getString(3), resultSet.getString(4),
+                         resultSet.getString(5),resultSet.getString(6),
+                         resultSet.getString(7), resultSet.getString(8));
+            addressList.add(address);
+       }
+       return addressList;
     }
 }

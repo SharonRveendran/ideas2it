@@ -157,9 +157,28 @@ public class EmployeeController {
      * Methode to update address
      * @param addressId employee address id
      * @param addressDetails array of address details
+     * @param input user given option for the address
+     * @return true for successfull address upodation else false
      */
-    public void updateAddress(int addressId, String[] addressDetails)
+    public boolean updateAddress(int addressId, String[] addressDetails, String input)
             throws SQLException {
-        employeeService.updateAddress(addressId, addressDetails);
+        return employeeService.updateAddress(addressId, addressDetails, input);
     }
+
+    /**
+     * Methode to recover deleted employee
+     * @param id employee id
+     */
+    public String recoverEmployee(int id) throws SQLException {
+        return employeeService.recoverEmployee(id);
+    }
+    
+    /**
+     * Method to get addressList of a employee
+     * @param employeeId
+     * @return list of employee address strings
+     */
+    public List<String> getAddressList(int employeeId) throws SQLException {
+        return employeeService.getAddressList(employeeId);
+    }       
 }

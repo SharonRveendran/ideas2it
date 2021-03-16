@@ -99,7 +99,22 @@ public interface EmployeeService {
      * Methode to update address
      * @param addressId employee address id
      * @param addressDetails array of address details
+     * @param option user given option for address
+     * @return true for successfull address updation else false 
      */
-    public void updateAddress(int addressId, String[] addressDetails)
-            throws SQLException ;
+    public boolean updateAddress(int addressId, String[] addressDetails, String input)
+            throws SQLException ;   
+    
+    /**
+     * Methode to recover deleted employee
+     * @param id employee id
+     */
+    public String recoverEmployee(int id) throws SQLException;
+
+    /**
+     * Method to get addressList of a employee
+     * @param employeeId
+     * @return list of employee address strings
+     */
+    public List<String> getAddressList(int employeeId) throws SQLException;
 }
