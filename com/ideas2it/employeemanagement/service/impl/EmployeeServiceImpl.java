@@ -213,5 +213,35 @@ public class EmployeeServiceImpl implements EmployeeService {
            addressList.add(addresses.get(index).toString());
         }
         return addressList;
-    }       
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean deleteAddress(int employeeId, String option)throws SQLException {
+       return employeeDao.deleteAddress(employeeId, option);
+    }  
+    
+     /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<String> getDeletedAddressList(int employeeId)throws SQLException {
+        List <String> deletedAddressList = new ArrayList <String> ();
+        List <Address> deletedAddresses = employeeDao.getDeletedAddressList(employeeId);
+        for(int index = 0; index < deletedAddresses.size(); index++) {
+           deletedAddressList.add(deletedAddresses.get(index).toString());
+        }
+        return deletedAddressList;
+    }  
+  
+     /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean recoverAddress(int employeeId, String input) throws SQLException {
+            int option = Integer.parseInt(input);
+            return employeeDao.recoverAddress(employeeId, option);
+    }     
 }

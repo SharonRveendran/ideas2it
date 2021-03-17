@@ -80,4 +80,28 @@ public interface EmployeeDao {
      * @return employee address list.
      */
     public List <Address> getAddressList(int employeeId)throws SQLException; 
+  
+    /**
+     * Method to delete employee address
+     * @param employeeId
+     * @param option user given option for address
+     * @return true for successfull address deletion else false
+     */
+    public boolean deleteAddress(int employeeId, String option)throws SQLException;
+
+    /**
+     * Methode to get deleted address list
+     * @param employeeId
+     * @param input user input for the address
+     * @return deleted address list
+     */
+    public List<Address> getDeletedAddressList(int employeeId)throws SQLException;
+
+    /**
+     * Method to recover deleted employee
+     * @param employeeId
+     * @param input
+     * @return true for successfull recovery
+     */
+    public boolean recoverAddress(int employeeId,int option) throws SQLException;
 }

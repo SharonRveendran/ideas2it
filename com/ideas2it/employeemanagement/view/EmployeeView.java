@@ -24,11 +24,10 @@ public class EmployeeView {
      * This method will collect the input option from user
      * and perfom CRUD operation
      */
-    public void getInput() throws SQLException {
-	String option = "0";
+    public void getInput() throws SQLException {	String option;
         do {
             System.out.println(constants.crudOption); 
-            option = scanner.nextLine();
+            String option = scanner.nextLine();
             switch (option) {
    	        case "1":
    	            createEmployee();
@@ -309,8 +308,28 @@ public class EmployeeView {
         if (0 == id) {
             System.out.println(constants.invalidDetails);  
     	} else if (employeeController.isIdExist(id)) {
-            employeeController.deleteEmployee(id);
-            System.out.println(constants.successfullDeletion);
+            System.out.println("Select your option\n1 : Whole employee\n2 : Address only");
+            String option = scanner.nextLine();
+            if ("1".equals(option)) {
+                employeeController.deleteEmployee(id);
+                System.out.println(constants.successfullDeletion);
+            } else if ("2".equals(option)) {
+                List<String> addressList = employeeController.getAddressList(id);
+                System.out.println("Which address you want to delete ?");
+                if (0 != addressList.size()) {
+                    for(int index = 0; index < addressList.size(); index++) {
+                        System.out.println((index + 1) + " :\n    " + addressList.get(index));
+                    }
+                    String input = scanner.nextLine();
+                    if (employeeController.deleteAddress(id, input)) {
+                        System.out.println("\nAddress deleted successfully");
+                    } else { 
+                        System.out.println(constants.invalidDetails);
+                    }
+                } else {
+                    System.out.println("No address exist for given employee");
+                }
+            } 
     	} else {
     		System.out.println(constants.noEmployee);
     	}
@@ -337,7 +356,7 @@ public class EmployeeView {
         System.out.println("Which address you want to update ?");
         if (0 != addressList.size()) {
             for(int index = 0; index < addressList.size(); index++) {
-                System.out.println((index + 1) + " : " + addressList.get(index));
+                System.out.println((index + 1) + " :\n    " + addressList.get(index));
             }
             String input = scanner.nextLine();
             String addressDetails[] = getAddress(null);
@@ -355,13 +374,34 @@ public class EmployeeView {
      * Method to recover a deleted employee
      */
     private void recoverEmployee() throws SQLException{
-        int id = getAndValidateId();
-        String recoveryStatus = employeeController.recoverEmployee(id);
-        if (null == recoveryStatus) {
-            System.out.println(constants.invalidDetails);
+        System.out.println("Select your option\n1 : whole employee\n2 : Address only");
+        String input1 = scanner.nextLine();
+        int employeeId = getAndValidateId();
+        if ("1".equals(input1)) {
+            String recoveryStatus = employeeController.recoverEmployee(employeeId);
+            if (null == recoveryStatus) {
+                System.out.println(constants.invalidDetails);
+            } else {
+                System.out.println(recoveryStatus); 
+            } 
+        } else if ("2".equals(input1)) {
+            List<String> deletedAddressList = employeeController.getDeletedAddressList(employeeId);    
+            if (0 == deletedAddressList.size()) {
+                System.out.println("No address deleted");
+            } else {
+                System.out.println("Which address you want to recover ?");
+                for(int index = 0; index < deletedAddressList.size(); index++) {
+                        System.out.println((index + 1) + " :\n    " + deletedAddressList.get(index));
+                }
+                String input2 = scanner.nextLine();
+                if(employeeController.recoverAddress(employeeId, input2)) {
+                    System.out.println("Address recoverd successfully");
+                } else {
+                    System.out.println(constants.invalidDetails);
+                }          
+            }
         } else {
-            System.out.println(recoveryStatus);
-            System.out.println(employeeController.getEmployee(id));  
-        }          
+            System.out.println(constants.invalidDetails);
+        }     
     }		
 }

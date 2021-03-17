@@ -92,8 +92,7 @@ public class Address {
     }
 
     public String toString() {
-    	return  "Address id    = " + addressId 
-                + "\nDoor number   = " + doorNumber
+    	return  "\nDoor number   = " + doorNumber
                 + "\nStreet        = " + street
                 + "\nDistrict      = " + district
                 + "\nState         = " + state
