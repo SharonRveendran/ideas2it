@@ -3,13 +3,14 @@ package com.ideas2it.employeemanagement.controller;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
 
 /**
  * Class for Employee controller
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public class EmployeeController {
     EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
@@ -157,17 +158,17 @@ public class EmployeeController {
      * Methode to update address
      * @param addressId employee address id
      * @param addressDetails array of address details
-     * @param input user given option for the address
      * @return true for successfull address upodation else false
      */
-    public boolean updateAddress(int addressId, String[] addressDetails, String input)
+    public boolean updateAddress(int addressId, String[] addressDetails)
             throws SQLException {
-        return employeeService.updateAddress(addressId, addressDetails, input);
+        return employeeService.updateAddress(addressId, addressDetails);
     }
 
     /**
      * Methode to recover deleted employee
      * @param id employee id
+     * @return recovery status string
      */
     public String recoverEmployee(int id) throws SQLException {
         return employeeService.recoverEmployee(id);
@@ -178,37 +179,42 @@ public class EmployeeController {
      * @param employeeId
      * @return list of employee address strings
      */
-    public List<String> getAddressList(int employeeId) throws SQLException {
+    public Map<Integer, String> getAddressList(int employeeId) throws SQLException {
         return employeeService.getAddressList(employeeId);
     }
 
     /**
      * Method to delete employee address
-     * @param employeeId
-     * @param option user given option for address
+     * @param addressId
      * @return true for successfull address deletion else false
      */
-    public boolean deleteAddress(int employeeId, String option)throws SQLException {
-        return employeeService.deleteAddress(employeeId, option);
+    public boolean deleteAddress(int addressId)throws SQLException {
+        return employeeService.deleteAddress(addressId);
     }
     
     /**
      * Methode to get deleted address list
      * @param employeeId
-     * @param input user input for the address
-     * @return deleted address list
+     * @return map of deleted address with address id 
      */
-    public List<String> getDeletedAddressList(int employeeId)throws SQLException {
+    public Map<Integer, String> getDeletedAddressList(int employeeId)throws SQLException {
         return employeeService.getDeletedAddressList(employeeId);
     }
 
     /**
      * Method to recover deleted employee
-     * @param employeeId
-     * @param input
+     * @param addressId
      * @return true for successfull recovery
      */
-    public boolean recoverAddress(int employeeId, String input) throws SQLException {
-        return employeeService.recoverAddress(employeeId, input);
-    } 
+    public boolean recoverAddress(int addressId) throws SQLException {
+        return employeeService.recoverAddress(addressId);
+    }
+
+    /**
+     * Method to get all deleted employees
+     * @return list of  deleted employees 
+     */
+    public List<String> getDeletedEmployees()throws SQLException {
+        return employeeService.getDeletedEmployees();
+    }
 }

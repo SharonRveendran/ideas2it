@@ -3,6 +3,7 @@ package com.ideas2it.employeemanagement.dao;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.Employee;
@@ -10,7 +11,7 @@ import com.ideas2it.employeemanagement.model.Employee;
 /**
  * Class to interact with database
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public interface EmployeeDao {
       
@@ -50,11 +51,11 @@ public interface EmployeeDao {
     /**
      * Methode to update address
      * @param employeeAddress employee address object
-     * @param option user given option for type of address
-     * @param option user given option for address
+     * @param addressId
      * @return true for successfull employee updation else false
      */
-    public boolean updateAddress(Address employeeAddress, String input)throws SQLException;
+    public boolean updateAddress(Address employeeAddress, int addressId)
+            throws SQLException;
   
     /**
      * Methode to get all employee object as a list
@@ -79,29 +80,34 @@ public interface EmployeeDao {
      * @param employeeId
      * @return employee address list.
      */
-    public List <Address> getAddressList(int employeeId)throws SQLException; 
+    public Map <Integer, Address> getAddressList(int employeeId)
+            throws SQLException; 
   
     /**
      * Method to delete employee address
-     * @param employeeId
-     * @param option user given option for address
+     * @param addressId
      * @return true for successfull address deletion else false
      */
-    public boolean deleteAddress(int employeeId, String option)throws SQLException;
+    public boolean deleteAddress(int addressId)throws SQLException;
 
     /**
      * Methode to get deleted address list
      * @param employeeId
-     * @param input user input for the address
-     * @return deleted address list
+     * @return map of deleted address and address id
      */
-    public List<Address> getDeletedAddressList(int employeeId)throws SQLException;
+    public Map <Integer, Address> getDeletedAddressList(int employeeId)
+            throws SQLException;
 
     /**
      * Method to recover deleted employee
-     * @param employeeId
-     * @param input
+     * @param addressId
      * @return true for successfull recovery
      */
-    public boolean recoverAddress(int employeeId,int option) throws SQLException;
+    public boolean recoverAddress(int addressId) throws SQLException;
+
+    /**
+     * Method to get all deleted employees
+     * @return list of  deleted employees 
+     */
+    public List <Employee> getDeletedEmployees()throws SQLException;
 }

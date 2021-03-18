@@ -2,12 +2,13 @@ package com.ideas2it.employeemanagement.dao.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ideas2it.employeemanagement.dao.EmployeeDao;
 import com.ideas2it.employeemanagement.model.Address;
@@ -17,7 +18,7 @@ import com.ideas2it.sessionfactory.DatabaseConnection;
 /**
  * Class to interact with database
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public class EmployeeDaoImpl implements EmployeeDao {
     DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
@@ -108,8 +109,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
      public void insertEmployee(Employee employee) throws SQLException {
-         List<Address> employeeAddresses = new ArrayList<Address>();
-         Address employeeAddress;
 	 preparedStatement = connection.prepareStatement
                  ("insert into employee values(?, ?, ?, ?, ?, ?, ?)");
          preparedStatement.setInt(1, employee.getId());
@@ -120,12 +119,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	 preparedStatement.setDouble(6, employee.getSalary());
          preparedStatement.setInt(7, 0);
          preparedStatement.executeUpdate();
-         preparedStatement = connection.prepareStatement
+         List<Address> employeeAddresses = employee.getEmployeeAddresses();
+         try {
+             insertAddress(employeeAddresses);
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+    }
+
+    /**
+     * Method to insert address
+     * @param employee employee object
+     */
+    private void insertAddress(List<Address> employeeAddresses)throws Exception {
+        Address employeeAddress;
+        preparedStatement = connection.prepareStatement
                  ("select max(id) from employee");
          resultSet = preparedStatement.executeQuery();
          resultSet.next();		
          int employeeId = resultSet.getInt(1);	         
-         employeeAddresses = employee.getEmployeeAddresses();
          for (int index = 0; index < employeeAddresses.size(); index++) {
              employeeAddress = employeeAddresses.get(index);
              preparedStatement = connection.prepareStatement
@@ -217,21 +229,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean updateAddress(Address employeeAddress, String input) throws SQLException {
-        int option = Integer.parseInt(input);
-        preparedStatement = connection.prepareStatement
-                ("select id from address where employee_id = ? and is_deleted = 0",
-                ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-        preparedStatement.setInt(1, employeeAddress.getEmployeeId());
-        resultSet = preparedStatement.executeQuery();
-        resultSet.last();
-        if (resultSet.getRow() >= option) {
-            resultSet.first();
-            while(option > 1) {
-                resultSet.next();
-                option--;
-            }
-            int addressId = resultSet.getInt(1);
+    public boolean updateAddress(Address employeeAddress, int addressId)
+            throws SQLException {
             preparedStatement = connection.prepareStatement
                     ("update address set door_number = ?, street = ?, district = ?,"
                     + "state = ?,country = ?, type= ? where id = ?");
@@ -244,9 +243,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setInt(7,addressId);
             preparedStatement.executeUpdate();
             return true;
-        } else { 
-            return false;
-        }  
     }
 
     /**
@@ -279,12 +275,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public List <Address> getAddressList(int employeeId)throws SQLException {
+    public Map <Integer, Address> getAddressList(int employeeId)throws SQLException {
        preparedStatement = connection.prepareStatement
                 ("select * from address where employee_id = ? and is_deleted = 0"); 
        preparedStatement.setInt(1,employeeId);
        resultSet = preparedStatement.executeQuery();
-       List <Address> addressList = new ArrayList <Address> ();
+       Map <Integer, Address> addressList = new HashMap <Integer, Address> ();
        while(resultSet.next()) {
            if(1 == resultSet.getInt(9)) {
                if(!resultSet.next()) {
@@ -295,7 +291,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                          resultSet.getString(3), resultSet.getString(4),
                          resultSet.getString(5),resultSet.getString(6),
                          resultSet.getString(7), resultSet.getString(8));
-            addressList.add(address);
+            addressList.put(resultSet.getInt(1), address);
        }
        return addressList;
     }
@@ -304,47 +300,31 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean deleteAddress(int employeeId, String input)throws SQLException {
-       int option = Integer.parseInt(input);
-        preparedStatement = connection.prepareStatement
-                ("select * from address where employee_id = ? and is_deleted = 0",
-                ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-        preparedStatement.setInt(1, employeeId);
-        resultSet = preparedStatement.executeQuery();
-        resultSet.last();
-        if (resultSet.getRow() >= option) {
-            resultSet.first();
-            while(option > 1) {
-                resultSet.next();
-                option--;
-            } 
-            int addressId = resultSet.getInt(1);
+    public boolean deleteAddress(int addressId)throws SQLException {
             preparedStatement = connection.prepareStatement
                     ("update address set is_deleted = 1 where id = ?");
             preparedStatement.setInt(1, addressId);
             preparedStatement.executeUpdate();
             return true;
-        } else { 
-            return false;
-        }  
     } 
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public List<Address> getDeletedAddressList(int employeeId)throws SQLException {
+    public Map <Integer, Address> getDeletedAddressList(int employeeId)
+            throws SQLException {
        preparedStatement = connection.prepareStatement
                 ("select * from address where employee_id = ? and is_deleted = 1"); 
        preparedStatement.setInt(1,employeeId);
        resultSet = preparedStatement.executeQuery();
-       List <Address> addressList = new ArrayList <Address> ();
+       Map <Integer, Address> addressList = new HashMap <Integer, Address> ();
        while(resultSet.next()) {
             Address address = new Address(resultSet.getInt(1), resultSet.getInt(2),
                          resultSet.getString(3), resultSet.getString(4),
                          resultSet.getString(5),resultSet.getString(6),
                          resultSet.getString(7), resultSet.getString(8));
-            addressList.add(address);
+            addressList.put(resultSet.getInt(1), address);
        }
        return addressList;
     }
@@ -353,27 +333,29 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean recoverAddress(int employeeId,int option) throws SQLException {
-        preparedStatement = connection.prepareStatement
-                ("select id from address where employee_id = ? and is_deleted = 1",
-                ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-        preparedStatement.setInt(1, employeeId);
-        resultSet = preparedStatement.executeQuery();
-        resultSet.last();
-        if (resultSet.getRow() >= option) {
-            resultSet.first();
-            while(option > 1) {
-                resultSet.next();
-                option--;
-            }
-            int addressId = resultSet.getInt(1);
+    public boolean recoverAddress(int addressId) throws SQLException {
             preparedStatement = connection.prepareStatement
                     ("update address set is_deleted = 0 where id = ?"); 
             preparedStatement.setInt(1,addressId);
             preparedStatement.executeUpdate();
             return true;
-        } else {
-            return false;
-        }    
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List <Employee> getDeletedEmployees()throws SQLException {
+        List <Employee> deletedEmployees = new ArrayList <Employee> ();
+        preparedStatement = connection.prepareStatement
+                ("select * from employee where employee.is_deleted = 1");        
+	resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()) {
+            Employee employee = new Employee(resultSet.getString(2),
+                          resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
+                          resultSet.getLong(3), resultSet.getDate(4),null);
+            deletedEmployees.add(employee);
+        }
+        return deletedEmployees;
+    } 
 }

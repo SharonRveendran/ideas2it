@@ -3,8 +3,8 @@ package com.ideas2it.employeemanagement.view;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.constants.Constants;
@@ -13,7 +13,7 @@ import com.ideas2it.employeemanagement.controller.EmployeeController;
 /**
  * Class for Employee view
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public class EmployeeView {
     Constants constants = new Constants();
@@ -24,10 +24,11 @@ public class EmployeeView {
      * This method will collect the input option from user
      * and perfom CRUD operation
      */
-    public void getInput() throws SQLException {	String option;
+    public void start() throws SQLException {	
+        String option;
         do {
             System.out.println(constants.crudOption); 
-            String option = scanner.nextLine();
+            option = scanner.nextLine();
             switch (option) {
    	        case "1":
    	            createEmployee();
@@ -60,9 +61,7 @@ public class EmployeeView {
      * Method to create employee
      */
     private void createEmployee() throws SQLException {
-        List<String[]> employeeAddresses = new ArrayList<String[]>();
         int permanentAddressCount = 0;
-        String option = "1";
     	System.out.println(constants.getNameMessage);
     	String name = scanner.nextLine();
     	System.out.println(constants.getDesignationMessage);
@@ -70,25 +69,47 @@ public class EmployeeView {
     	double salary = getAndValidateSalary();
     	long mobile = getAndValidateMobile();
     	Date dob = getDob();
-        do {
-            System.out.println("\nSelect type of address\n1 : Permanent\n2 : Temporary");
-            String addressChoice = scanner.nextLine();
-            if ("1".equals(addressChoice)) {
-                permanentAddressCount++;
-            }  
-            if (1 == permanentAddressCount||"2".equals(addressChoice)) {
-                String addressDetails[] = getAddress(addressChoice);
-    	        employeeAddresses.add(addressDetails);
-                System.out.println("Press 1 to add more address"
-                         + "\nPress other key to continue");
-                option = scanner.nextLine();
-            } else {
-                System.out.println("You already have a permanent address");
-            }
-        } while("1".equals(option));
         employeeController.createEmployee(name, designation, salary,
-                mobile, dob, employeeAddresses);
+                mobile, dob, createAddresses());
         System.out.println(constants.successfullCreation);
+    }
+
+    /**
+     * Methode to create employee addresses
+     */
+    private List<String[]> createAddresses() {
+        String option = "";
+        int permanentAddressCount = 0;
+        List<String[]> employeeAddresses = new ArrayList<String[]>();
+        do {
+            System.out.println(constants.addressType);
+            String addressChoice = scanner.nextLine();
+            switch (addressChoice) {
+                case "1":
+                    permanentAddressCount++;
+                    if (1 == permanentAddressCount) {
+                        String addressDetails[] = getAddress(addressChoice);
+    	                employeeAddresses.add(addressDetails);
+                        System.out.println("Press 1 to add more address\n"
+                                + "Press other key to continue");
+                        option = scanner.nextLine();
+                    } else {
+                        System.out.println("You already have a permanent address");
+                    }
+                    break;
+                case "2":
+                    String addressDetails[] = getAddress(addressChoice);
+    	            employeeAddresses.add(addressDetails);
+                    System.out.println("Press 1 to add more address\n"
+                             + "Press other key to continue");
+                    option = scanner.nextLine();
+                    break;
+                default:
+   	            System.out.println(constants.invalidDetails);
+                    option = "1";
+            }
+        } while ("1".equals(option));
+        return employeeAddresses;
     }
      
     /**
@@ -145,36 +166,41 @@ public class EmployeeView {
     	    System.out.println(employeeDetails);
     	}
     }
+
     /**
      * Method to update the employee details
      */
     private void updateEmployee() throws SQLException {
     	int id = getAndValidateId();
     	if (employeeController.isIdExist(id)) {	
-            System.out.println(constants.updateOption);
-            String option = scanner.nextLine();
-    	    switch (option) {
-    	        case "1":
-    	    	    updateName(id);
-    	    	    break;
-    	    	case "2":
-    	    	    updateDesignation(id);
-    	    	    break;
-    	    	case "3":
-    	    	    updateSalary(id);
-    	    	    break;
-    	    	case "4":
-    	    	    updateDob(id);
-    	    	    break;
-    	    	case "5":
-    	    	   updateMobile(id);
-                   break;
-                case "6":
-    	    	   updateAddress(id);
-                   break;
-                default:
-                   System.out.println(constants.invalidDetails);
-    	    }
+            String option;
+            do {
+                System.out.println(constants.updateOption);
+                option = scanner.nextLine();
+    	        switch (option) {
+    	            case "1":
+    	    	        updateName(id);
+    	    	        break;
+    	    	    case "2":
+    	    	        updateDesignation(id);
+    	    	        break;
+    	    	    case "3":
+    	    	        updateSalary(id);
+    	    	        break;
+    	            case "4":
+    	    	        updateDob(id);
+    	    	        break;
+    	    	    case "5":
+    	    	       updateMobile(id);
+                       break;
+                   case "6":
+    	    	       updateAddress(id);
+                       break;
+                   default:
+                       option = null;
+                       System.out.println(constants.invalidDetails);
+    	        }
+            } while (null == option);
     	} else {
     	    System.out.println(constants.noEmployee);
     	}		
@@ -304,37 +330,60 @@ public class EmployeeView {
      * Method to delete employee based on employee id
      */
     private void deleteEmployee() throws SQLException { 
-    	int id = getAndValidateId() ;
-        if (0 == id) {
-            System.out.println(constants.invalidDetails);  
-    	} else if (employeeController.isIdExist(id)) {
+    	int id = getAndValidateId() ;  
+    	if (employeeController.isIdExist(id)) {
             System.out.println("Select your option\n1 : Whole employee\n2 : Address only");
             String option = scanner.nextLine();
-            if ("1".equals(option)) {
-                employeeController.deleteEmployee(id);
-                System.out.println(constants.successfullDeletion);
-            } else if ("2".equals(option)) {
-                List<String> addressList = employeeController.getAddressList(id);
-                System.out.println("Which address you want to delete ?");
-                if (0 != addressList.size()) {
-                    for(int index = 0; index < addressList.size(); index++) {
-                        System.out.println((index + 1) + " :\n    " + addressList.get(index));
-                    }
-                    String input = scanner.nextLine();
-                    if (employeeController.deleteAddress(id, input)) {
-                        System.out.println("\nAddress deleted successfully");
-                    } else { 
-                        System.out.println(constants.invalidDetails);
-                    }
-                } else {
-                    System.out.println("No address exist for given employee");
+            switch (option) {
+                case "1":
+                    employeeController.deleteEmployee(id);
+                    System.out.println(constants.successfullDeletion);
+                    break;
+                case "2":
+                    deleteAddress(id);
+                    break;
+                default:
+                    System.out.println(constants.invalidDetails);
+            }
+         } else {
+             System.out.println(constants.noEmployee);
+         }
+     }
+
+    /**
+     * Method to delete address
+     */
+    private void deleteAddress(int employeeId)throws SQLException {
+        Map <Integer, String> addressList = employeeController.getAddressList(employeeId);
+        if (0 != addressList.size()) {
+            List <Integer> employeeIdList = new ArrayList <Integer> (addressList.keySet());
+            System.out.println("Which address you want to delete ?");
+            int index;
+            for(index = 0; index < employeeIdList.size(); index++) {
+                System.out.println((index + 1) + " :\n    "
+                        + addressList.get(employeeIdList.get(index)));
+            }
+            int input;
+            try {
+                input =Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                input = index +1;
+            }
+            if (input <= index) {
+                int addressId = employeeIdList.get(input - 1);
+                if (employeeController.deleteAddress(addressId)) {
+                    System.out.println("\nAddress deleted successfully");
+                } else { 
+                    System.out.println(constants.invalidDetails);
                 }
-            } 
-    	} else {
-    		System.out.println(constants.noEmployee);
-    	}
+             } else {
+                 System.out.println(constants.invalidDetails);
+             }
+         } else {
+             System.out.println("No address exist for given employee");
+         } 
     }
-    
+
     /**
      * Method to display all employee details present in collection
      */
@@ -348,23 +397,37 @@ public class EmployeeView {
             }
         }
     }
+
     /**
      * Methode to update employee address
      */
     private void updateAddress(int employeeId) throws SQLException {
-        List<String> addressList = employeeController.getAddressList(employeeId);
+        Map<Integer, String> addressList = employeeController.getAddressList(employeeId);
+        List<Integer> employeeIdList = new ArrayList<Integer>(addressList.keySet());
         System.out.println("Which address you want to update ?");
-        if (0 != addressList.size()) {
-            for(int index = 0; index < addressList.size(); index++) {
-                System.out.println((index + 1) + " :\n    " + addressList.get(index));
+        if (0 != addressList.size()) {  
+            int index;              
+            for(index = 0; index < employeeIdList.size(); index++) {
+                System.out.println((index + 1) + " :\n    "
+                        + addressList.get(employeeIdList.get(index)));
             }
-            String input = scanner.nextLine();
-            String addressDetails[] = getAddress(null);
-           if (employeeController.updateAddress(employeeId, addressDetails, input)) {
-               System.out.println("Address updated successfully...");
-           } else {
-               System.out.println(constants.invalidDetails);
-           } 
+            int input;
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+            } catch(NumberFormatException e) {
+                input = index + 1;
+            }
+            if (input < index) {
+                int addressId = employeeIdList.get(input - 1);              
+                String addressDetails[] = getAddress(null);
+                if (employeeController.updateAddress(addressId, addressDetails)) {
+                    System.out.println("Address updated successfully...");
+                } else {
+                    System.out.println(constants.invalidDetails);
+                }
+            } else {
+                System.out.println(constants.invalidDetails);
+            }  
         } else {
             System.out.println(constants.invalidDetails);
         }
@@ -376,32 +439,54 @@ public class EmployeeView {
     private void recoverEmployee() throws SQLException{
         System.out.println("Select your option\n1 : whole employee\n2 : Address only");
         String input1 = scanner.nextLine();
-        int employeeId = getAndValidateId();
-        if ("1".equals(input1)) {
-            String recoveryStatus = employeeController.recoverEmployee(employeeId);
-            if (null == recoveryStatus) {
-                System.out.println(constants.invalidDetails);
-            } else {
-                System.out.println(recoveryStatus); 
-            } 
-        } else if ("2".equals(input1)) {
-            List<String> deletedAddressList = employeeController.getDeletedAddressList(employeeId);    
-            if (0 == deletedAddressList.size()) {
-                System.out.println("No address deleted");
-            } else {
-                System.out.println("Which address you want to recover ?");
-                for(int index = 0; index < deletedAddressList.size(); index++) {
-                        System.out.println((index + 1) + " :\n    " + deletedAddressList.get(index));
+        int employeeId; 
+        switch (input1) {
+            case "1":
+                List <String> deletedEmployees = employeeController.getDeletedEmployees();
+                System.out.println("Deleted employees are given below");
+                for(int index = 0; index < deletedEmployees.size(); index++) {
+                    System.out.println((index + 1) + " :\n    " + deletedEmployees.get(index));
                 }
-                String input2 = scanner.nextLine();
-                if(employeeController.recoverAddress(employeeId, input2)) {
-                    System.out.println("Address recoverd successfully");
-                } else {
+                employeeId = getAndValidateId();
+                String recoveryStatus = employeeController.recoverEmployee(employeeId);
+                if (null == recoveryStatus) {
                     System.out.println(constants.invalidDetails);
-                }          
+                } else {
+                    System.out.println(recoveryStatus); 
+                }   
+                break;
+            case "2":
+                employeeId = getAndValidateId();
+                recoverAddress(employeeId);
+                break;
+            default:
+                 System.out.println(constants.invalidDetails);
+        }
+    }
+    
+    /**
+     * Methode to recover employee address
+     */
+    private void recoverAddress(int employeeId)throws SQLException {
+        Map <Integer, String>  deletedAddressList = employeeController
+                .getDeletedAddressList(employeeId); 
+        List <Integer> deletedAddressIdList 
+                = new ArrayList<Integer> (deletedAddressList.keySet());   
+        if (0 != deletedAddressList.size()) {
+            System.out.println("Which address you want to recover ?");
+            for(int index = 0; index < deletedAddressIdList.size(); index++) {
+                System.out.println((index + 1) + " :\n    "
+                        + deletedAddressList.get(deletedAddressIdList.get(index)));
             }
+            int input2 = Integer.parseInt(scanner.nextLine());
+            int addressId = deletedAddressIdList.get(input2 - 1);
+            if(employeeController.recoverAddress(addressId)) {
+                System.out.println("Address recoverd successfully");
+            } else {
+                System.out.println(constants.invalidDetails);
+            }         
         } else {
             System.out.println(constants.invalidDetails);
-        }     
-    }		
+        }
+    }             
 }

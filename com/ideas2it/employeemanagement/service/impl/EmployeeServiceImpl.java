@@ -3,7 +3,6 @@ package com.ideas2it.employeemanagement.service.impl;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
 /**
  * Class for Employee service
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public class EmployeeServiceImpl implements EmployeeService {
     EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
@@ -186,12 +185,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean updateAddress(int employeeId, String[] addressDetails, String input) 
+    public boolean updateAddress(int addressId, String[] addressDetails) 
             throws SQLException {
-        Address employeeAddress = new Address(0, employeeId, addressDetails[0],
+        Address employeeAddress = new Address(addressId, 0, addressDetails[0],
                 addressDetails[1], addressDetails[2], addressDetails[3],
                 addressDetails[4], addressDetails[5]);
-        return employeeDao.updateAddress(employeeAddress, input);
+        return employeeDao.updateAddress(employeeAddress, addressId);
     }
 
     /**
@@ -206,11 +205,13 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getAddressList(int employeeId) throws SQLException {
-        List <String> addressList = new ArrayList <String> ();
-        List <Address> addresses = employeeDao.getAddressList(employeeId);
-        for(int index = 0; index < addresses.size(); index++) {
-           addressList.add(addresses.get(index).toString());
+    public Map <Integer, String> getAddressList(int employeeId) throws SQLException {
+        Map <Integer, String> addressList = new HashMap <Integer, String> ();
+        Map <Integer, Address> addresses = employeeDao.getAddressList(employeeId);
+        List <Integer> addressIdList = new ArrayList <Integer> (addresses.keySet());
+        for(int index = 0; index < addressIdList.size(); index++) {
+           addressList.put((addressIdList.get(index)),
+                   (addresses.get(addressIdList.get(index))).toString());
         }
         return addressList;
     } 
@@ -219,19 +220,21 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean deleteAddress(int employeeId, String option)throws SQLException {
-       return employeeDao.deleteAddress(employeeId, option);
+    public boolean deleteAddress(int addressId)throws SQLException {
+       return employeeDao.deleteAddress(addressId);
     }  
     
      /**
      * {@inheritdoc}
      */
     @Override
-    public List<String> getDeletedAddressList(int employeeId)throws SQLException {
-        List <String> deletedAddressList = new ArrayList <String> ();
-        List <Address> deletedAddresses = employeeDao.getDeletedAddressList(employeeId);
-        for(int index = 0; index < deletedAddresses.size(); index++) {
-           deletedAddressList.add(deletedAddresses.get(index).toString());
+    public Map <Integer, String> getDeletedAddressList(int employeeId)throws SQLException {
+        Map <Integer, String> deletedAddressList = new HashMap <Integer, String> ();
+        Map <Integer, Address> deletedAddresses = employeeDao.getDeletedAddressList(employeeId);
+        List <Integer> addressIdList = new ArrayList <Integer> (deletedAddresses.keySet());
+        for(int index = 0; index < addressIdList.size(); index++) {
+           deletedAddressList.put((addressIdList.get(index)),
+                   (deletedAddresses.get(addressIdList.get(index))).toString());
         }
         return deletedAddressList;
     }  
@@ -240,8 +243,20 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean recoverAddress(int employeeId, String input) throws SQLException {
-            int option = Integer.parseInt(input);
-            return employeeDao.recoverAddress(employeeId, option);
-    }     
+    public boolean recoverAddress(int addressId) throws SQLException {
+            return employeeDao.recoverAddress(addressId);
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List <String> getDeletedEmployees()throws SQLException {
+        List <String> deletedEmployees = new ArrayList <String> ();
+        List <Employee> deletedEmployeesObjects = employeeDao.getDeletedEmployees();
+        for (int index = 0; index < deletedEmployeesObjects.size(); index++) {
+            deletedEmployees.add(deletedEmployeesObjects.get(index).toString());
+        }
+        return deletedEmployees;
+    }    
 }

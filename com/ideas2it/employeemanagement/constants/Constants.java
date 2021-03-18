@@ -3,7 +3,7 @@ package com.ideas2it.employeemanagement.constants;
 /**
  * Class for define constants
  * @author Sharon V
- * @created 15-03-2021
+ * @created 18-03-2021
  */
 public class Constants {
     public final String crudOption = "\nSelect your option\n\n1 : Create employee\n"
@@ -23,4 +23,6 @@ public class Constants {
     public final String successfullUpdation = "\nEmployee updated successfully...";
     public final String successfullDeletion = "\nEmployee deleted successfully...";   
     public final String endMassege = "\nThank you....";
+    public final String addressType = "\nSelect type of address\n1 "
+            + ": Permanent\n2 : Temporary";
 }
