@@ -36,16 +36,9 @@ public interface EmployeeDao {
          
    /**
      * Methode to update employee details
-     * @param id Employee id
-     * @param name employee name
-     * @param designation employee designation
-     * @param salary employee salary
-     * @param dob employee date of birth
-     * @param mobile employee mobile number
-     * @param option option to specify the attribute that need to update
+     * @param employee employee object
      */
-    public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, String option)
+    public void updateEmployee(Employee employee)
             throws SQLException;
     
     /**

@@ -26,6 +26,16 @@ public class Address {
         this.country = country;
         this.addressType = addressType;
     }
+
+    public Address(String doorNumber, String street, String district,
+            String state, String country, String addressType) {
+        this.doorNumber = doorNumber;
+        this.street = street;
+        this.district = district;
+        this.state = state;
+        this.country = country;
+        this.addressType = addressType;
+    }
     
     public void setAddressId(int addressId) {
         this.addressId = addressId;

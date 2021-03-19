@@ -16,8 +16,8 @@ import com.ideas2it.employeemanagement.controller.EmployeeController;
  * @created 18-03-2021
  */
 public class EmployeeView {
-    Constants constants = new Constants();
-    Scanner scanner = new Scanner(System.in);
+    private Constants constants = new Constants();
+    private Scanner scanner = new Scanner(System.in);
     EmployeeController employeeController = new EmployeeController();
     
     /**
@@ -405,31 +405,34 @@ public class EmployeeView {
         Map<Integer, String> addressList = employeeController.getAddressList(employeeId);
         List<Integer> employeeIdList = new ArrayList<Integer>(addressList.keySet());
         System.out.println("Which address you want to update ?");
-        if (0 != addressList.size()) {  
-            int index;              
-            for(index = 0; index < employeeIdList.size(); index++) {
-                System.out.println((index + 1) + " :\n    "
-                        + addressList.get(employeeIdList.get(index)));
-            }
-            int input;
-            try {
-                input = Integer.parseInt(scanner.nextLine());
-            } catch(NumberFormatException e) {
-                input = index + 1;
-            }
-            if (input < index) {
-                int addressId = employeeIdList.get(input - 1);              
-                String addressDetails[] = getAddress(null);
-                if (employeeController.updateAddress(addressId, addressDetails)) {
-                    System.out.println("Address updated successfully...");
+        if (0 != addressList.size()) { 
+            int input; 
+            do {
+                int index;              
+                for(index = 0; index < employeeIdList.size(); index++) {
+                    System.out.println((index + 1) + " :\n    "
+                            + addressList.get(employeeIdList.get(index)));
+                }
+                try {
+                    input = Integer.parseInt(scanner.nextLine());
+                } catch(NumberFormatException e) {
+                    input = index + 1;
+                }
+                if (input < index) {
+                    int addressId = employeeIdList.get(input - 1);              
+                    String addressDetails[] = getAddress(null);
+                    if (employeeController.updateAddress(addressId, addressDetails)) {
+                        System.out.println("Address updated successfully...");
+                    } else {
+                        System.out.println(constants.invalidDetails);
+                    }
                 } else {
                     System.out.println(constants.invalidDetails);
+                    input = 0;
                 }
-            } else {
-                System.out.println(constants.invalidDetails);
-            }  
+            } while (0 == input); 
         } else {
-            System.out.println(constants.invalidDetails);
+            System.out.println("No address present for the given employee");
         }
     }
 
@@ -468,23 +471,36 @@ public class EmployeeView {
      * Methode to recover employee address
      */
     private void recoverAddress(int employeeId)throws SQLException {
+        int input;
         Map <Integer, String>  deletedAddressList = employeeController
                 .getDeletedAddressList(employeeId); 
         List <Integer> deletedAddressIdList 
                 = new ArrayList<Integer> (deletedAddressList.keySet());   
         if (0 != deletedAddressList.size()) {
+            int index;
             System.out.println("Which address you want to recover ?");
-            for(int index = 0; index < deletedAddressIdList.size(); index++) {
-                System.out.println((index + 1) + " :\n    "
-                        + deletedAddressList.get(deletedAddressIdList.get(index)));
-            }
-            int input2 = Integer.parseInt(scanner.nextLine());
-            int addressId = deletedAddressIdList.get(input2 - 1);
-            if(employeeController.recoverAddress(addressId)) {
-                System.out.println("Address recoverd successfully");
-            } else {
-                System.out.println(constants.invalidDetails);
-            }         
+            do {
+                for(index = 0; index < deletedAddressIdList.size(); index++) {
+                    System.out.println((index + 1) + " :\n    "
+                            + deletedAddressList.get(deletedAddressIdList.get(index)));
+                }
+                try {
+                    input = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    input = index +1;
+                }
+                if (input <= index) {
+                    int addressId = deletedAddressIdList.get(input - 1);
+                    if(employeeController.recoverAddress(addressId)) {
+                        System.out.println("Address recoverd successfully");
+                    } else {
+                        System.out.println(constants.invalidDetails);
+                    }
+                } else {
+                    input = 0;
+                    System.out.println(constants.invalidDetails);
+                } 
+            } while (0 == input);        
         } else {
             System.out.println(constants.invalidDetails);
         }

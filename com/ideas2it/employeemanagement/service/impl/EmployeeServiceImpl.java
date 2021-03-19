@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         String addressType;
         List<Address> employeeAddresses = new ArrayList<Address>();
         for (int index = 0; index < employeeAddressesDetails.size(); index++) {
-            employeeAddress = new Address(0, 0, employeeAddressesDetails.get(index)[0],
+            employeeAddress = new Address(employeeAddressesDetails.get(index)[0],
                         employeeAddressesDetails.get(index)[1],
                         employeeAddressesDetails.get(index)[2],
                         employeeAddressesDetails.get(index)[3],
@@ -88,7 +88,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(int id, String name, String designation,
             double salary, Date dob, long mobile, String option)
             throws SQLException {
-    	employeeDao.updateEmployee(id, name, designation, salary, dob, mobile, option);
+        Employee employee = employeeDao.getEmployee(id);
+        if ("name".equals(option)) {
+            employee.setName(name);           
+    	}
+    	if ("designation".equals(option)) {
+    	    employee.setDesignation(designation);   
+    	}
+    	if ("salary".equals(option)) {
+    	    employee.setSalary(salary);
+    	}
+    	if ("dob".equals(option)) {
+    	    employee.setDob(dob);   
+    	}
+    	if ("mobile".equals(option)) {
+    	   employee.setMobile(mobile);
+    	}
+    	employeeDao.updateEmployee(employee);
     }
    
     /**
@@ -187,9 +203,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean updateAddress(int addressId, String[] addressDetails) 
             throws SQLException {
-        Address employeeAddress = new Address(addressId, 0, addressDetails[0],
+        Address employeeAddress = new Address(addressDetails[0],
                 addressDetails[1], addressDetails[2], addressDetails[3],
                 addressDetails[4], addressDetails[5]);
+        employeeAddress.setAddressId(addressId);
         return employeeDao.updateAddress(employeeAddress, addressId);
     }
 
@@ -205,7 +222,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map <Integer, String> getAddressList(int employeeId) throws SQLException {
+    public Map <Integer, String> getAddressList(int employeeId)
+            throws SQLException {
         Map <Integer, String> addressList = new HashMap <Integer, String> ();
         Map <Integer, Address> addresses = employeeDao.getAddressList(employeeId);
         List <Integer> addressIdList = new ArrayList <Integer> (addresses.keySet());
@@ -228,10 +246,14 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map <Integer, String> getDeletedAddressList(int employeeId)throws SQLException {
-        Map <Integer, String> deletedAddressList = new HashMap <Integer, String> ();
-        Map <Integer, Address> deletedAddresses = employeeDao.getDeletedAddressList(employeeId);
-        List <Integer> addressIdList = new ArrayList <Integer> (deletedAddresses.keySet());
+    public Map <Integer, String> getDeletedAddressList(int employeeId)
+            throws SQLException {
+        Map <Integer, String> deletedAddressList 
+                = new HashMap <Integer, String> ();
+        Map <Integer, Address> deletedAddresses 
+                = employeeDao.getDeletedAddressList(employeeId);
+        List <Integer> addressIdList 
+                = new ArrayList <Integer> (deletedAddresses.keySet());
         for(int index = 0; index < addressIdList.size(); index++) {
            deletedAddressList.put((addressIdList.get(index)),
                    (deletedAddresses.get(addressIdList.get(index))).toString());
