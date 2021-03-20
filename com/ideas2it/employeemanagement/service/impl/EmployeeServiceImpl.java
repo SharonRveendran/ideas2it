@@ -63,18 +63,22 @@ public class EmployeeServiceImpl implements EmployeeService {
             int temporaryAddressCount = 1;
             String employeeDetails = employee.toString();
             List<Address> employeeAddresses = employee.getEmployeeAddresses();
-            for (int index = 0; index < employeeAddresses.size(); index++) {
-                if ("permanent".equals(employeeAddresses.get(index).getAddressType())) {
-                    employeeDetails = employeeDetails +
-                            "\nPermanent address\n-----------------\n\n";
-                }
-                if ("temporary".equals(employeeAddresses.get(index).getAddressType())) {
-                    employeeDetails = employeeDetails + "\nTemporary address " +
-                            temporaryAddressCount + "\n--------------------\n\n";
-                    temporaryAddressCount++;
-                }    
-                employeeDetails = employeeDetails + (employeeAddresses.get(index)).toString();
-            }
+            
+                for (int index = 0; index < employeeAddresses.size(); index++) {
+                    if ("permanent".equals(employeeAddresses.get(index).getAddressType())) {
+                        employeeDetails = employeeDetails +
+                                "\nPermanent address\n-----------------\n\n";
+                    }
+                    if ("temporary".equals(employeeAddresses.get(index).getAddressType())) {
+                        employeeDetails = employeeDetails + "\nTemporary address " +
+                                temporaryAddressCount + "\n--------------------\n\n";
+                        temporaryAddressCount++;
+                    } 
+                    if (null != employeeAddresses.get(index).getDoorNumber()) { 
+                        employeeDetails = employeeDetails + (employeeAddresses.get(index)).toString();
+                    } 
+               }
+            
         return employeeDetails;
         } else {
             return null;

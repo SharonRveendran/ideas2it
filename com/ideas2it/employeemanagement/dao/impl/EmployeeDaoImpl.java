@@ -32,7 +32,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Employee getEmployee(int id) throws SQLException  {
         preparedStatement = connection.prepareStatement
-                ("select * from employee inner join address on employee.id"
+                ("select * from employee left join address on employee.id"
                 + " = address.employee_id where employee.id = ? and employee.is_deleted = 0");
         preparedStatement.setInt(1, id);         
 	resultSet = preparedStatement.executeQuery();
@@ -89,8 +89,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
         boolean resultSetEnd = false;
         List<Employee> employees = new ArrayList<Employee>(); 
         preparedStatement = connection.prepareStatement
-                ("select * from employee inner join address on "
-                + "employee.id = address.employee_id where employee.is_deleted = 0");         
+                ("select * from employee left join address on employee.id"
+                + "= address.employee_id where employee.is_deleted = 0");         
 	resultSet = preparedStatement.executeQuery();	
         if (resultSet.next()) {                     
 	    outer: do{  
