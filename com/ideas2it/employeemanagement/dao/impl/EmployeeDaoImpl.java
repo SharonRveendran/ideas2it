@@ -153,12 +153,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                  ("select max(id) from employee");
          resultSet = preparedStatement.executeQuery();
          resultSet.next();		
-         int employeeId = resultSet.getInt(1);	         
+         int employeeId = resultSet.getInt(1);
+         preparedStatement = connection.prepareStatement
+                     ("insert into address(employee_id, door_number, street, district,"
+                     + "state, country, type, is_deleted) values(?, ?, ?, ?, ?, ?, ?, ?)");	         
          for (int index = 0; index < employeeAddresses.size(); index++) {
              employeeAddress = employeeAddresses.get(index);
-             preparedStatement = connection.prepareStatement
-                     ("insert into address(employee_id, door_number, street, district,"
-                     + "state, country, type, is_deleted) values(?, ?, ?, ?, ?, ?, ?, ?)");
              preparedStatement.setInt(1,employeeId);
              preparedStatement.setString(2,employeeAddress.getDoorNumber());
              preparedStatement.setString(3,employeeAddress.getStreet());
@@ -167,8 +167,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
              preparedStatement.setString(6,employeeAddress.getCountry());
              preparedStatement.setString(7,employeeAddress.getAddressType());
              preparedStatement.setInt(8,0);
-             preparedStatement.executeUpdate();
+             preparedStatement.addBatch();
          }
+         preparedStatement.executeBatch();
     }
 
     /**

@@ -16,9 +16,8 @@ import com.ideas2it.employeemanagement.controller.EmployeeController;
  * @created 18-03-2021
  */
 public class EmployeeView {
-    private Constants constants = new Constants();
     private Scanner scanner = new Scanner(System.in);
-    EmployeeController employeeController = new EmployeeController();
+    private EmployeeController employeeController = new EmployeeController();
     
     /**
      * This method will collect the input option from user
@@ -27,7 +26,7 @@ public class EmployeeView {
     public void start() throws SQLException {	
         String option;
         do {
-            System.out.println(constants.crudOption); 
+            System.out.println(Constants.CRUD_OPTION); 
             option = scanner.nextLine();
             switch (option) {
    	        case "1":
@@ -49,10 +48,10 @@ public class EmployeeView {
    	            recoverEmployee();
    	            break;
                 case "7":
-   	            System.out.println(constants.endMassege);
+   	            System.out.println(Constants.END_MESSAGE);
    	            break;
    	        default:
-   	            System.out.println(constants.invalidDetails);
+   	            System.out.println(Constants.INVALID_DETAILS);
    	    } 	 
 	} while(!"7".equals(option));   
     }
@@ -62,16 +61,16 @@ public class EmployeeView {
      */
     private void createEmployee() throws SQLException {
         int permanentAddressCount = 0;
-    	System.out.println(constants.getNameMessage);
+    	System.out.println(Constants.GET_NAME_MESSAGE);
     	String name = scanner.nextLine();
-    	System.out.println(constants.getDesignationMessage);
+    	System.out.println(Constants.GET_DESIGNATION_MESSAGE);
     	String designation = scanner.nextLine();
     	double salary = getAndValidateSalary();
     	long mobile = getAndValidateMobile();
     	Date dob = getDob();
         employeeController.createEmployee(name, designation, salary,
                 mobile, dob, createAddresses());
-        System.out.println(constants.successfullCreation);
+        System.out.println(Constants.SUCCESSFULL_CREATION);
     }
 
     /**
@@ -82,7 +81,7 @@ public class EmployeeView {
         int permanentAddressCount = 0;
         List<String[]> employeeAddresses = new ArrayList<String[]>();
         do {
-            System.out.println(constants.addressType);
+            System.out.println(Constants.GET_ADDRESS_TYPE_MESSAGE);
             String addressChoice = scanner.nextLine();
             switch (addressChoice) {
                 case "1":
@@ -105,7 +104,7 @@ public class EmployeeView {
                     option = scanner.nextLine();
                     break;
                 default:
-   	            System.out.println(constants.invalidDetails);
+   	            System.out.println(Constants.INVALID_DETAILS);
                     option = "1";
             }
         } while ("1".equals(option));
@@ -143,11 +142,11 @@ public class EmployeeView {
      */
     private Date getDob() {
         String date;
-        System.out.println(constants.getDateMessage);      
+        System.out.println(Constants.GET_DATE_MESSAGE);      
         do {
             date = scanner.nextLine();
 	    if (null == employeeController.isValidDate(date)) { 
-	        System.out.println(constants.invalidDetails);
+	        System.out.println(Constants.INVALID_DETAILS);
 	        date = "invalidDate";
             }
         } while("invalidDate".equals(date));
@@ -161,7 +160,7 @@ public class EmployeeView {
         int id = getAndValidateId();
     	String employeeDetails = employeeController.getEmployee(id);
     	if(null == employeeDetails) {
-    	    System.out.println(constants.noEmployee);
+    	    System.out.println(Constants.NO_EMPLOYEE);
     	} else {
     	    System.out.println(employeeDetails);
     	}
@@ -175,7 +174,7 @@ public class EmployeeView {
     	if (employeeController.isIdExist(id)) {	
             String option;
             do {
-                System.out.println(constants.updateOption);
+                System.out.println(Constants.UPDATE_OPTION);
                 option = scanner.nextLine();
     	        switch (option) {
     	            case "1":
@@ -198,11 +197,11 @@ public class EmployeeView {
                        break;
                    default:
                        option = null;
-                       System.out.println(constants.invalidDetails);
+                       System.out.println(Constants.INVALID_DETAILS);
     	        }
             } while (null == option);
     	} else {
-    	    System.out.println(constants.noEmployee);
+    	    System.out.println(Constants.NO_EMPLOYEE);
     	}		
     }
 
@@ -211,14 +210,14 @@ public class EmployeeView {
      * @return employee id
      */
     private int getAndValidateId() throws SQLException {
-        System.out.println(constants.getIdMessage);
+        System.out.println(Constants.GET_ID_MESSAGE);
         String input;
         int id = 0;
         do {
             input = scanner.nextLine();
             id = employeeController.isValidId(input); 
             if (0 == id) {
-                System.out.println(constants.invalidDetails);
+                System.out.println(Constants.INVALID_DETAILS);
             }     
     	} while(0 == id);
     	return id;
@@ -229,13 +228,13 @@ public class EmployeeView {
      * @param id the employee id
      */
     private void updateName(int id) throws SQLException {
-    	System.out.println(constants.getNameMessage);
+    	System.out.println(Constants.GET_NAME_MESSAGE);
         String employeeName = scanner.nextLine();
         if(employeeController.isIdExist(id)) {
             employeeController.updateName(id, employeeName);
-            System.out.println(constants.successfullUpdation);
+            System.out.println(Constants.SUCCESSFULL_UPDATION);
         } else {
-            System.out.println(constants.noEmployee);
+            System.out.println(Constants.NO_EMPLOYEE);
         }  
     }
     
@@ -244,10 +243,10 @@ public class EmployeeView {
      * @param id the employee id
      */
     private void updateDesignation(int id) throws SQLException {
-    	System.out.println(constants.getDesignationMessage);
+    	System.out.println(Constants.GET_DESIGNATION_MESSAGE);
         String designation = scanner.nextLine();
         employeeController.updateDesignation(id, designation);
-        System.out.println(constants.successfullUpdation);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
     }
     
     /**
@@ -257,7 +256,7 @@ public class EmployeeView {
     private void updateSalary(int id) throws SQLException {
     	double employeeSalary = getAndValidateSalary();
         employeeController.updateSalary(id, employeeSalary);
-        System.out.println(constants.successfullUpdation);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
     }
     
     /**
@@ -265,12 +264,12 @@ public class EmployeeView {
      * @return valid salary
      */
     private double getAndValidateSalary() {
-    	System.out.println(constants.getSalaryMessage);
+    	System.out.println(Constants.GET_SALARY_MESSAGE);
     	String input;
     	do {  
             input = scanner.nextLine();	    
             if(0 == employeeController.isValidSalary(input)) {
-                System.out.println(constants.invalidDetails);
+                System.out.println(Constants.INVALID_DETAILS);
                 input = null;          
             } 
         } while (null == input);
@@ -282,17 +281,17 @@ public class EmployeeView {
      * @param id the employee id
      */
     private void updateDob(int id) throws SQLException {
-    	System.out.println(constants.getDateMessage);
+    	System.out.println(Constants.GET_DATE_MESSAGE);
     	String date;
     	do {
             date = scanner.nextLine();
 	    if (null == employeeController.isValidDate(date)) { 
-                System.out.println(constants.invalidDetails);
+                System.out.println(Constants.INVALID_DETAILS);
 	        date = "invalidDate";
             }
         } while("invalidDate".equals(date));
 	employeeController.updateDob(id, employeeController.isValidDate(date));
-	System.out.println(constants.successfullUpdation);
+	System.out.println(Constants.SUCCESSFULL_UPDATION);
     }
     
     /**
@@ -303,7 +302,7 @@ public class EmployeeView {
     	String input;
     	long mobile = getAndValidateMobile();
         employeeController.updateMobile(id, mobile);
-        System.out.println(constants.successfullUpdation);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
     }
     
     /**
@@ -313,11 +312,11 @@ public class EmployeeView {
     private long getAndValidateMobile() {
         String input;
     	long mobile = 1;
-    	System.out.println(constants.getMobileMessage);
+    	System.out.println(Constants.GET_MOBILE_MESSAGE);
         do {  	    
             input = scanner.nextLine();
       	    if (0 == employeeController.isValidMobile(input)) {
-                System.out.println(constants.invalidDetails);
+                System.out.println(Constants.INVALID_DETAILS);
       	        mobile = 0;
       	    } else {
                 mobile = employeeController.isValidMobile(input);
@@ -337,16 +336,16 @@ public class EmployeeView {
             switch (option) {
                 case "1":
                     employeeController.deleteEmployee(id);
-                    System.out.println(constants.successfullDeletion);
+                    System.out.println(Constants.SUCCESSFULL_DELETION);
                     break;
                 case "2":
                     deleteAddress(id);
                     break;
                 default:
-                    System.out.println(constants.invalidDetails);
+                    System.out.println(Constants.INVALID_DETAILS);
             }
          } else {
-             System.out.println(constants.noEmployee);
+             System.out.println(Constants.NO_EMPLOYEE);
          }
      }
 
@@ -374,10 +373,10 @@ public class EmployeeView {
                 if (employeeController.deleteAddress(addressId)) {
                     System.out.println("\nAddress deleted successfully");
                 } else { 
-                    System.out.println(constants.invalidDetails);
+                    System.out.println(Constants.INVALID_DETAILS);
                 }
              } else {
-                 System.out.println(constants.invalidDetails);
+                 System.out.println(Constants.INVALID_DETAILS);
              }
          } else {
              System.out.println("No address exist for given employee");
@@ -390,7 +389,7 @@ public class EmployeeView {
     private void displayAll() throws SQLException {
         List<String> employeesDetails = employeeController.getAll();
         if (0 == employeesDetails.size()) {
-            System.out.println(constants.noEmployee);
+            System.out.println(Constants.NO_EMPLOYEE);
         } else {
             for(String employeeDetails : employeesDetails) {
                 System.out.println(employeeDetails);
@@ -424,10 +423,10 @@ public class EmployeeView {
                     if (employeeController.updateAddress(addressId, addressDetails)) {
                         System.out.println("Address updated successfully...");
                     } else {
-                        System.out.println(constants.invalidDetails);
+                        System.out.println(Constants.INVALID_DETAILS);
                     }
                 } else {
-                    System.out.println(constants.invalidDetails);
+                    System.out.println(Constants.INVALID_DETAILS);
                     input = 0;
                 }
             } while (0 == input); 
@@ -441,9 +440,9 @@ public class EmployeeView {
      */
     private void recoverEmployee() throws SQLException{
         System.out.println("Select your option\n1 : whole employee\n2 : Address only");
-        String input1 = scanner.nextLine();
+        String input = scanner.nextLine();
         int employeeId; 
-        switch (input1) {
+        switch (input) {
             case "1":
                 List <String> deletedEmployees = employeeController.getDeletedEmployees();
                 System.out.println("Deleted employees are given below");
@@ -453,7 +452,7 @@ public class EmployeeView {
                 employeeId = getAndValidateId();
                 String recoveryStatus = employeeController.recoverEmployee(employeeId);
                 if (null == recoveryStatus) {
-                    System.out.println(constants.invalidDetails);
+                    System.out.println(Constants.INVALID_DETAILS);
                 } else {
                     System.out.println(recoveryStatus); 
                 }   
@@ -463,7 +462,7 @@ public class EmployeeView {
                 recoverAddress(employeeId);
                 break;
             default:
-                 System.out.println(constants.invalidDetails);
+                 System.out.println(Constants.INVALID_DETAILS);
         }
     }
     
@@ -494,15 +493,15 @@ public class EmployeeView {
                     if(employeeController.recoverAddress(addressId)) {
                         System.out.println("Address recoverd successfully");
                     } else {
-                        System.out.println(constants.invalidDetails);
+                        System.out.println(Constants.INVALID_DETAILS);
                     }
                 } else {
                     input = 0;
-                    System.out.println(constants.invalidDetails);
+                    System.out.println(Constants.INVALID_DETAILS);
                 } 
             } while (0 == input);        
         } else {
-            System.out.println(constants.invalidDetails);
+            System.out.println(Constants.INVALID_DETAILS);
         }
     }             
 }
