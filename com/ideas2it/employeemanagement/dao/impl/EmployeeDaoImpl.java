@@ -18,13 +18,13 @@ import com.ideas2it.sessionfactory.DatabaseConnection;
 /**
  * Class to interact with database
  * @author Sharon V
- * @created 18-03-2021
+ * @created 21-03-2021
  */
 public class EmployeeDaoImpl implements EmployeeDao {
-    DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
-    Connection connection = databaseConnection.getDatabaseConnection();	
-    PreparedStatement preparedStatement;
-    ResultSet resultSet;
+    private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+    private Connection connection = databaseConnection.getDatabaseConnection();	
+    private PreparedStatement preparedStatement;
+    private ResultSet resultSet;
   
     /**
      * {@inheritdoc}

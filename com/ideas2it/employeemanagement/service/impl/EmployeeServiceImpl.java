@@ -17,10 +17,10 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
 /**
  * Class for Employee service
  * @author Sharon V
- * @created 18-03-2021
+ * @created 21-03-2021
  */
 public class EmployeeServiceImpl implements EmployeeService {
-    EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
+    private EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
 	
     /**
      * {@inheritdoc}

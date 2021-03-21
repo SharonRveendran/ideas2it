@@ -11,7 +11,7 @@ import com.ideas2it.employeemanagement.model.Employee;
 /**
  * Class to interact with database
  * @author Sharon V
- * @created 18-03-2021
+ * @created 21-03-2021
  */
 public interface EmployeeDao {
       

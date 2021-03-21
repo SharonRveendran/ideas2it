@@ -10,10 +10,10 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
 /**
  * Class for Employee controller
  * @author Sharon V
- * @created 18-03-2021
+ * @created 21-03-2021
  */
 public class EmployeeController {
-    EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+    private EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
     
     /**
      * Method to create employee
