@@ -417,7 +417,7 @@ public class EmployeeView {
                 } catch(NumberFormatException e) {
                     input = index + 1;
                 }
-                if (input < index) {
+                if (input <= index) {
                     int addressId = employeeIdList.get(input - 1);              
                     String addressDetails[] = getAddress(null);
                     if (employeeController.updateAddress(addressId, addressDetails)) {

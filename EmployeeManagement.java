@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.view.EmployeeView;
 
@@ -9,8 +10,8 @@ import com.ideas2it.employeemanagement.view.EmployeeView;
  */
 public class EmployeeManagement {
     public static void main(String[] args) {
-        private Scanner scanner = new Scanner(System.in);
-	private EmployeeView employeeView = new EmployeeView();
+        Scanner scanner = new Scanner(System.in);
+	EmployeeView employeeView = new EmployeeView();
         String option = "0";
 	do {
             try {

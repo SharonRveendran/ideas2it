@@ -48,9 +48,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 Address employeeAddress = createAddress(resultSet);
                 employeeAddressList.add(employeeAddress);             
             } while(resultSet.next());  
-            employee.setEmployeeAddresses(employeeAddressList);                
+            employee.setEmployeeAddresses(employeeAddressList);              
             return employee;
-        } else { 
+        } else {
             return null;
         }
     }
@@ -117,6 +117,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employees.add(employee);
             } while(resultSetEnd == false);
         }
+        //closeConnection();
         return employees;
     }
       
@@ -141,6 +142,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
          } catch (Exception e) {
             e.printStackTrace();
          }
+        //closeConnection();
     }
 
     /**
@@ -185,6 +187,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                  ("update address set is_deleted ='1' where employee_id=?");
          preparedStatement.setInt(1, id);
          preparedStatement.executeUpdate();
+         //closeConnection();
      }   
          
     /**
@@ -203,6 +206,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         preparedStatement.setDouble(5, employee.getSalary());
         preparedStatement.setInt(6, employee.getId());
         preparedStatement.executeUpdate();
+        //closeConnection();
     } 
 
     /**
@@ -214,6 +218,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 ("select id from employee where id = ?");
         preparedStatement.setInt(1, id);
         resultSet = preparedStatement.executeQuery();
+        //closeConnection();
         return resultSet.next();
     }
 
@@ -234,6 +239,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setString(6,employeeAddress.getAddressType());
             preparedStatement.setInt(7,addressId);
             preparedStatement.executeUpdate();
+            //closeConnection();
             return true;
     }
 
@@ -247,8 +253,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
        preparedStatement.setInt(1,id);
        resultSet = preparedStatement.executeQuery();
        if (!resultSet.next()) {
+           //closeConnection();
            return null;
        } else if (0 == resultSet.getInt(7)) {
+           //closeConnection();
            return "Employee already present";
        } else {
            preparedStatement = connection.prepareStatement
@@ -258,9 +266,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
            preparedStatement = connection.prepareStatement
                   ("update address set is_deleted = 0 where employee_id = ?");
            preparedStatement.setInt(1,id);
-           preparedStatement.executeUpdate(); 
+           preparedStatement.executeUpdate();
+           //closeConnection(); 
            return "Recovery Successfull...";
-       }
+       } 
     }
 
     /**
@@ -285,6 +294,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                          resultSet.getString(7), resultSet.getString(8));
             addressList.put(resultSet.getInt(1), address);
        }
+       //closeConnection();
        return addressList;
     }
 
@@ -293,11 +303,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public boolean deleteAddress(int addressId)throws SQLException {
-            preparedStatement = connection.prepareStatement
-                    ("update address set is_deleted = 1 where id = ?");
-            preparedStatement.setInt(1, addressId);
-            preparedStatement.executeUpdate();
-            return true;
+        preparedStatement = connection.prepareStatement
+                ("update address set is_deleted = 1 where id = ?");
+        preparedStatement.setInt(1, addressId);
+        preparedStatement.executeUpdate();
+        //closeConnection();
+        return true;     
     } 
 
     /**
@@ -318,6 +329,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                          resultSet.getString(7), resultSet.getString(8));
             addressList.put(resultSet.getInt(1), address);
        }
+       //closeConnection();
        return addressList;
     }
 
@@ -330,6 +342,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     ("update address set is_deleted = 0 where id = ?"); 
             preparedStatement.setInt(1,addressId);
             preparedStatement.executeUpdate();
+            //closeConnection();
             return true;
     }
 
@@ -346,6 +359,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
             Employee employee = createEmployee(resultSet);
             deletedEmployees.add(employee);
         }
+        //closeConnection();
         return deletedEmployees;
     } 
+   
+     /**
+     * Methode to close connection and prepared statement objects.
+     */
+    private void closeConnection()throws SQLException {
+        preparedStatement.close();
+        connection.close();
+    }
 }
