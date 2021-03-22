@@ -23,7 +23,7 @@ public class EmployeeView {
      * This method will collect the input option from user
      * and perfom CRUD operation
      */
-    public void start() throws SQLException {	
+    public void start() {	
         String option;
         do {
             System.out.println(Constants.CRUD_OPTION); 
@@ -59,7 +59,7 @@ public class EmployeeView {
     /**
      * Method to create employee
      */
-    private void createEmployee() throws SQLException {
+    private void createEmployee() {
         int permanentAddressCount = 0;
     	System.out.println(Constants.GET_NAME_MESSAGE);
     	String name = scanner.nextLine();
@@ -156,7 +156,7 @@ public class EmployeeView {
     /**
      * Method to display employee based on employee id
      */
-    private void displayEmployee() throws SQLException{
+    private void displayEmployee() {
         int id = getAndValidateId();
     	String employeeDetails = employeeController.getEmployee(id);
     	if(null == employeeDetails) {
@@ -169,7 +169,7 @@ public class EmployeeView {
     /**
      * Method to update the employee details
      */
-    private void updateEmployee() throws SQLException {
+    private void updateEmployee() {
     	int id = getAndValidateId();
     	if (employeeController.isIdExist(id)) {	
             String option;
@@ -209,7 +209,7 @@ public class EmployeeView {
      * Method to get and validate the employee id
      * @return employee id
      */
-    private int getAndValidateId() throws SQLException {
+    private int getAndValidateId() {
         System.out.println(Constants.GET_ID_MESSAGE);
         String input;
         int id = 0;
@@ -227,7 +227,7 @@ public class EmployeeView {
      * This method will update the employee name
      * @param id the employee id
      */
-    private void updateName(int id) throws SQLException {
+    private void updateName(int id) {
     	System.out.println(Constants.GET_NAME_MESSAGE);
         String employeeName = scanner.nextLine();
         if(employeeController.isIdExist(id)) {
@@ -242,7 +242,7 @@ public class EmployeeView {
      * This method will update the employee Designation
      * @param id the employee id
      */
-    private void updateDesignation(int id) throws SQLException {
+    private void updateDesignation(int id) {
     	System.out.println(Constants.GET_DESIGNATION_MESSAGE);
         String designation = scanner.nextLine();
         employeeController.updateDesignation(id, designation);
@@ -253,7 +253,7 @@ public class EmployeeView {
      * This method will update the employee Salary
      * @param id the employee id
      */
-    private void updateSalary(int id) throws SQLException {
+    private void updateSalary(int id) {
     	double employeeSalary = getAndValidateSalary();
         employeeController.updateSalary(id, employeeSalary);
         System.out.println(Constants.SUCCESSFULL_UPDATION);
@@ -280,7 +280,7 @@ public class EmployeeView {
      * This method will update the employee Date of birth
      * @param id the employee id
      */
-    private void updateDob(int id) throws SQLException {
+    private void updateDob(int id) {
     	System.out.println(Constants.GET_DATE_MESSAGE);
     	String date;
     	do {
@@ -298,7 +298,7 @@ public class EmployeeView {
      * This method will update the employee Mobile number
      * @param id the employee id
      */
-    private void updateMobile(int id) throws SQLException {
+    private void updateMobile(int id) {
     	String input;
     	long mobile = getAndValidateMobile();
         employeeController.updateMobile(id, mobile);
@@ -328,7 +328,7 @@ public class EmployeeView {
     /**
      * Method to delete employee based on employee id
      */
-    private void deleteEmployee() throws SQLException { 
+    private void deleteEmployee() { 
     	int id = getAndValidateId() ;  
     	if (employeeController.isIdExist(id)) {
             System.out.println("Select your option\n1 : Whole employee\n2 : Address only");
@@ -352,7 +352,7 @@ public class EmployeeView {
     /**
      * Method to delete address
      */
-    private void deleteAddress(int employeeId)throws SQLException {
+    private void deleteAddress(int employeeId) {
         Map <Integer, String> addressList = employeeController.getAddressList(employeeId);
         if (0 != addressList.size()) {
             List <Integer> employeeIdList = new ArrayList <Integer> (addressList.keySet());
@@ -383,7 +383,7 @@ public class EmployeeView {
     /**
      * Method to display all employee details present in collection
      */
-    private void displayAll() throws SQLException {
+    private void displayAll() {
         List<String> employeesDetails = employeeController.getAll();
         if (0 == employeesDetails.size()) {
             System.out.println(Constants.NO_EMPLOYEE);
@@ -397,7 +397,7 @@ public class EmployeeView {
     /**
      * Methode to update employee address
      */
-    private void updateAddress(int employeeId) throws SQLException {
+    private void updateAddress(int employeeId) {
         Map<Integer, String> addressList = employeeController.getAddressList(employeeId);
         List<Integer> employeeIdList = new ArrayList<Integer>(addressList.keySet());
         System.out.println("Which address you want to update ?");
@@ -432,7 +432,7 @@ public class EmployeeView {
     /**
      * Method to recover a deleted employee
      */
-    private void recoverEmployee() throws SQLException{
+    private void recoverEmployee() {
         System.out.println("Select your option\n1 : whole employee\n2 : Address only");
         String input = scanner.nextLine();
         int employeeId; 
@@ -463,7 +463,7 @@ public class EmployeeView {
     /**
      * Methode to recover employee address
      */
-    private void recoverAddress(int employeeId)throws SQLException {
+    private void recoverAddress(int employeeId) {
         int input;
         Map <Integer, String>  deletedAddressList = employeeController
                 .getDeletedAddressList(employeeId); 

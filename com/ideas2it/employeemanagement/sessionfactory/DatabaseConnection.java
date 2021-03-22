@@ -1,4 +1,4 @@
-package com.ideas2it.sessionfactory;
+package com.ideas2it.employeemanagement.sessionfactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,10 +19,8 @@ public class DatabaseConnection {
      * @return DatabaseConnection object
      */
     public static DatabaseConnection getInstance() {
-       if(null == databaseConnection) {
-         databaseConnection = new DatabaseConnection();
-       }
-       return databaseConnection;
+       return null == databaseConnection ? databaseConnection 
+               = new DatabaseConnection() : databaseConnection;
     }
 
     /**
@@ -30,14 +28,14 @@ public class DatabaseConnection {
      * @return database connection object
      */
     public Connection getDatabaseConnection() {
-        try {
-            Connection connection = DriverManager.getConnection
+        Connection connection = null;
+        try {            
+            connection = DriverManager.getConnection
                     ("jdbc:mysql://localhost:3306/employeemanagement",
-                     "root", "25562556");
-            return connection;
-        } catch (SQLException e) {    
-            System.out.println("Can't connect to database");
-        } 
-        return null;
+                    "root", "25562556");
+        } catch(SQLException e) {
+                System.out.println("Can't connect to database");
+        }
+        return connection;
     }
 }	

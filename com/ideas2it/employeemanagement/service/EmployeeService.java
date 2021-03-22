@@ -26,14 +26,14 @@ public interface EmployeeService {
      */
    public void createEmployee(String name, String designation,
            double salary, long mobile, Date dob,
-           List<String[]> employeeAddresses) throws SQLException;
+           List<String[]> employeeAddresses);
     
     /**
      * Method to return employee details based on employee id
      * @param id Employee id
      * @return employee object if employee present else return null
      */
-    public String getEmployee(int id) throws SQLException;
+    public String getEmployee(int id);
         
     /**
      * Methode to update employee details
@@ -46,27 +46,26 @@ public interface EmployeeService {
      * @param option option to specify the attribute that need to update
      */
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, String option)
-            throws ClassNotFoundException, SQLException;
+            double salary, Date dob, long mobile, String option);
    
     /**
      * Method to check whether the id is present in collection or not 
      * @param id Employee id
      * @return true if id present in collection else return false
      */
-    public boolean isIdExist(int id) throws SQLException;
+    public boolean isIdExist(int id);
      
     /**
      * Method to delete the Employee based on employee id
      * @param id Employee id
      */
-    public void deleteEmployee(int id) throws SQLException;
+    public void deleteEmployee(int id);
     	
     /**
      * Method to return all employee details present in collection
      * @return list of employee details
      */
-    public List<String> getAll() throws SQLException;
+    public List<String> getAll();
         
     /**
      * Method to validate date
@@ -101,44 +100,43 @@ public interface EmployeeService {
      * @param addressId employee address id
      * @param addressDetails array of address details
      */
-    public void updateAddress(int addressId, String[] addressDetails)
-            throws SQLException ;   
+    public void updateAddress(int addressId, String[] addressDetails);   
     
     /**
      * Methode to recover deleted employee
      * @param id employee id
      */
-    public String recoverEmployee(int id) throws SQLException;
+    public String recoverEmployee(int id);
 
     /**
      * Method to get addressList of a employee
      * @param employeeId
      * @return list of employee address strings
      */
-    public Map <Integer, String> getAddressList(int employeeId) throws SQLException;
+    public Map <Integer, String> getAddressList(int employeeId);
 
     /**
      * Method to delete employee address
      * @param addressId
      */
-    public void deleteAddress(int addressId)throws SQLException;
+    public void deleteAddress(int addressId);
 
     /**
      * Methode to get deleted address list
      * @param employeeId
      * @return map of deleted address and address id
      */
-    public Map <Integer, String> getDeletedAddressList(int employeeId)throws SQLException;
+    public Map <Integer, String> getDeletedAddressList(int employeeId);
 
     /**
      * Method to recover deleted employee
      * @param addressId
      */
-    public void recoverAddress(int addressId) throws SQLException;
+    public void recoverAddress(int addressId);
 
     /**
      * Method to get all deleted employees
      * @return list of  deleted employees 
      */
-    public List <String> getDeletedEmployees()throws SQLException;
+    public List <String> getDeletedEmployees();
 }

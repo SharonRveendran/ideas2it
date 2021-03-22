@@ -26,8 +26,7 @@ public class EmployeeController {
      * @return  employee id
      */
     public void createEmployee(String name, String designation,
-            double salary,long mobile,Date dob, List<String[]> employeeAddresses) 
-            throws SQLException {
+            double salary,long mobile,Date dob, List<String[]> employeeAddresses) {
         employeeService.createEmployee(name, designation, salary,
                 mobile, dob, employeeAddresses);
     }
@@ -37,7 +36,7 @@ public class EmployeeController {
      * @param id Employee id
      * @return Employee details as string
      */
-    public String getEmployee(int id) throws SQLException {
+    public String getEmployee(int id) {
     	return employeeService.getEmployee(id);
     }
     
@@ -47,7 +46,7 @@ public class EmployeeController {
      * @param employeeName Name of employee
      * @return true for successful updation of name else return false
      */
-    public void updateName(int id, String employeeName) throws SQLException {
+    public void updateName(int id, String employeeName) {
     	employeeService.updateEmployee(id, employeeName,
                 null, 0l, null, 0l, "name");
     }
@@ -57,7 +56,7 @@ public class EmployeeController {
      * @param id Employee id
      * @return true if id present in database else return false
      */
-    public boolean isIdExist(int id) throws SQLException {
+    public boolean isIdExist(int id) {
     	return employeeService.isIdExist(id);
     }
     
@@ -66,8 +65,7 @@ public class EmployeeController {
      * @param id Employee id
      * @param designation Employee Designation   
      */
-    public void updateDesignation(int id, String designation) 
-            throws SQLException {
+    public void updateDesignation(int id, String designation) {
     	employeeService.updateEmployee(id, null, designation,
                 0l, null, 0l, "designation");
     }
@@ -77,8 +75,7 @@ public class EmployeeController {
      * @param id Employee id
      * @param employeeSalary Salary of Employee
      */
-    public void updateSalary(int id, double employeeSalary)
-            throws SQLException {
+    public void updateSalary(int id, double employeeSalary) {
     	employeeService.updateEmployee(id, null, null,
                 employeeSalary, null, 0l, "salary");
     }
@@ -88,7 +85,7 @@ public class EmployeeController {
      * @param id Employee id
      * @param dob Employee date of birth
      */
-    public void updateDob(int id, Date dob) throws SQLException{
+    public void updateDob(int id, Date dob) {
     	employeeService.updateEmployee(id, null, null, 0l, dob, 0l, "dob");
     }
     
@@ -97,7 +94,7 @@ public class EmployeeController {
      * @param id Employee id
      * @param mobile Employee mobile number
      */
-    public void updateMobile(int id, long mobile) throws SQLException {
+    public void updateMobile(int id, long mobile) {
     	employeeService.updateEmployee(id, null, null,
                 0l, null, mobile, "mobile");
     }
@@ -106,7 +103,7 @@ public class EmployeeController {
      * Method to delete the Employee based on employee id
      * @param id Employee id
      */
-    public void deleteEmployee(int id) throws SQLException {
+    public void deleteEmployee(int id) {
     	employeeService.deleteEmployee(id);
     }
 
@@ -114,7 +111,7 @@ public class EmployeeController {
      * Method to return all employee details present in collection
      * @return list of all employee delails
      */
-    public List<String> getAll() throws SQLException {
+    public List<String> getAll() {
     	return employeeService.getAll();
     }
     
@@ -150,7 +147,7 @@ public class EmployeeController {
      * @param id employee id
      * @return valid employee id
      */
-    public int isValidId(String id) throws SQLException {
+    public int isValidId(String id) {
         return employeeService.isValidId(id);
     }
 
@@ -159,8 +156,7 @@ public class EmployeeController {
      * @param addressId employee address id
      * @param addressDetails array of address details
      */
-    public void updateAddress(int addressId, String[] addressDetails)
-            throws SQLException {
+    public void updateAddress(int addressId, String[] addressDetails) {
         employeeService.updateAddress(addressId, addressDetails);
     }
 
@@ -169,7 +165,7 @@ public class EmployeeController {
      * @param id employee id
      * @return recovery status string
      */
-    public String recoverEmployee(int id) throws SQLException {
+    public String recoverEmployee(int id) {
         return employeeService.recoverEmployee(id);
     }
     
@@ -178,7 +174,7 @@ public class EmployeeController {
      * @param employeeId
      * @return list of employee address strings
      */
-    public Map<Integer, String> getAddressList(int employeeId) throws SQLException {
+    public Map<Integer, String> getAddressList(int employeeId) {
         return employeeService.getAddressList(employeeId);
     }
 
@@ -186,7 +182,7 @@ public class EmployeeController {
      * Method to delete employee address
      * @param addressId
      */
-    public void deleteAddress(int addressId)throws SQLException {
+    public void deleteAddress(int addressId) {
         employeeService.deleteAddress(addressId);
     }
     
@@ -195,7 +191,7 @@ public class EmployeeController {
      * @param employeeId
      * @return map of deleted address with address id 
      */
-    public Map<Integer, String> getDeletedAddressList(int employeeId)throws SQLException {
+    public Map<Integer, String> getDeletedAddressList(int employeeId) {
         return employeeService.getDeletedAddressList(employeeId);
     }
 
@@ -203,7 +199,7 @@ public class EmployeeController {
      * Method to recover deleted employee
      * @param addressId
      */
-    public void recoverAddress(int addressId) throws SQLException {
+    public void recoverAddress(int addressId) {
         employeeService.recoverAddress(addressId);
     }
 
@@ -211,7 +207,7 @@ public class EmployeeController {
      * Method to get all deleted employees
      * @return list of  deleted employees 
      */
-    public List<String> getDeletedEmployees()throws SQLException {
+    public List<String> getDeletedEmployees() {
         return employeeService.getDeletedEmployees();
     }
 }

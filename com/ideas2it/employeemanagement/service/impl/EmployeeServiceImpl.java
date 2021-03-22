@@ -27,8 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void createEmployee(String name, String designation, double salary,
-            long mobile, Date dob, List<String[]> employeeAddressesDetails)
-            throws SQLException {
+            long mobile, Date dob, List<String[]> employeeAddressesDetails) {
         Address employeeAddress;
         String addressType;
         List<Address> employeeAddresses = new ArrayList<Address>();
@@ -50,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public String getEmployee(int id) throws SQLException {    
+    public String getEmployee(int id) {    
         Employee employee = employeeDao.getEmployee(id);
         return getEmployeeDetails(employee);
     }
@@ -90,8 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, String option)
-            throws SQLException {
+            double salary, Date dob, long mobile, String option) {
         Employee employee = employeeDao.getEmployee(id);
         if ("name".equals(option)) {
             employee.setName(name);           
@@ -115,7 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean isIdExist(int id) throws SQLException {
+    public boolean isIdExist(int id) {
         return employeeDao.isIdExist(id);
     }
      
@@ -123,7 +121,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public void deleteEmployee(int id) throws SQLException {
+    public void deleteEmployee(int id) {
     	employeeDao.deleteEmployee(id);
     }
     
@@ -131,7 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getAll() throws SQLException {
+    public List<String> getAll() {
         List<String> employeesDetails = new ArrayList<String>();
         List<Employee> employees = new ArrayList<Employee>();
         employees = employeeDao.getAllEmployee();
@@ -205,8 +203,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public void updateAddress(int addressId, String[] addressDetails) 
-            throws SQLException {
+    public void updateAddress(int addressId, String[] addressDetails) {
         Address employeeAddress = new Address(addressDetails[0],
                 addressDetails[1], addressDetails[2], addressDetails[3],
                 addressDetails[4], addressDetails[5]);
@@ -218,7 +215,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public String recoverEmployee(int id) throws SQLException {
+    public String recoverEmployee(int id) {
         return employeeDao.recoverEmployee(id);
     }
 
@@ -226,8 +223,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map <Integer, String> getAddressList(int employeeId)
-            throws SQLException {
+    public Map <Integer, String> getAddressList(int employeeId) {
         Map <Integer, String> addressList = new HashMap <Integer, String> ();
         Map <Integer, Address> addresses = employeeDao.getAddressList(employeeId);
         List <Integer> addressIdList = new ArrayList <Integer> (addresses.keySet());
@@ -242,7 +238,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public void deleteAddress(int addressId)throws SQLException {
+    public void deleteAddress(int addressId) {
        employeeDao.deleteAddress(addressId);
     }  
     
@@ -250,8 +246,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map <Integer, String> getDeletedAddressList(int employeeId)
-            throws SQLException {
+    public Map <Integer, String> getDeletedAddressList(int employeeId) {
         Map <Integer, String> deletedAddressList 
                 = new HashMap <Integer, String> ();
         Map <Integer, Address> deletedAddresses 
@@ -269,7 +264,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public void recoverAddress(int addressId) throws SQLException {
+    public void recoverAddress(int addressId) {
             employeeDao.recoverAddress(addressId);
     } 
 
@@ -277,7 +272,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public List <String> getDeletedEmployees()throws SQLException {
+    public List <String> getDeletedEmployees() {
         List <String> deletedEmployees = new ArrayList <String> ();
         List <Employee> deletedEmployeesObjects = employeeDao.getDeletedEmployees();
         for (int index = 0; index < deletedEmployeesObjects.size(); index++) {
