@@ -100,9 +100,8 @@ public interface EmployeeService {
      * Methode to update address
      * @param addressId employee address id
      * @param addressDetails array of address details
-     * @return true for successfull address updation else false 
      */
-    public boolean updateAddress(int addressId, String[] addressDetails)
+    public void updateAddress(int addressId, String[] addressDetails)
             throws SQLException ;   
     
     /**
@@ -121,9 +120,8 @@ public interface EmployeeService {
     /**
      * Method to delete employee address
      * @param addressId
-     * @return true for successfull address deletion else false
      */
-    public boolean deleteAddress(int addressId)throws SQLException;
+    public void deleteAddress(int addressId)throws SQLException;
 
     /**
      * Methode to get deleted address list
@@ -135,9 +133,8 @@ public interface EmployeeService {
     /**
      * Method to recover deleted employee
      * @param addressId
-     * @return true for successfull recovery
      */
-    public boolean recoverAddress(int addressId) throws SQLException;
+    public void recoverAddress(int addressId) throws SQLException;
 
     /**
      * Method to get all deleted employees

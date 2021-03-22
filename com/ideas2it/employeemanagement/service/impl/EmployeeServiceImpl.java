@@ -205,13 +205,13 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean updateAddress(int addressId, String[] addressDetails) 
+    public void updateAddress(int addressId, String[] addressDetails) 
             throws SQLException {
         Address employeeAddress = new Address(addressDetails[0],
                 addressDetails[1], addressDetails[2], addressDetails[3],
                 addressDetails[4], addressDetails[5]);
         employeeAddress.setAddressId(addressId);
-        return employeeDao.updateAddress(employeeAddress, addressId);
+        employeeDao.updateAddress(employeeAddress, addressId);
     }
 
     /**
@@ -242,8 +242,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean deleteAddress(int addressId)throws SQLException {
-       return employeeDao.deleteAddress(addressId);
+    public void deleteAddress(int addressId)throws SQLException {
+       employeeDao.deleteAddress(addressId);
     }  
     
      /**
@@ -269,8 +269,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public boolean recoverAddress(int addressId) throws SQLException {
-            return employeeDao.recoverAddress(addressId);
+    public void recoverAddress(int addressId) throws SQLException {
+            employeeDao.recoverAddress(addressId);
     } 
 
     /**

@@ -47,7 +47,7 @@ public interface EmployeeDao {
      * @param addressId
      * @return true for successfull employee updation else false
      */
-    public boolean updateAddress(Address employeeAddress, int addressId)
+    public void updateAddress(Address employeeAddress, int addressId)
             throws SQLException;
   
     /**
@@ -79,9 +79,8 @@ public interface EmployeeDao {
     /**
      * Method to delete employee address
      * @param addressId
-     * @return true for successfull address deletion else false
      */
-    public boolean deleteAddress(int addressId)throws SQLException;
+    public void deleteAddress(int addressId)throws SQLException;
 
     /**
      * Methode to get deleted address list
@@ -94,9 +93,8 @@ public interface EmployeeDao {
     /**
      * Method to recover deleted employee
      * @param addressId
-     * @return true for successfull recovery
      */
-    public boolean recoverAddress(int addressId) throws SQLException;
+    public void recoverAddress(int addressId) throws SQLException;
 
     /**
      * Method to get all deleted employees

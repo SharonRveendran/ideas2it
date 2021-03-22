@@ -226,7 +226,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean updateAddress(Address employeeAddress, int addressId)
+    public void updateAddress(Address employeeAddress, int addressId)
             throws SQLException {
             preparedStatement = connection.prepareStatement
                     ("update address set door_number = ?, street = ?, district = ?,"
@@ -240,7 +240,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setInt(7,addressId);
             preparedStatement.executeUpdate();
             //closeConnection();
-            return true;
     }
 
     /**
@@ -302,13 +301,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean deleteAddress(int addressId)throws SQLException {
+    public void deleteAddress(int addressId)throws SQLException {
         preparedStatement = connection.prepareStatement
                 ("update address set is_deleted = 1 where id = ?");
         preparedStatement.setInt(1, addressId);
         preparedStatement.executeUpdate();
-        //closeConnection();
-        return true;     
+        //closeConnection();  
     } 
 
     /**
@@ -337,13 +335,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritdoc}
      */
     @Override
-    public boolean recoverAddress(int addressId) throws SQLException {
+    public void recoverAddress(int addressId) throws SQLException {
             preparedStatement = connection.prepareStatement
                     ("update address set is_deleted = 0 where id = ?"); 
             preparedStatement.setInt(1,addressId);
             preparedStatement.executeUpdate();
             //closeConnection();
-            return true;
     }
 
     /**

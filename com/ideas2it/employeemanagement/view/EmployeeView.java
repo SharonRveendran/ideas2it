@@ -370,11 +370,8 @@ public class EmployeeView {
             }
             if (input <= index) {
                 int addressId = employeeIdList.get(input - 1);
-                if (employeeController.deleteAddress(addressId)) {
-                    System.out.println("\nAddress deleted successfully");
-                } else { 
-                    System.out.println(Constants.INVALID_DETAILS);
-                }
+                employeeController.deleteAddress(addressId);
+                System.out.println("\nAddress deleted successfully");
              } else {
                  System.out.println(Constants.INVALID_DETAILS);
              }
@@ -420,11 +417,8 @@ public class EmployeeView {
                 if (input <= index) {
                     int addressId = employeeIdList.get(input - 1);              
                     String addressDetails[] = getAddress(null);
-                    if (employeeController.updateAddress(addressId, addressDetails)) {
-                        System.out.println("Address updated successfully...");
-                    } else {
-                        System.out.println(Constants.INVALID_DETAILS);
-                    }
+                    employeeController.updateAddress(addressId, addressDetails);
+                    System.out.println("Address updated successfully...");
                 } else {
                     System.out.println(Constants.INVALID_DETAILS);
                     input = 0;
@@ -490,11 +484,8 @@ public class EmployeeView {
                 }
                 if (input <= index) {
                     int addressId = deletedAddressIdList.get(input - 1);
-                    if(employeeController.recoverAddress(addressId)) {
-                        System.out.println("Address recoverd successfully");
-                    } else {
-                        System.out.println(Constants.INVALID_DETAILS);
-                    }
+                    employeeController.recoverAddress(addressId);
+                    System.out.println("Address recoverd successfully");                   
                 } else {
                     input = 0;
                     System.out.println(Constants.INVALID_DETAILS);
