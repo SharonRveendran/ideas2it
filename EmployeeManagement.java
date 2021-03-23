@@ -5,7 +5,7 @@ import com.ideas2it.employeemanagement.view.EmployeeView;
  * @author Sharon V
  * @created 21-03-2021
  */
-public class EmployeeManagement {
+public class Employeemanagement {
     public static void main(String[] args) {
 	EmployeeView employeeView = new EmployeeView();
         employeeView.start();

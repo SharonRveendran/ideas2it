@@ -11,6 +11,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
     private static DatabaseConnection databaseConnection = null;
+    private static Connection connection = null;
     private DatabaseConnection() {
     }
 	
@@ -28,7 +29,6 @@ public class DatabaseConnection {
      * @return database connection object
      */
     public Connection getDatabaseConnection() {
-        Connection connection = null;
         try {            
             connection = DriverManager.getConnection
                     ("jdbc:mysql://localhost:3306/employeemanagement",

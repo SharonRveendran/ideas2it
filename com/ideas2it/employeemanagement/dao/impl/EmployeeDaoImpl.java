@@ -1,10 +1,11 @@
 package com.ideas2it.employeemanagement.dao.impl;
-import java.sql.DriverManager;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,14 +30,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Employee getEmployee(int id) {
         Connection connection = databaseConnection.getDatabaseConnection();
-        ResultSet resultSet = null;
         Employee employee = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement
                     ("select * from employee left join address on employee.id"
                     + " = address.employee_id where employee.id = ? and employee.is_deleted = 0");
             preparedStatement.setInt(1, id);         
-	    resultSet = preparedStatement.executeQuery();
+	    ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 employee = createEmployee(resultSet);	                
                 List<Address> employeeAddressList = new ArrayList<Address>();
@@ -49,7 +49,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     Address employeeAddress = createAddress(resultSet);
                     employeeAddressList.add(employeeAddress);             
                 } while(resultSet.next());  
-                employee.setEmployeeAddresses(employeeAddressList);  
+                employee.setEmployeeAddresses(employeeAddressList); 
+                resultSet.close();
+                preparedStatement.close(); 
                 connection.close();          
             }
         } catch(SQLException e) {
@@ -102,14 +104,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public List<Employee> getAllEmployee() {
         Connection connection = databaseConnection.getDatabaseConnection();
         List<Employee> employees = new ArrayList<Employee>();  
+        ResultSet resultSet;
         try {  
             boolean resultSetEnd = false;
             PreparedStatement preparedStatement = connection.prepareStatement
                     ("select * from employee left join address on employee.id"
                     + "= address.employee_id where employee.is_deleted = 0");         
-	    ResultSet resultSet = preparedStatement.executeQuery();	
-            if (resultSet.next()) { 
-            			
+	    resultSet = preparedStatement.executeQuery();	
+            if (resultSet.next()) {             			
 	        outer: do{ 
                     List<Address> employeeAddresses = new ArrayList<Address>();			
                     int employeeId = resultSet.getInt(1);
@@ -117,10 +119,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     inner: while(employeeId == resultSet.getInt(1)) {
                         while(1 == resultSet.getInt(16)) {
                             if (!resultSet.next()) {
+                                employee.setEmployeeAddresses(employeeAddresses);
+                                employees.add(employee);
                                 break outer;
                             }
                             if (employeeId != resultSet.getInt(1)) {
-                                break inner;
+                                break;
                             }
                         }
                         Address employeeAddress = createAddress(resultSet);
@@ -134,9 +138,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     employees.add(employee);
                 } while(resultSetEnd == false);
             }
+            resultSet.close();
+            preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            System.out.println("xyxySomething went wrong in database");
+            e.printStackTrace();
         }
         return employees;
     }
@@ -150,7 +157,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {  
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement
-                    ("insert into employee(id, name, mobile, dob, designation, salary) values(?, ?, ?, ?, ?, ?)");
+                    ("insert into employee(id, name, mobile, dob, designation, salary)" 
+                    + "values(?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, employee.getId());
 	    preparedStatement.setString(2, employee.getName());
 	    preparedStatement.setLong(3, employee.getMobile());
@@ -158,12 +166,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setString(5, employee.getDesignation());
 	    preparedStatement.setDouble(6, employee.getSalary());
             preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int employeeId = resultSet.getInt(1);
             List<Address> employeeAddresses = employee.getEmployeeAddresses();
-            if (insertAddress(employeeAddresses, connection)) {
+            if (insertAddress(employeeAddresses, connection, employeeId)) {
                 connection.commit(); 
             } else {
                 connection.rollback();
             }
+            resultSet.close();
+            preparedStatement.close();
             connection.close();  
         } catch(SQLException e) {
             System.out.println("Something went wrong in database"); 
@@ -172,23 +185,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     /**
      * Method to insert address
-     * @param employee employee object
+     * @param employeeAddresses list of  employee  address objects
+     * @param connection connection object
+     * @param employeeId employee id for address table.
      * @return true for successfull address insertion else false.
      */
-    private boolean insertAddress(List<Address> employeeAddresses, Connection connection) {
+    private boolean insertAddress(List<Address> employeeAddresses,
+            Connection connection, int employeeId) {
         try { 
             connection.setAutoCommit(false); 
-            Address employeeAddress;
             PreparedStatement preparedStatement = connection.prepareStatement
-                    ("select max(id) from employee");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();		
-            int employeeId = resultSet.getInt(1);
-            preparedStatement = connection.prepareStatement
                     ("insert into address(employee_id, door_number, street, district,"
                     + "state, country, type) values(?, ?, ?, ?, ?, ?, ?)");	         
-            for (int index = 0; index < employeeAddresses.size(); index++) {
-                employeeAddress = employeeAddresses.get(index);
+            for (Address employeeAddress : employeeAddresses) {
                 preparedStatement.setInt(1,employeeId);
                 preparedStatement.setString(2,employeeAddress.getDoorNumber());
                 preparedStatement.setString(3,employeeAddress.getStreet());
@@ -223,11 +232,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     ("update address set is_deleted ='1' where employee_id=?");
             preparedStatement.setInt(1, id);
             int rowCount = preparedStatement.executeUpdate();
-            if (1 == rowCount) {
+            if (0 != rowCount) {
                 connection.commit();
             } else {
                 connection.rollback();
             }
+            preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
             System.out.println("Something went wrong in database");
@@ -250,7 +260,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setString(4, employee.getDesignation());
             preparedStatement.setDouble(5, employee.getSalary());
             preparedStatement.setInt(6, employee.getId());
-            preparedStatement.executeUpdate(); 
+            preparedStatement.executeUpdate();
+            preparedStatement.close(); 
             connection.close();  
         } catch(SQLException e) {
             System.out.println("Something went wrong in database");
@@ -268,8 +279,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     ("select id from employee where id = ?");
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
+            boolean isIdExist = resultSet.next();
+            resultSet.close();
+            preparedStatement.close();
             connection.close();
-            return resultSet.next();   
+            return isIdExist;  
         } catch(SQLException e) {
             System.out.println("Something went wrong in database");
             return false; 
@@ -294,6 +308,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setString(6,employeeAddress.getAddressType());
             preparedStatement.setInt(7,addressId);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
             System.out.println("Something went wrong in database");
@@ -326,6 +341,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                       ("update address set is_deleted = 0 where employee_id = ?");
                preparedStatement.setInt(1,id);
                preparedStatement.executeUpdate();
+               resultSet.close();
+               preparedStatement.close();
                connection.close();
                return "Recovery Successfull...";  
             } 
@@ -359,7 +376,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
                              resultSet.getString(7), resultSet.getString(8));
                 addressList.put(resultSet.getInt(1), address);
            }
-          connection.close();
+           resultSet.close();
+           preparedStatement.close();
+           connection.close();
            return addressList;         
        } catch(SQLException e) {
            System.out.println("Something went wrong in database");
@@ -377,7 +396,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
            PreparedStatement preparedStatement = connection.prepareStatement
                    ("update address set is_deleted = 1 where id = ?");
            preparedStatement.setInt(1, addressId);
-           preparedStatement.executeUpdate(); 
+           preparedStatement.executeUpdate();
+           preparedStatement.close(); 
            connection.close();  
        } catch(SQLException e) {
            System.out.println("Something went wrong in database");
@@ -403,6 +423,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                             resultSet.getString(7), resultSet.getString(8));
                addressList.put(resultSet.getInt(1), address);
           }
+          resultSet.close();
+          preparedStatement.close();
           connection.close();
           return addressList;   
        } catch(SQLException e) {
@@ -422,6 +444,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                    ("update address set is_deleted = 0 where id = ?"); 
            preparedStatement.setInt(1,addressId);
            preparedStatement.executeUpdate();
+           preparedStatement.close();
            connection.close();
        } catch(SQLException e) {
            System.out.println("Something went wrong in database");
@@ -443,6 +466,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                Employee employee = createEmployee(resultSet);
                deletedEmployees.add(employee);
            }
+           resultSet.close();
+           preparedStatement.close();
            connection.close();
            return deletedEmployees;    
         } catch(SQLException e) {

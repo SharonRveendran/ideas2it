@@ -27,17 +27,15 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void createEmployee(String name, String designation, double salary,
-            long mobile, Date dob, List<String[]> employeeAddressesDetails) {
+            long mobile, Date dob, List<String[]> employeeAddressList) {
         Address employeeAddress;
         String addressType;
         List<Address> employeeAddresses = new ArrayList<Address>();
-        for (int index = 0; index < employeeAddressesDetails.size(); index++) {
-            employeeAddress = new Address(employeeAddressesDetails.get(index)[0],
-                        employeeAddressesDetails.get(index)[1],
-                        employeeAddressesDetails.get(index)[2],
-                        employeeAddressesDetails.get(index)[3],
-                        employeeAddressesDetails.get(index)[4],                                                 
-                        employeeAddressesDetails.get(index)[5]);
+        for (String employeeAddressArray[] : employeeAddressList) {
+            employeeAddress = new Address(employeeAddressArray[0],
+                        employeeAddressArray[1], employeeAddressArray[2],
+                        employeeAddressArray[3], employeeAddressArray[4],                                                 
+                        employeeAddressArray[5]);
             employeeAddresses.add(employeeAddress);
         } 
     	Employee employee = new Employee(name, designation, salary,

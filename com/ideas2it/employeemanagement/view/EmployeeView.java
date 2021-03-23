@@ -23,7 +23,8 @@ public class EmployeeView {
      * This method will collect the input option from user
      * and perfom CRUD operation
      */
-    public void start() {	
+    public void start() {
+        System.out.println("\n\n........... Welcome to employee management system ...........\n");	
         String option;
         do {
             System.out.println(Constants.CRUD_OPTION); 
