@@ -1,11 +1,13 @@
-package com.ideas2it.employeemanagement.controller;
+package com.ideas2it.employeemanagement.employee.controller;
 
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
+
+import com.ideas2it.employeemanagement.employee.service.EmployeeService;
+import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl;
 
 /**
  * Class for Employee controller
@@ -13,7 +15,7 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
  * @created 21-03-2021
  */
 public class EmployeeController {
-    private EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+    private EmployeeService employeeService = new EmployeeServiceImpl();
     
     /**
      * Method to create employee

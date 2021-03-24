@@ -1,4 +1,4 @@
-package com.ideas2it.employeemanagement.service.impl;
+package com.ideas2it.employeemanagement.employee.service.impl;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.ideas2it.employeemanagement.dao.impl.EmployeeDaoImpl;
-import com.ideas2it.employeemanagement.model.Address;
-import com.ideas2it.employeemanagement.model.Employee;
-import com.ideas2it.employeemanagement.service.EmployeeService;
+import com.ideas2it.employeemanagement.employee.dao.EmployeeDao;
+import com.ideas2it.employeemanagement.employee.dao.impl.EmployeeDaoImpl;
+import com.ideas2it.employeemanagement.employee.model.Address;
+import com.ideas2it.employeemanagement.employee.model.Employee;
+import com.ideas2it.employeemanagement.employee.service.EmployeeService;
 
 /**
  * Class for Employee service
@@ -20,7 +21,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
  * @created 21-03-2021
  */
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
+    private EmployeeDao employeeDao = new EmployeeDaoImpl();
 	
     /**
      * {@inheritdoc}

@@ -1,11 +1,11 @@
-package com.ideas2it.employeemanagement.service;
+package com.ideas2it.employeemanagement.employee.service;
 
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.employee.model.Employee;
 
 /**
  * Class for Employee service

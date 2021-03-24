@@ -1,10 +1,10 @@
-package com.ideas2it.employeemanagement.model;
+package com.ideas2it.employeemanagement.employee.model;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ideas2it.employeemanagement.model.Address;
+import com.ideas2it.employeemanagement.employee.model.Address;
 
 /**
  * POJO class for employee providing id,

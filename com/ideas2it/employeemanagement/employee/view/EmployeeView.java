@@ -1,4 +1,4 @@
-package com.ideas2it.employeemanagement.view;
+package com.ideas2it.employeemanagement.employee.view;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.constants.Constants;
-import com.ideas2it.employeemanagement.controller.EmployeeController;
+import com.ideas2it.employeemanagement.employee.controller.EmployeeController;
 
 /**
  * Class for Employee view
@@ -23,8 +23,7 @@ public class EmployeeView {
      * This method will collect the input option from user
      * and perfom CRUD operation
      */
-    public void start() {
-        System.out.println("\n\n........... Welcome to employee management system ...........\n");	
+    public void start() {	
         String option;
         do {
             System.out.println(Constants.CRUD_OPTION); 

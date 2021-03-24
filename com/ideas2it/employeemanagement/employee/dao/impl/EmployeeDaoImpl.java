@@ -1,4 +1,4 @@
-package com.ideas2it.employeemanagement.dao.impl;
+package com.ideas2it.employeemanagement.employee.dao.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ideas2it.employeemanagement.dao.EmployeeDao;
-import com.ideas2it.employeemanagement.model.Address;
-import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.employee.dao.EmployeeDao;
+import com.ideas2it.employeemanagement.employee.model.Address;
+import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
 
 /**
@@ -54,8 +54,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 preparedStatement.close(); 
                 connection.close();          
             }
-        } catch(SQLException e) {
-            System.out.println("Something went wrong in database");     
+        } catch(SQLException e) { 
+            e.printStackTrace();    
             return null; 
         } 
         return employee; 
@@ -73,7 +73,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                           resultSet.getString(5), resultSet.getDouble(6), resultSet.getInt(1),
                           resultSet.getLong(3), resultSet.getDate(4),null);   
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            e.printStackTrace();
         }
         return employee;        
     }
@@ -91,7 +91,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                         resultSet.getString(12),resultSet.getString(13),
                         resultSet.getString(14), resultSet.getString(15));
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+             e.printStackTrace();
         }
         return employeeAddress;
     }
@@ -142,7 +142,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
-            System.out.println("xyxySomething went wrong in database");
             e.printStackTrace();
         }
         return employees;
@@ -179,7 +178,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.close();
             connection.close();  
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database"); 
+             e.printStackTrace();
         }	 
     }
 
@@ -210,7 +209,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.executeBatch();
             return true;
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            e.printStackTrace();
             return false;
         }
     }
@@ -240,7 +239,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+             e.printStackTrace();
         }
      }   
          
@@ -264,7 +263,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.close(); 
             connection.close();  
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+             e.printStackTrace();
         }     
     } 
 
@@ -285,7 +284,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             connection.close();
             return isIdExist;  
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            e.printStackTrace();
             return false; 
         }
     }
@@ -311,7 +310,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.close();
             connection.close();
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            e.printStackTrace();
         }
     }
 
@@ -347,7 +346,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                return "Recovery Successfull...";  
             } 
         } catch(SQLException e) {
-            System.out.println("Something went wrong in database");
+            e.printStackTrace();
             return null;
         } 
     }
@@ -381,7 +380,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
            connection.close();
            return addressList;         
        } catch(SQLException e) {
-           System.out.println("Something went wrong in database");
+           e.printStackTrace();
            return null;
        }
     }
@@ -400,7 +399,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
            preparedStatement.close(); 
            connection.close();  
        } catch(SQLException e) {
-           System.out.println("Something went wrong in database");
+           e.printStackTrace();
        }
     } 
 
@@ -428,7 +427,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
           connection.close();
           return addressList;   
        } catch(SQLException e) {
-           System.out.println("Something went wrong in database");
+           e.printStackTrace();
            return null;
        }
     }
@@ -447,7 +446,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
            preparedStatement.close();
            connection.close();
        } catch(SQLException e) {
-           System.out.println("Something went wrong in database");
+           e.printStackTrace();
        }
     }
 
@@ -471,7 +470,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
            connection.close();
            return deletedEmployees;    
         } catch(SQLException e) {
-           System.out.println("Something went wrong in database");
+           e.printStackTrace();
            return null; 
         }
     } 

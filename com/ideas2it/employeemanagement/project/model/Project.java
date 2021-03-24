@@ -1,6 +1,9 @@
-package com.ideas2it.employeemanagement.model;
+package com.ideas2it.employeemanagement.project.model;
  
 import java.sql.Date;
+import java.util.List;
+
+import com.ideas2it.employeemanagement.employee.model.Employee;
 
 /**
  * Calss for project Pojo
@@ -13,14 +16,25 @@ public class Project {
     private String managerName;
     private Date startDate;
     private Date endDate;
+    private List<Employee> employeeList;
 
     public Project(int id, String name, String managerName,
-            Date startDate, Date endDate) {
+            Date startDate, Date endDate, List<Employee> employeeList) {
         this.id = id;
         this.name = name;
         this.managerName = managerName;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.employeeList = employeeList;
+    }
+
+    public Project(String name, String managerName,
+            Date startDate, Date endDate, List<Employee> employeeList) {
+        this.name = name;
+        this.managerName = managerName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.employeeList = employeeList;
     }
 
     public void setId(int id) {
@@ -63,10 +77,18 @@ public class Project {
         return endDate;
     }
 
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+ 
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }    
+
     public String toString() {
-        return "Project id     = " + id + "\nProject name  = " 
-                + name + "\nManager name  = " + managerName + "\nStart date    = "
-                + startDate + "\nEnd date      = " + endDate;
+        return "\n\nProject id     = " + id + "\nProject name   = " 
+                + name + "\nManager name   = " + managerName + "\nStart date     = "
+                + startDate + "\nEnd date       = " + endDate;
     }
 }
 

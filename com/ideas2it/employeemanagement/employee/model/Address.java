@@ -1,4 +1,4 @@
-package com.ideas2it.employeemanagement.model;
+package com.ideas2it.employeemanagement.employee.model;
 
 /**
  * Calss for address Pojo
