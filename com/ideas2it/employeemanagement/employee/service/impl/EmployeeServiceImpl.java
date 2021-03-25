@@ -278,5 +278,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             deletedEmployees.add(deletedEmployeesObjects.get(index).toString());
         }
         return deletedEmployees;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeDao.getAllEmployee();
     }    
 }

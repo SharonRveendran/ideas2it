@@ -27,14 +27,32 @@ public interface ProjectDao {
 
     /**
      * Method to display all project present in database
+     * @param isDeleted indicating the project is deleted or not
      * @return list of project objects 
      */
-    public List<Project> getAllProject();
+    public List<Project> getAllProject(int isDeleted);
 
     /**
      * Method to delete project based on projectId
      * @param projectId project id for deletion of project
      * @return true for succeessfull deletion else false
      */
-    public boolean deleteProject(int projectId);	
+    public boolean deleteProject(int projectId);
+
+    /**
+     * Method to recover deleted project
+     * @param projectId project id for recover project
+     * @return true for successfull recovery else false
+     */
+    public boolean recoverProject(int projectId);
+
+    /** 
+     * Method to update project details
+     * @param project project object
+     * @param option indicating which project details need to update
+     * @return true for successfull updation else false
+     */
+    public boolean updateProject(Project project, String option);
+
+    public boolean assignEmployee(int employeeId, int projectId);
 }

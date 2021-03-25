@@ -43,9 +43,10 @@ public interface ProjectService {
 
     /**
      * Method to display all project present in database
+     * @param isDeleted indicating the project is deleted or not
      * @return list of project details in string format
      */
-    public List<String> getAllProject();
+    public List<String> getAllProject(int isDeleted);
 
     /**
      * Method to delete project based on projectId
@@ -53,4 +54,32 @@ public interface ProjectService {
      * @return true for succeessfull deletion else false
      */
     public boolean deleteProject(int projectId);
+
+    /**
+     * Method to recover deleted project
+     * @param projectId project id for recover project
+     * @return true for successfull recovery else false
+     */
+    public boolean recoverProject(int projectId);
+
+    /**
+     * Method to update project details
+     * @param projectId project id for update project
+     * @param name project name
+     * @param managerName name of projectManager
+     * @param startDate project starting date
+     * @param endDate project ending date
+     * @param option indicating which project details need to update
+     * @return true for successfull updation else false
+     */
+    public boolean updateProject(int projectId, String name, String managerName,
+            Date startDate, Date endDate, String option);
+   
+    /**
+     * Methode to get basic details of employees 
+     * @return List of employee's basic details
+     */
+    public List<String> getAllEmployeesDetails();
+
+    public boolean assignEmployee(int employeeId, int projectId);
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ideas2it.employeemanagement.employee.model.Employee;
+import com.ideas2it.employeemanagement.employee.service.EmployeeService;
+import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl;
 import com.ideas2it.employeemanagement.project.dao.impl.ProjectDaoImpl;
 import com.ideas2it.employeemanagement.project.dao.ProjectDao;
 import com.ideas2it.employeemanagement.project.model.Project;
@@ -38,8 +40,10 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritdoc}
      */
     @Override
-    public boolean createProject(String name, String managerName, Date startDate, Date endDate) {
-        Project project = new Project(name, managerName, startDate, endDate,new ArrayList<Employee>());
+    public boolean createProject(String name, String managerName,
+            Date startDate, Date endDate) {
+        Project project = new Project(name, managerName, startDate,
+               endDate,new ArrayList<Employee>());
         return projectDao.insertProject(project);
     }
 
@@ -74,8 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getAllProject() {
-        List<Project> projects = projectDao.getAllProject();
+    public List<String> getAllProject(int isDeleted) {
+        List<Project> projects = projectDao.getAllProject(isDeleted);
         List<String> projectDetailsList = new ArrayList<String>();
         if (null == projects) {
             return null;
@@ -93,5 +97,58 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean deleteProject(int projectId) {
         return projectDao.deleteProject(projectId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean recoverProject(int projectId) {
+        return projectDao.recoverProject(projectId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean updateProject(int projectId, String name, String managerName,
+            Date startDate, Date endDate, String option) {
+        Project project = projectDao.getProject(projectId);
+        if (null == project) {
+            return false;
+        } else {
+            switch (option) {
+                case "name":
+                    project.setName(name);
+                    break;
+                case "manager name":
+                    project.setManagerName(managerName);
+                    break;
+                case "start date":
+                    project.setStartDate(startDate);
+                    break;
+                case "end date":
+                    project.setEndDate(endDate);
+            }
+        }
+        return projectDao.updateProject(project, option);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public List<String> getAllEmployeesDetails() {
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        List<String> employeesDetails = new ArrayList<String>();
+        List<Employee> employees = employeeService.getAllEmployees();
+        for (Employee employee : employees) {
+            employeesDetails.add("\nEmployee Id       : " + employee.getId() + "\nEmployee Name"
+                    + "     : " + employee.getName() + "\nEmployee Mobile   : " + employee.getMobile());   
+        }
+        return employeesDetails;
+    }
+
+    public boolean assignEmployee(int employeeId, int projectId) {
+        return projectDao.assignEmployee(employeeId, projectId);
     }
 }

@@ -139,4 +139,10 @@ public interface EmployeeService {
      * @return list of  deleted employees 
      */
     public List <String> getDeletedEmployees();
+   
+    /**
+     * Method to get all employee objects present in database
+     * @return list of employee objects
+     */
+    public List<Employee> getAllEmployees();
 }
