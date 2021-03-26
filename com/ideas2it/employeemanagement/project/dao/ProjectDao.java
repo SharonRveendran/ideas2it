@@ -54,5 +54,7 @@ public interface ProjectDao {
      */
     public boolean updateProject(Project project, String option);
 
-    public boolean assignEmployee(int employeeId, int projectId);
+    public boolean assignEmployee(Project project);
+
+    public List<Integer> getEmployeesId(int projectId);
 }

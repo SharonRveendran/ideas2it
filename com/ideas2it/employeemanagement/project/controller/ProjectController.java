@@ -2,6 +2,7 @@ package com.ideas2it.employeemanagement.project.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
@@ -100,11 +101,15 @@ public class ProjectController {
      * Methode to get basic details of employees 
      * @return List of employee's basic details
      */
-    public List<String> getAllEmployeesDetails() {
+    public Map<Integer, String> getAllEmployeesDetails() {
         return projectService.getAllEmployeesDetails();
     }
    
-    public boolean assignEmployee(int employeeId, int projectId) {
-        return projectService.assignEmployee(employeeId, projectId);
+    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
+        return projectService.assignEmployee(employeeIdList, projectId);
+    }
+
+    public Map<Integer, String> getAllProjectBasicDetails() {
+        return projectService.getAllProjectBasicDetails();
     }
 }

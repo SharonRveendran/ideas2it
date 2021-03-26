@@ -5,10 +5,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.project.dao.ProjectDao;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
@@ -37,13 +38,13 @@ public class ProjectDaoImpl implements ProjectDao {
 	    preparedStatement.setDate(3, project.getStartDate());
             preparedStatement.setDate(4, project.getEndDate());
             preparedStatement.executeUpdate();   
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             return false;
         } finally {
             try{
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -72,14 +73,14 @@ public class ProjectDaoImpl implements ProjectDao {
             } else {
                 return null;
             }              
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();   
         } finally {
             try{
                 resultSet.close();
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -112,14 +113,14 @@ public class ProjectDaoImpl implements ProjectDao {
             } else {
                 return null;
             }              
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();   
         } finally {
             try{
                 resultSet.close();
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -135,17 +136,28 @@ public class ProjectDaoImpl implements ProjectDao {
         PreparedStatement preparedStatement = null;
         boolean deleteStatus = false;
         try{
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement
                     ("update project set is_deleted = 1 where id = ? and is_deleted = 0"); 
             preparedStatement.setInt(1, projectId);
-            deleteStatus = (0 != preparedStatement.executeUpdate());            
-        } catch(SQLException e) {
-            e.printStackTrace();   
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement
+                    ("delete from employee_project where project_id = ?"); 
+            preparedStatement.setInt(1, projectId);
+            deleteStatus = (0 != preparedStatement.executeUpdate());  
+            connection.commit();          
+        } catch (SQLException e1) {
+            try {
+                connection.rollback();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+            e1.printStackTrace();   
         } finally {
             try {
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -165,13 +177,13 @@ public class ProjectDaoImpl implements ProjectDao {
                     ("update project set is_deleted = 0 where id = ? and is_deleted = 1"); 
             preparedStatement.setInt(1, projectId);
             recoverStatus = (0 != preparedStatement.executeUpdate());            
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();   
         } finally {
             try {
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -210,39 +222,75 @@ public class ProjectDaoImpl implements ProjectDao {
             }
             preparedStatement.setInt(2, project.getId());
             updateStatus = (0 != preparedStatement.executeUpdate());       
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();   
         } finally {
             try {
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return updateStatus;    
     }
 
-    public boolean assignEmployee(int employeeId, int projectId) {
+    public boolean assignEmployee(Project project) {
+        int projectId = project.getId();
+        List<Employee> employees = project.getEmployeeList();
         Connection connection = databaseConnection.getDatabaseConnection();
         PreparedStatement preparedStatement = null;
         boolean assignStatus = false;
         try{
             preparedStatement = connection.prepareStatement
                     ("insert into employee_project values (?, ?)"); 
-            preparedStatement.setInt(1, employeeId);
-            preparedStatement.setInt(2, projectId);
-            assignStatus = (0 != preparedStatement.executeUpdate());            
-        } catch(SQLException e) {
+            for (Employee employee : employees) {
+                preparedStatement.setInt(1, employee.getId());
+                preparedStatement.setInt(2, projectId);
+                preparedStatement.addBatch();
+            }
+            assignStatus = (0 != preparedStatement.executeBatch().length);  
+        }catch (SQLIntegrityConstraintViolationException e) {
+            assignStatus = false;    
+        }         
+        catch (SQLException e) {
             e.printStackTrace();   
         } finally {
             try {
                 preparedStatement.close();
                 connection.close();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return assignStatus;     
+    }
+
+    public List<Integer> getEmployeesId(int projectId) {
+        List<Integer> employeeIdList = new ArrayList<Integer>();
+        Connection connection = databaseConnection.getDatabaseConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement
+                    ("select employee_id from employee_project where project_id = ?"); 
+            preparedStatement.setInt(1, projectId);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                employeeIdList.add(resultSet.getInt(1));
+            }    
+             
+        } catch (SQLException e) {
+            e.printStackTrace();   
+        } finally {
+            try {
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return employeeIdList;
     }
 }

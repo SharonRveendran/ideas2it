@@ -1,9 +1,11 @@
 package com.ideas2it.employeemanagement.project.view;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.project.controller.ProjectController;
@@ -27,7 +29,7 @@ public class ProjectView {
 		+ "       |  7 : Assign Employee in project   |\n2 : Display existing project  | "
 		+ " 4 : Delete project                |  6 : Recover deleted project   |  8 : Exit          "
 		+ "               |\n-------------------------------------------------------------------"
-	        + "----------------------------------------------------------------------";	
+	        + "----------------------------------------------------------------------\n";	
         System.out.println("\nSelect your option");
         String option;
         do {
@@ -112,7 +114,7 @@ public class ProjectView {
         if (null == projectDetails) {
             System.out.println("No project exist with given id");
         } else {
-            System.out.println("\n.............Existing Project Details ..............\n"
+            System.out.println("\n............. PROJECT DETAILS ..............\n"
                     + projectDetails);
         }
     }
@@ -283,33 +285,50 @@ public class ProjectView {
      * Method to assign employees to the project
      */
     private void assignEmployee() {
-        List<String> employeesDetails = projectController.getAllEmployeesDetails();
-        if (0 != employeesDetails.size()) {
-
-
-
-
-
-            System.out.println("................. LIST OF EMPLOYEES ..................");
-            for (String employeeDetails : employeesDetails) {
-                System.out.println(employeeDetails);
+        Map<Integer, String> employeesDetails = projectController.getAllEmployeesDetails();
+        Map<Integer, String> projectsDetails = projectController.getAllProjectBasicDetails();
+        List<Integer> employeeIdList = new ArrayList<Integer>();
+        if (0 != projectsDetails.size()) {
+            Set<Integer> projectIdSet = projectsDetails.keySet();
+            System.out.println("................. LIST OF PROJECTS ..................");
+            for (int projectsId : projectIdSet) {
+                System.out.println(projectsDetails.get(projectsId));
             }
-            System.out.print("Enter employee id : ");
-            int employeeId = getValidId();
             System.out.print("\nEnter project id : ");
             int projectId = getValidId();
-            if (projectController.assignEmployee(employeeId, projectId)) {
-                System.out.println("Employee assigned successfully...!!!");
-            } else { 
-                System.out.println("Employee assignment failed");
-            }
-
-
-
-
-
+            if (projectIdSet.contains(projectId)) {
+                if (0 != employeesDetails.size()) {
+                    Set<Integer> employeeIdSet = employeesDetails.keySet();
+                    System.out.println("\n................. LIST OF EMPLOYEES ..................");
+                    for (int employeesId : employeeIdSet) {
+                        System.out.println(employeesDetails.get(employeesId));
+                    }
+                    String input = null;
+                    do {
+                        System.out.print("\nEnter employee id : ");
+                        int employeeId = getValidId();
+                    
+                        if (employeeIdSet.contains(employeeId)) {
+                            employeeIdList.add(employeeId);
+                        } else {
+                            System.out.println("\nNo employee Available with given employee id");
+                        } 
+                        System.out.println("\nDo you want to add more employees ?\n1 : Yes\n2 : No");
+                        input = scanner.nextLine();
+                    } while ("1".equals(input));
+                    if (projectController.assignEmployee(employeeIdList, projectId)) {
+                            System.out.println("\nEmployee assigned successfully...!!!");
+                    } else { 
+                            System.out.println("\nEmployee already assigned");
+                    }
+                } else {
+                    System.out.println("No employee availabale");
+                }
+             } else {
+                 System.out.println("\nNo project Available with given project id");
+             }
         } else {
-            System.out.println("No employee availabale");
+            System.out.println("No Project availabale");
         }
     }
 

@@ -9,13 +9,13 @@ import java.util.Scanner;
  * @author Sharon V
  * @created 21-03-2021
  */
-public class EmployeeManagement {
+public class Employeemanagement {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         EmployeeView employeeView = new EmployeeView();
         ProjectView projectView = new ProjectView();
-        System.out.println("\n\n........... Welcome to Employee Management System ...........");
-        String message = "\n1 : Employee Management\n2 : Project Management";
+        System.out.println("\n\n........... WELCOME TO EMPLOYEE MANAGEMENT SYSTEM ...........");
+        String message = "\n1 : Employee Management\n\n2 : Project Management\n";
         System.out.println("\n\nSelect your option");
         String option;
         do {
@@ -23,9 +23,11 @@ public class EmployeeManagement {
             option = scanner.nextLine();
             switch(option) {
                 case "1":
+                    System.out.println("\n.............. WELCOME TO EMPLOYEE MANAGEMENT ...............");
                     employeeView.start();
                     break;
                 case "2":
+                    System.out.println("\n.............. WELCOME TO PROJECT MANAGEMENT ...............");
                     projectView.start();
                     break;
                 default:

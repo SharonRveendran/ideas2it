@@ -2,6 +2,7 @@ package com.ideas2it.employeemanagement.project.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for Project service
@@ -77,9 +78,11 @@ public interface ProjectService {
    
     /**
      * Methode to get basic details of employees 
-     * @return List of employee's basic details
+     * @return Map of employee id as key and employee's basic details as value
      */
-    public List<String> getAllEmployeesDetails();
+    public Map<Integer, String> getAllEmployeesDetails();
 
-    public boolean assignEmployee(int employeeId, int projectId);
+    public boolean assignEmployee(List<Integer> employeeIdList, int projectId);
+
+    public Map<Integer, String> getAllProjectBasicDetails();
 }

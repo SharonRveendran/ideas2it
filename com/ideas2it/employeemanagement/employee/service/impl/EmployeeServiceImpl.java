@@ -286,5 +286,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAllEmployees() {
         return employeeDao.getAllEmployee();
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Employee getEmployeeObject(int id) {
+        return employeeDao.getEmployee(id);
     }    
 }

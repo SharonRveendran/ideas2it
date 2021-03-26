@@ -145,4 +145,10 @@ public interface EmployeeService {
      * @return list of employee objects
      */
     public List<Employee> getAllEmployees();
+  
+    /**
+     * @param id employee id
+     * @return Emnployee object
+     */
+    public Employee getEmployeeObject(int id);
 }
