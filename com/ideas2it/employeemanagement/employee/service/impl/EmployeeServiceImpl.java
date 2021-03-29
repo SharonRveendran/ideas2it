@@ -14,6 +14,10 @@ import com.ideas2it.employeemanagement.employee.dao.impl.EmployeeDaoImpl;
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
+import com.ideas2it.employeemanagement.project.model.Project;
+import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
+import com.ideas2it.employeemanagement.project.service.ProjectService;
+
 
 /**
  * Class for Employee service
@@ -120,8 +124,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public void deleteEmployee(int id) {
-    	employeeDao.deleteEmployee(id);
+    public boolean deleteEmployee(int id) {
+    	return employeeDao.deleteEmployee(id);
     }
     
     /**
@@ -294,5 +298,63 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployeeObject(int id) {
         return employeeDao.getEmployee(id);
-    }    
+    }   
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Map<Integer, String> getAllProjectsBasicDetails() {
+        ProjectService projectService = new ProjectServiceImpl();
+        return projectService.getAllProjectBasicDetails();
+    }
+ 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Map<Integer, String> getAllEmployeeBasicDetails() {
+        List<Employee> employees = employeeDao.getAllEmployee();
+        Map<Integer, String> allEmployeeBasicDetails = new HashMap<Integer, String>();
+        for (Employee employee : employees) {
+            allEmployeeBasicDetails.put(employee.getId(), "\nEmployee Id     : "
+                    + employee.getId() + "\nEmployee Name   : " + employee.getName() 
+                    + "\nEmployee Mobile : " + employee.getMobile() + "\n");  
+        } 
+        return allEmployeeBasicDetails;            
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean assignProject(List<Integer> projectIdList, int employeeId) {
+        ProjectService projectService = new ProjectServiceImpl();
+        List<Project> projects = new ArrayList<Project>();
+        for (int projectId : projectIdList) {
+            projects.add(projectService.getProjectObject(projectId));
+        }
+        Employee employee = employeeDao.getEmployee(employeeId);
+        employee.setProjectList(projects);
+        return employeeDao.assignProjects(employee); 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<String> getProjectsBasicDetails(int employeeId) {
+        ProjectService projectService = new ProjectServiceImpl();
+        List<Integer> projectIdList = employeeDao.getProjectIdList(employeeId);
+        List<Project> projects = new ArrayList<Project>();
+        List<String> projectsBasicDetails = new ArrayList<String>();
+        for (int projectId : projectIdList) {
+            projects.add(projectService.getProjectObject(projectId));
+        }
+        for (Project project : projects) {
+            projectsBasicDetails.add("\nProject id   : " 
+                    + project.getId() + "\nProject Name : " + project.getName());
+        }
+        return projectsBasicDetails;
+    }
 }

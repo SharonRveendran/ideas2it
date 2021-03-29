@@ -116,11 +116,11 @@ public class ProjectServiceImpl implements ProjectService {
                 if (0 != employees.size()) {
                     projectDetails = projectDetails + "\n........... LIST OF ASSIGNED "
                         + "EMPLOYEES DETAILS ............\n";
-                    for (Employee employee : employees) {
+                    for (Employee employee : employees) {if (null != employee){
                         projectDetails = projectDetails + "\nEmployee Id       : " + 
                             employee.getId() + "\nEmployee Name"
                             + "     : " + employee.getName() + "\nEmployee Mobile   : " 
-                            + employee.getMobile() + "\n";
+                            + employee.getMobile() + "\n";}
                     }
                 }   
                 projectDetailsList.add(projectDetails);
@@ -175,6 +175,7 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * {@inheritdoc}
      */
+    @Override
     public Map<Integer, String> getAllEmployeesDetails() {
         EmployeeService employeeService = new EmployeeServiceImpl();
         Map<Integer, String> employeesDetails = new HashMap<Integer, String>();
@@ -199,6 +200,10 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDao.assignEmployee(project);      
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public Map<Integer, String> getAllProjectBasicDetails() {
         List<Project> projects = projectDao.getAllProject(0); 
         Map<Integer, String> projectDetailsList = new HashMap<Integer, String>();
@@ -207,5 +212,13 @@ public class ProjectServiceImpl implements ProjectService {
                     + project.getId() + "\nProject Name : " + project.getName());
         } 
         return projectDetailsList;  
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Project getProjectObject(int projectId) {
+        return projectDao.getProject(projectId);
     }
 }

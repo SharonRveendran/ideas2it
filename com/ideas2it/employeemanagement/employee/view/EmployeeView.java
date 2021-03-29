@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.employee.controller.EmployeeController;
@@ -48,12 +49,18 @@ public class EmployeeView {
    	            recoverEmployee();
    	            break;
                 case "7":
+   	            assignProjects();
+   	            break;
+                case "8":
+   	            displayAssignedProjects();
+   	            break;
+                case "9":
    	            System.out.println(Constants.END_MESSAGE);
    	            break;
    	        default:
    	            System.out.println(Constants.INVALID_DETAILS);
    	    } 	 
-	} while(!"7".equals(option));   
+	} while(!"9".equals(option));   
     }
     
     /**
@@ -335,8 +342,11 @@ public class EmployeeView {
             String option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    employeeController.deleteEmployee(id);
-                    System.out.println(Constants.SUCCESSFULL_DELETION);
+                    if (employeeController.deleteEmployee(id)) {
+                        System.out.println(Constants.SUCCESSFULL_DELETION);
+                    } else {
+                        System.out.println("Deletion failed...!!!");
+                    }   
                     break;
                 case "2":
                     deleteAddress(id);
@@ -439,16 +449,20 @@ public class EmployeeView {
         switch (input) {
             case "1":
                 List <String> deletedEmployees = employeeController.getDeletedEmployees();
-                System.out.println("Deleted employees are given below");
-                for(int index = 0; index < deletedEmployees.size(); index++) {
-                    System.out.println((index + 1) + " :\n    " + deletedEmployees.get(index));
-                }
-                employeeId = getAndValidateId();
-                String recoveryStatus = employeeController.recoverEmployee(employeeId);
-                if (null == recoveryStatus) {
-                    System.out.println(Constants.INVALID_DETAILS);
+                if (0 != deletedEmployees.size()) {
+                    System.out.println("Deleted employees are given below");
+                    for(int index = 0; index < deletedEmployees.size(); index++) {
+                        System.out.println((index + 1) + " :\n    " + deletedEmployees.get(index));
+                    }
+                    employeeId = getAndValidateId();
+                    String recoveryStatus = employeeController.recoverEmployee(employeeId);
+                    if (null == recoveryStatus) {
+                        System.out.println(Constants.INVALID_DETAILS);
+                    } else {
+                        System.out.println(recoveryStatus); 
+                    }
                 } else {
-                    System.out.println(recoveryStatus); 
+                    System.out.println("No employees to recover");
                 }   
                 break;
             case "2":
@@ -494,5 +508,85 @@ public class EmployeeView {
         } else {
             System.out.println(Constants.INVALID_DETAILS);
         }
-    }             
+    }  
+
+    /**
+     * Method to assign projects to employee
+     */
+    private void assignProjects() {
+        Map<Integer, String> projectsBasicsDetails = employeeController.getAllProjectsBasicDetails();
+        Map<Integer, String> employeeBasicsDetails = employeeController.getAllEmployeeBasicDetails();
+        List<Integer> projectIdList = new ArrayList<Integer>();
+        if (0 != employeeBasicsDetails.size()) {
+            Set<Integer> employeeIdSet = employeeBasicsDetails.keySet();
+            System.out.println("................. LIST OF EMPLOYEES ..................\n");
+            for (int employeeId : employeeIdSet) {
+                System.out.println(employeeBasicsDetails.get(employeeId));
+            }
+            int employeeId = getAndValidateId();
+            if (employeeIdSet.contains(employeeId)) {
+                if (0 != projectsBasicsDetails.size()) {
+                    Set<Integer> projectIdSet = projectsBasicsDetails.keySet();
+                    System.out.println("\n................. LIST OF PROJECTS ..................");
+                    for (int projectId : projectIdSet) {
+                        System.out.println(projectsBasicsDetails.get(projectId));
+                    }
+ 
+                    String input = null;
+                    do {
+                        int projectId = getAndValidateId();
+                    
+                        if (projectIdSet.contains(projectId)) {
+                            projectIdList.add(projectId);
+                        } else {
+                            System.out.println("\nNo project Available with given project id");
+                        } 
+                        System.out.println("\nDo you want to add more projects ?\n1 : Yes\n2 : No");
+                        input = scanner.nextLine();
+                    } while ("1".equals(input));
+                    if (employeeController.assignProject(projectIdList, employeeId)) {
+                            System.out.println("\nProjects assigned successfully...!!!");
+                    } else { 
+                            System.out.println("\nProject assignment failed because Some Projects already assigned");
+                    }
+                } else {
+                    System.out.println("No project availabale");
+                }
+            } else {
+                 System.out.println("\nNo employee Available with given employee id");
+            }
+        } else {
+            System.out.println("No Employees availabale");
+        }
+    } 
+
+    /**
+     * Methode to display projects assigned to employee
+     */
+    private void displayAssignedProjects() {
+        Map<Integer, String> employeeBasicsDetails = employeeController.getAllEmployeeBasicDetails();  
+        if (0 != employeeBasicsDetails.size()) {
+            Set<Integer> employeeIdSet = employeeBasicsDetails.keySet();
+            System.out.println("................. LIST OF EMPLOYEES ..................\n");
+            for (int employeeId : employeeIdSet) {
+                System.out.println(employeeBasicsDetails.get(employeeId));
+            }
+            int employeeId = getAndValidateId();
+            if (employeeIdSet.contains(employeeId)) {
+                List<String> projectsBasicDetails = employeeController.getProjectsBasicDetails(employeeId);
+                if (0 != projectsBasicDetails.size()) {
+                    System.out.println("\n.............LIST OF ASSIGNED PROJECTS.................\n");
+                    for (String projectBasicDetails : projectsBasicDetails) {
+                        System.out.println(projectBasicDetails);
+                    }
+                } else {
+                    System.out.println("\nNo projects assigned for given employee");
+                }
+            } else {
+                System.out.println("No employee exist with given id");
+            }
+        } else {
+            System.out.println("No Employees availabale");
+        } 
+    }               
 }

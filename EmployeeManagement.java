@@ -9,7 +9,7 @@ import java.util.Scanner;
  * @author Sharon V
  * @created 21-03-2021
  */
-public class Employeemanagement {
+public class EmployeeManagement {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         EmployeeView employeeView = new EmployeeView();

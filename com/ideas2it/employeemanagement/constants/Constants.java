@@ -6,10 +6,11 @@ package com.ideas2it.employeemanagement.constants;
  * @created 21-03-2021
  */
 public class Constants {
-    public static final String CRUD_OPTION = 
-            "\nSelect your option\n\n1 : Create employee\n"
-            + "2 : Read employee\n3 : Update employee\n"
- 	    + "4 : Delete employee\n5 : Display all\n6 : Recover Employee\n7 : Exit\n";
+    public static final String CRUD_OPTION = "\nSelect your option\n\n1 : Create employee "
+            + "   |   4 : Delete employee   |   7 : Assign Project    "
+            + "          |\n2 : Read employee      |   5 : Display all       |   8 : Display Assigned Projects   "
+            + "|\n3 : Update employee    |   6 : Recover Employee  |   9 : Exit                        |\n-------"
+            + "-------------------------------------------------------------------------------";
     public static final String UPDATE_OPTION = 
             "\nWhat you want to update\n1 : Name\n"
             + "2 : Designation\n3 : Salary\n4 : DOB\n5 : Mobile\n6 : Address";  
@@ -17,7 +18,7 @@ public class Constants {
     public static final String GET_DESIGNATION_MESSAGE = "\nEnter Designation";
     public static final String GET_DATE_MESSAGE =
             "\nEnter date in given format yyyy-mm-dd";
-    public static final String GET_ID_MESSAGE = "\nEnter employee id";
+    public static final String GET_ID_MESSAGE = "\nEnter id";
     public static final String GET_SALARY_MESSAGE = "\nEnter salary";
     public static final String GET_MOBILE_MESSAGE = "\nEnter mobile number";
     public static final String INVALID_DETAILS = "\nPlease enter valid details";

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
+import com.ideas2it.employeemanagement.project.model.Project;
 
 /**
  * POJO class for employee providing id,
@@ -19,7 +20,8 @@ public class Employee {
     private long mobile;
     private String designation;
     private double salary;
-    private List <Address> addresses = new ArrayList<Address>();  
+    private List<Address> addresses;  
+    private List<Project> projectList;
     
     public Employee(String name, String designation, double salary,
             int id, long mobile, Date dob, List<Address> addresses) {
@@ -86,6 +88,14 @@ public class Employee {
 	
     public void setEmployeeAddresses(List<Address> employeeAddresses) {
 	this.addresses = employeeAddresses;
+    }
+
+    public List<Project> getProjectList() {
+	return projectList;
+    }
+	
+    public void setProjectList(List<Project> projectList) {
+	this.projectList = projectList;
     }
 	
     public String toString() {

@@ -13,7 +13,7 @@ import com.ideas2it.employeemanagement.project.controller.ProjectController;
 /**
  * Class for Project view
  * @author Sharon V
- * @created 24-03-2021
+ * @created 27-03-2021
  */
 public class ProjectView {
     private Scanner scanner = new Scanner(System.in);
@@ -319,7 +319,7 @@ public class ProjectView {
                     if (projectController.assignEmployee(employeeIdList, projectId)) {
                             System.out.println("\nEmployee assigned successfully...!!!");
                     } else { 
-                            System.out.println("\nEmployee already assigned");
+                            System.out.println("\nEmployee Assignment Failed...Because Some Employee already assigned");
                     }
                 } else {
                     System.out.println("No employee availabale");

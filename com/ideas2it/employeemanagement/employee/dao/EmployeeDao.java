@@ -30,9 +30,10 @@ public interface EmployeeDao {
 
     /**
      * Methode to delete employee based on employee id
-     * @ param id employee id  
+     * @param id employee id  
+     * @return true for successfull deletion
      */
-     public void deleteEmployee(int id);
+     public boolean deleteEmployee(int id);
          
    /**
      * Methode to update employee details
@@ -97,4 +98,18 @@ public interface EmployeeDao {
      * @return list of  deleted employees 
      */
     public List <Employee> getDeletedEmployees();
+
+    /** 
+     * Method to assign projects to emkployee
+     * @param employee employee object
+     * @return true for successfull assignment of project else false
+     */
+    public boolean assignProjects(Employee employee);
+
+    /**
+     * Methode to get id of all projects assigned to the given employee
+     * @param employeeId
+     * @return list of project ids
+     */
+    public List<Integer> getProjectIdList(int employeeId);
 }

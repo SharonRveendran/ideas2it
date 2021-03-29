@@ -58,8 +58,9 @@ public interface EmployeeService {
     /**
      * Method to delete the Employee based on employee id
      * @param id Employee id
+     * @return true for successfull deletion else false
      */
-    public void deleteEmployee(int id);
+    public boolean deleteEmployee(int id);
     	
     /**
      * Method to return all employee details present in collection
@@ -151,4 +152,30 @@ public interface EmployeeService {
      * @return Emnployee object
      */
     public Employee getEmployeeObject(int id);
+
+    /**
+     * Method to get projects basic details
+     * @return map of Project id as key and project basic details as value
+     */
+    public Map<Integer, String> getAllProjectsBasicDetails();
+
+    /**
+     * Method to get all employee basic details
+     * @return map of employee id as key and basic details as value
+     */
+    public Map<Integer, String> getAllEmployeeBasicDetails();
+
+    /**
+     * Method to assign projects to employee
+     * @param projectIdList list of project ids which need to assign
+     * @param employeeId employee id 
+     */
+    public boolean assignProject(List<Integer> projectIdList, int employeeId);
+
+    /**
+     * Method to get assigned projects details of specified employee
+     * @param employeeId employee id to get the assigned projects details
+     * @ return list of project basic details
+     */
+    public List<String> getProjectsBasicDetails(int employeeId);
 }

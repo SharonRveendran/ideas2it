@@ -1,11 +1,11 @@
 package com.ideas2it.employeemanagement.project.dao.impl;
 
 import java.sql.Connection;
+import java.sql.BatchUpdateException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,11 +140,11 @@ public class ProjectDaoImpl implements ProjectDao {
             preparedStatement = connection.prepareStatement
                     ("update project set is_deleted = 1 where id = ? and is_deleted = 0"); 
             preparedStatement.setInt(1, projectId);
-            preparedStatement.executeUpdate();
+            deleteStatus = (0 != preparedStatement.executeUpdate()); 
             preparedStatement = connection.prepareStatement
                     ("delete from employee_project where project_id = ?"); 
-            preparedStatement.setInt(1, projectId);
-            deleteStatus = (0 != preparedStatement.executeUpdate());  
+            preparedStatement.setInt(1, projectId); 
+            preparedStatement.executeUpdate();
             connection.commit();          
         } catch (SQLException e1) {
             try {
@@ -242,6 +242,7 @@ public class ProjectDaoImpl implements ProjectDao {
         PreparedStatement preparedStatement = null;
         boolean assignStatus = false;
         try{
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement
                     ("insert into employee_project values (?, ?)"); 
             for (Employee employee : employees) {
@@ -249,18 +250,24 @@ public class ProjectDaoImpl implements ProjectDao {
                 preparedStatement.setInt(2, projectId);
                 preparedStatement.addBatch();
             }
-            assignStatus = (0 != preparedStatement.executeBatch().length);  
-        }catch (SQLIntegrityConstraintViolationException e) {
-            assignStatus = false;    
+            assignStatus = (0 != preparedStatement.executeBatch().length); 
+            connection.commit(); 
+        }catch (BatchUpdateException e1) {
+            assignStatus = false; 
+            try {
+                connection.rollback();
+            } catch (SQLException e4) {
+                e4.printStackTrace();
+            }       
         }         
-        catch (SQLException e) {
-            e.printStackTrace();   
+        catch (SQLException e2) {
+            e2.printStackTrace();   
         } finally {
             try {
                 preparedStatement.close();
                 connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException e3) {
+                e3.printStackTrace();
             }
         }
         return assignStatus;     

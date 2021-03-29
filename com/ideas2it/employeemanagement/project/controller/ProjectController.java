@@ -10,7 +10,7 @@ import com.ideas2it.employeemanagement.project.service.ProjectService;
 /**
  * Class for Project controller
  * @author Sharon V
- * @created 24-03-2021
+ * @created 27-03-2021
  */
 public class ProjectController {
     private ProjectService projectService = new ProjectServiceImpl();
@@ -105,10 +105,20 @@ public class ProjectController {
         return projectService.getAllEmployeesDetails();
     }
    
+    /**
+     * Method to assign employees to project
+     * @param employeeIdList list of employee ids
+     * @param projectId project id in which we need to assign employees
+     * @return true for successfull assignment else false
+     */
     public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
         return projectService.assignEmployee(employeeIdList, projectId);
     }
 
+    /**
+     * Method to get all projects basics details
+     * @return map of project id as key and project details as value
+     */
     public Map<Integer, String> getAllProjectBasicDetails() {
         return projectService.getAllProjectBasicDetails();
     }

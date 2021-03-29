@@ -54,7 +54,17 @@ public interface ProjectDao {
      */
     public boolean updateProject(Project project, String option);
 
+     /**
+     * Method to assign employees to project
+     * @param project project pojo object
+     * @return true for successfull assignment else false
+     */
     public boolean assignEmployee(Project project);
 
+    /**
+     * Method to get all projects basics details
+     * @param projectId project id
+     * @return List of employee id assigtned for given project id
+     */
     public List<Integer> getEmployeesId(int projectId);
 }

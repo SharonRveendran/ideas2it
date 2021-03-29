@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.ideas2it.employeemanagement.project.model.Project;
+
 /**
  * Interface for Project service
  * @author Sharon V
@@ -82,7 +84,24 @@ public interface ProjectService {
      */
     public Map<Integer, String> getAllEmployeesDetails();
 
+    /**
+     * Method to assign employees to project
+     * @param employeeIdList list of employee ids
+     * @param projectId project id in which we need to assign employees
+     * @return true for successfull assignment else false
+     */
     public boolean assignEmployee(List<Integer> employeeIdList, int projectId);
 
+    /**
+     * Method to get all projects basics details
+     * @return map of project id as key and project details as value
+     */
     public Map<Integer, String> getAllProjectBasicDetails();
+
+    /**
+     * Method to get project object
+     * @param projectId
+     * @return project object
+     */
+    public Project getProjectObject(int projectId);
 }
