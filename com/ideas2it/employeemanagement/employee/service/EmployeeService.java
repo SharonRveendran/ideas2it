@@ -178,4 +178,12 @@ public interface EmployeeService {
      * @ return list of project basic details
      */
     public List<String> getProjectsBasicDetails(int employeeId);
+
+    /**
+     * Method to remove assigned project of employee
+     * @param employeeId
+     * @param projectId
+     * @return true for successfull removing of project
+     */
+    public boolean removeProject(int employeeId, int projectId);
 }

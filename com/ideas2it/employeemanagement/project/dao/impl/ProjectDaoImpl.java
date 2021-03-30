@@ -235,6 +235,10 @@ public class ProjectDaoImpl implements ProjectDao {
         return updateStatus;    
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public boolean assignEmployee(Project project) {
         int projectId = project.getId();
         List<Employee> employees = project.getEmployeeList();
@@ -273,6 +277,10 @@ public class ProjectDaoImpl implements ProjectDao {
         return assignStatus;     
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public List<Integer> getEmployeesId(int projectId) {
         List<Integer> employeeIdList = new ArrayList<Integer>();
         Connection connection = databaseConnection.getDatabaseConnection();
@@ -299,5 +307,32 @@ public class ProjectDaoImpl implements ProjectDao {
             }
         }
         return employeeIdList;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean removeEmployee(Project project) {
+        Connection connection = databaseConnection.getDatabaseConnection();
+        PreparedStatement preparedStatement = null;
+        boolean removeStatus = false;
+        try{
+            preparedStatement = connection.prepareStatement
+                    ("delete from employee_project where employee_id = ? and project_id = ?");
+            preparedStatement.setInt(1, project.getEmployeeList().get(0).getId()); 
+            preparedStatement.setInt(2, project.getId());
+            removeStatus = (0 != preparedStatement.executeUpdate());
+        } catch (SQLException e) {
+            e.printStackTrace();   
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return removeStatus;
     }
 }

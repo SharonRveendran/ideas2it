@@ -552,4 +552,31 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
         return projectIdList;
     }
+
+    /**
+     * {@inheritdoc} 
+     */
+    @Override
+    public boolean removeProject(Employee employee) {
+        Connection connection = databaseConnection.getDatabaseConnection();
+        PreparedStatement preparedStatement = null;
+        boolean removeStatus = false;
+        try{
+            preparedStatement = connection.prepareStatement
+                    ("delete from employee_project where employee_id = ? and project_id = ?");
+            preparedStatement.setInt(1, employee.getId()); 
+            preparedStatement.setInt(2, employee.getProjectList().get(0).getId());
+            removeStatus = (0 != preparedStatement.executeUpdate());
+        } catch (SQLException e) {
+            e.printStackTrace();   
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return removeStatus;
+    }
 }

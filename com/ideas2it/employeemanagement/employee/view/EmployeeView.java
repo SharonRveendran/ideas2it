@@ -55,12 +55,15 @@ public class EmployeeView {
    	            displayAssignedProjects();
    	            break;
                 case "9":
+   	            removeProject();
+   	            break;
+                case "10":
    	            System.out.println(Constants.END_MESSAGE);
    	            break;
    	        default:
    	            System.out.println(Constants.INVALID_DETAILS);
    	    } 	 
-	} while(!"9".equals(option));   
+	} while(!"10".equals(option));   
     }
     
     /**
@@ -588,5 +591,29 @@ public class EmployeeView {
         } else {
             System.out.println("No Employees availabale");
         } 
-    }               
+    } 
+
+    /**
+     * Method to remove assigned projects of employee
+     */
+    private void removeProject() {
+        System.out.print("\n.........Enter employee details............\n");
+        int employeeId = getAndValidateId();
+        List<String> projectsBasicDetails = employeeController.getProjectsBasicDetails(employeeId);
+        if (0 == projectsBasicDetails.size()) {
+            System.out.println("No project exist with given id");
+        } else {
+            for (String projectBasicDetails : projectsBasicDetails) {
+                System.out.println("\n............. PROJECT DETAILS ..............\n"
+                        + projectBasicDetails);
+            }
+            System.out.println("\n........Enter project details.......");
+            int projectId = getAndValidateId();
+            if (employeeController.removeProject(employeeId, projectId)) {
+                System.out.println("Project removed successfully....!!!"); 
+            } else {
+                System.out.println("Project removing Failed due to invalid details...!!!");   
+            }
+        }     
+    }                 
 }

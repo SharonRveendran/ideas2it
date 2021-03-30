@@ -247,4 +247,14 @@ public class EmployeeController {
     public List<String> getProjectsBasicDetails(int employeeId) {
         return employeeService.getProjectsBasicDetails(employeeId);
     }
+
+    /**
+     * Method to remove assigned project of employee
+     * @param employeeId
+     * @param projectId
+     * @return true for successfull removing of project
+     */
+    public boolean removeProject(int employeeId, int projectId) {
+        return employeeService.removeProject(employeeId, projectId);
+    }
 }

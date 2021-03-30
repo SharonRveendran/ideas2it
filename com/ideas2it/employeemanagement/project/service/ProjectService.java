@@ -104,4 +104,10 @@ public interface ProjectService {
      * @return project object
      */
     public Project getProjectObject(int projectId);
+
+    /**
+     * Method to remove assigned employee from project
+     * @return true for successfull remove else false
+     */
+    public boolean removeEmployee(int projectId, int employeeId);
 }

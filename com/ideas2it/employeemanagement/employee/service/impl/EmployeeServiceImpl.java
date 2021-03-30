@@ -357,4 +357,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return projectsBasicDetails;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean removeProject(int employeeId, int projectId) {
+        ProjectService projectService = new ProjectServiceImpl();
+        Employee employee = employeeDao.getEmployee(employeeId);
+        List<Project> projects = new ArrayList<Project>();
+        projects.add(projectService.getProjectObject(projectId));
+        employee.setProjectList(projects);
+        return employeeDao.removeProject(employee); 
+    }
 }

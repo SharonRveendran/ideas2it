@@ -24,12 +24,12 @@ public class ProjectView {
      * and perfom CRUD operation
      */
     public void start() {
-        String message = "\n1 : Create new project        |  "
-	        + "3 : Display all existing projects |  5 : Update project     "
-		+ "       |  7 : Assign Employee in project   |\n2 : Display existing project  | "
-		+ " 4 : Delete project                |  6 : Recover deleted project   |  8 : Exit          "
-		+ "               |\n-------------------------------------------------------------------"
-	        + "----------------------------------------------------------------------\n";	
+        String message = "\n1 : Create new project            |  4 : Delete project     "
+                + "           |  7 : Assign Employee in project     |\n2 : Display existing project"
+                + "      |  5 : Update project                |  8 : Remove Employee from Project   "
+                + "|\n3 : Display all existing projects |  6 : Recover deleted project       |  9 : Exit "
+                + "                          |\n---------------------------------------------------"
+                + "-----------------------------------------------------------\n";	
         System.out.println("\nSelect your option");
         String option;
         do {
@@ -58,19 +58,22 @@ public class ProjectView {
                     assignEmployee();
                     break;
                 case "8":
+                    removeEmployee();
+                    break;
+                case "9":
    	            System.out.println(Constants.END_MESSAGE);
    	            break;
    	        default:
    	            System.out.println(Constants.INVALID_DETAILS);
    	    } 	 
-	} while(!"8".equals(option));  
+	} while(!"9".equals(option));  
     }
 
     /**
      * Method to create project
      */
     private void createProject() {
-        System.out.print("\n.......... Enter project details ..........\n\n");
+        System.out.print("\n.......... ENTER PROJECT DETAILS ..........\n\n");
     	System.out.print("Project name              : ");
     	String name = scanner.nextLine();
     	System.out.print("\nManagerName               : ");
@@ -128,7 +131,7 @@ public class ProjectView {
         if (null == projectDetailsList) {
             System.out.println("No projects present in database");
         } else {
-            System.out.println("\n.............Existing Projects Details ...............");
+            System.out.println("\n.............EXISTING PROJECT DETAILS ...............");
             for(String projectDetails : projectDetailsList) {
                 System.out.println(projectDetails);
             }
@@ -317,9 +320,9 @@ public class ProjectView {
                         input = scanner.nextLine();
                     } while ("1".equals(input));
                     if (projectController.assignEmployee(employeeIdList, projectId)) {
-                            System.out.println("\nEmployee assigned successfully...!!!");
+                        System.out.println("\nEmployee assigned successfully...!!!");
                     } else { 
-                            System.out.println("\nEmployee Assignment Failed...Because Some Employee already assigned");
+                        System.out.println("\nEmployee Assignment Failed...Because Some Employee already assigned");
                     }
                 } else {
                     System.out.println("No employee availabale");
@@ -328,14 +331,29 @@ public class ProjectView {
                  System.out.println("\nNo project Available with given project id");
              }
         } else {
-            System.out.println("No Project availabale");
+            System.out.println("No Projects availabale");
         }
     }
 
-
-
-
-
-
-
+    /** 
+     * Methode to remove assigned employee from project
+     */
+    private void removeEmployee() {
+        System.out.print("\nEnter project id : ");
+        int projectId = getValidId();
+        String projectDetails = projectController.getProject(projectId);
+        if (null == projectDetails) {
+            System.out.println("No project exist with given id");
+        } else {
+            System.out.println("\n............. PROJECT DETAILS ..............\n"
+                    + projectDetails);
+            System.out.print("\nEnter employee id : ");
+            int employeeId = getValidId();
+            if (projectController.removeEmployee(projectId, employeeId)) {
+                System.out.println("Employee removed successfully...!!!");
+            } else {
+                System.out.println("Invalid details....!!!");
+            }
+        }     
+    }
 }

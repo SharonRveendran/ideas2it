@@ -6,11 +6,12 @@ package com.ideas2it.employeemanagement.constants;
  * @created 21-03-2021
  */
 public class Constants {
-    public static final String CRUD_OPTION = "\nSelect your option\n\n1 : Create employee "
-            + "   |   4 : Delete employee   |   7 : Assign Project    "
-            + "          |\n2 : Read employee      |   5 : Display all       |   8 : Display Assigned Projects   "
-            + "|\n3 : Update employee    |   6 : Recover Employee  |   9 : Exit                        |\n-------"
-            + "-------------------------------------------------------------------------------";
+    public static final String CRUD_OPTION = "\nSelect your option\n\n1 : Create employee"
+             + "    |   4 : Delete employee   |   7 : Assign Project              |   10 : Exit"
+             + "       |\n2 : Read employee      |   5 : Display all       |   "
+             + "8 : Display Assigned Projects   |   ---------       |\n3 : Update employee    |   6 : Recover Employee"
+             + "  |   9 : Unassign project            |   ---------       |\n-------"
+             + "---------------------------------------------------------------------------------------------------";
     public static final String UPDATE_OPTION = 
             "\nWhat you want to update\n1 : Name\n"
             + "2 : Designation\n3 : Salary\n4 : DOB\n5 : Mobile\n6 : Address";  

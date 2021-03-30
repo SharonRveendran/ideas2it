@@ -112,4 +112,11 @@ public interface EmployeeDao {
      * @return list of project ids
      */
     public List<Integer> getProjectIdList(int employeeId);
+
+    /**
+     * Method to remove assigned project of employee
+     * @param employee employee pojo object
+     * @return true for successfull removing of project
+     */
+    public boolean removeProject(Employee employee);
 }

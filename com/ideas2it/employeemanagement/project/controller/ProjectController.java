@@ -122,4 +122,12 @@ public class ProjectController {
     public Map<Integer, String> getAllProjectBasicDetails() {
         return projectService.getAllProjectBasicDetails();
     }
+
+    /**
+     * Method to remove assigned employee from project
+     * @return true for successfull remove else false
+     */
+    public boolean removeEmployee(int projectId, int employeeId) {
+        return projectService.removeEmployee(projectId, employeeId);
+    }
 }

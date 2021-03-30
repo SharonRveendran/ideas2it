@@ -207,9 +207,11 @@ public class ProjectServiceImpl implements ProjectService {
     public Map<Integer, String> getAllProjectBasicDetails() {
         List<Project> projects = projectDao.getAllProject(0); 
         Map<Integer, String> projectDetailsList = new HashMap<Integer, String>();
-        for (Project project : projects) {
-            projectDetailsList.put(project.getId(), "\nProject id   : " 
-                    + project.getId() + "\nProject Name : " + project.getName());
+        if (null != projects) {
+            for (Project project : projects) {
+                projectDetailsList.put(project.getId(), "\nProject id   : " 
+                        + project.getId() + "\nProject Name : " + project.getName());
+            }
         } 
         return projectDetailsList;  
     }
@@ -220,5 +222,22 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProjectObject(int projectId) {
         return projectDao.getProject(projectId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean removeEmployee(int projectId, int employeeId) {
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        Project project = projectDao.getProject(projectId);
+        if (null == project) {
+            return false;
+        } else {
+           List<Employee> employees = new ArrayList<Employee>();  
+           employees.add(employeeService.getEmployeeObject(employeeId));
+           project.setEmployeeList(employees);
+        }
+        return projectDao.removeEmployee(project);
     }
 }
