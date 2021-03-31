@@ -14,8 +14,9 @@ public class EmployeeManagement {
         Scanner scanner = new Scanner(System.in);
         EmployeeView employeeView = new EmployeeView();
         ProjectView projectView = new ProjectView();
-        System.out.println("\n\n........... WELCOME TO EMPLOYEE MANAGEMENT SYSTEM ...........");
-        String message = "\n1 : Employee Management\n\n2 : Project Management\n";
+        System.out.println("\n\n.............. WELCOME TO EMPLOYEE MANAGEMENT SYSTEM ...............");
+        String message = "\n1 : Employee Management\n\n2 : Project Management\n\n3 : Exit\n"
+               + "------------------------";
         System.out.println("\n\nSelect your option");
         String option;
         do {
@@ -30,10 +31,13 @@ public class EmployeeManagement {
                     System.out.println("\n.............. WELCOME TO PROJECT MANAGEMENT ...............");
                     projectView.start();
                     break;
+                case "3":
+                    System.out.println("\nThank you....");
+                    option = "0";
+                    break;
                 default:
                     System.out.println("Enter valid option");
-                    option = "0";
             }
-        } while("0".equals(option));        
+        } while(!"0".equals(option));        
     }
 }

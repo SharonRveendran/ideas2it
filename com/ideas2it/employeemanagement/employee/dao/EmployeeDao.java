@@ -35,7 +35,7 @@ public interface EmployeeDao {
      */
      public boolean deleteEmployee(int id);
          
-   /**
+    /**
      * Methode to update employee details
      * @param employee employee object
      */
@@ -64,8 +64,9 @@ public interface EmployeeDao {
     /**
      * Methode to recover deleted employee
      * @param id employee id
+     * @ return true for successfull recovery else false
      */
-    public String recoverEmployee(int id);
+    public boolean recoverEmployee(int id);
 
     /**
      * Methode to get addressList of employee

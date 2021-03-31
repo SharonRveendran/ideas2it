@@ -219,7 +219,11 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public String recoverEmployee(int id) {
-        return employeeDao.recoverEmployee(id);
+        if (employeeDao.recoverEmployee(id)) {
+            return "Recovery successfull...!!!";
+        } else {
+            return "Invalid details";
+        }
     }
 
     /**
