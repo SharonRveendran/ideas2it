@@ -1,5 +1,11 @@
 package com.ideas2it.employeemanagement.sessionfactory;
 
+import org.hibernate.cfg.Configuration;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,12 +15,27 @@ import java.sql.SQLException;
  * @author Sharon v
  * @created 21/03/2021
  */
-public class DatabaseConnection {
-    private static DatabaseConnection databaseConnection = null;
+public class DatabaseConnection {private static DatabaseConnection databaseConnection = null;
     private static Connection connection = null;
+    private static SessionFactory sessionFactory = null;
     private DatabaseConnection() {
     }
 	
+    /**
+     * Method to return databaseConnection object
+     * @return DatabaseConnection object
+     */
+    public static SessionFactory getSessionFactoryInstance() {
+       if (null == sessionFactory) {
+           Configuration configuration = new Configuration()
+                        .configure("/resources/hibernate/property/hibernate.cfg.xml");
+                StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties()).build();
+                sessionFactory = configuration.buildSessionFactory(standardServiceRegistry); 
+       }
+       return sessionFactory;
+    }
+
     /**
      * Method to return databaseConnection object
      * @return DatabaseConnection object
@@ -38,4 +59,6 @@ public class DatabaseConnection {
         }
         return connection;
     }
-}	
+
+}
+

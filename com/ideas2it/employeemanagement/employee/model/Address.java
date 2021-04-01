@@ -1,11 +1,14 @@
 package com.ideas2it.employeemanagement.employee.model;
 
+import com.ideas2it.employeemanagement.employee.model.Employee;
+
 /**
  * Calss for address Pojo
  * @author Sharon v 
  * @created 21/03/2021
  */
-public class Address {   
+
+public class Address {  
     private int addressId;
     private int employeeId;
     private String doorNumber;
@@ -14,6 +17,8 @@ public class Address {
     private String state;
     private String country;
     private String addressType;
+    private boolean isDeleted;
+    private Employee employee;
 	      
     public Address(int addressId, int employeeId, String doorNumber, String street,
             String district, String state, String country, String addressType) {
@@ -99,6 +104,14 @@ public class Address {
 	
     public String getAddressType() {
         return addressType;
+    }
+
+    public boolean getIsDeleted() {
+	return isDeleted;
+    }
+    
+    public void setIsDeleted(boolean isDeleted) {
+	this.isDeleted = isDeleted;
     }
 
     public String toString() {

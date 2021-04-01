@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.ideas2it.employeemanagement.employee.dao.EmployeeDao;
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
@@ -146,7 +150,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
      public void insertEmployee(Employee employee) {
         Connection connection = databaseConnection.getDatabaseConnection();
-        PreparedStatement preparedStatement = null;
+        SessionFactory sessionFactory = databaseConnection.getSessionFactoryInstance();
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+        session.save(employee);
+        t.commit();
+
+        /*PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {  
             connection.setAutoCommit(false);
@@ -178,7 +188,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } 	 
+        } 
+     */	 
     }
 
     /**

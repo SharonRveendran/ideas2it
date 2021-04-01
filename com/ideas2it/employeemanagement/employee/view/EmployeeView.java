@@ -34,28 +34,28 @@ public class EmployeeView {
    	            createEmployee();
    		    break;
    	        case "2":
-   	            displayEmployee();
+   	            //displayEmployee();
    		    break;	
    	        case "3":
-   	            updateEmployee();
+   	           // updateEmployee();
    		    break;
    	        case "4":
-   	            deleteEmployee();
+   	           // deleteEmployee();
    		    break;
    	        case "5":
-   	            displayAll();
+   	           // displayAll();
    	            break;
    	        case "6":
-   	            recoverEmployee();
+   	           // recoverEmployee();
    	            break;
                 case "7":
-   	            assignProjects();
+   	          //  assignProjects();
    	            break;
                 case "8":
-   	            displayAssignedProjects();
+   	           // displayAssignedProjects();
    	            break;
                 case "9":
-   	            removeProject();
+   	           // removeProject();
    	            break;
                 case "10":
    	            System.out.println(Constants.END_MESSAGE);

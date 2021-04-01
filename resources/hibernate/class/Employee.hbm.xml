@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  package="com.ideas2it.employeemanagement.employee.model">
+    <class name="Employee" table="employee">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" />
+        <property name="dob" column="dob" />
+        <property name="mobile" column="mobile" />
+        <property name="designation" column="designation" />
+        <property name="salary" column="salary" />
+        <property name="isDeleted" column="is_deleted" />
+ 
+        <list name="addresses" inverse="true" cascade="all">
+            <key column="employee_id" not-null="true" />
+            <one-to-many class="Address"/>
+        </list>
+    </class> 
+</hibernate-mapping>
+
+

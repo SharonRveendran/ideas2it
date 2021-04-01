@@ -3,6 +3,7 @@ package com.ideas2it.employeemanagement.employee.model;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+//import org.hibernate.annotations.Entity;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.project.model.Project;
@@ -13,6 +14,7 @@ import com.ideas2it.employeemanagement.project.model.Project;
  * @author Sharon
  * @created 21-03-2021
  */
+
 public class Employee {
     private int id;
     private String name;
@@ -20,6 +22,7 @@ public class Employee {
     private long mobile;
     private String designation;
     private double salary;
+    private boolean isDeleted;
     private List<Address> addresses;  
     private List<Project> projectList;
     
@@ -81,6 +84,14 @@ public class Employee {
     public void setSalary(double salary) {
 	this.salary = salary;
     } 
+
+    public boolean getIsDeleted() {
+	return isDeleted;
+    }
+    
+    public void setIsDeleted(boolean isDeleted) {
+	this.isDeleted = isDeleted;
+    }
 
     public List<Address> getEmployeeAddresses() {
 	return addresses;
