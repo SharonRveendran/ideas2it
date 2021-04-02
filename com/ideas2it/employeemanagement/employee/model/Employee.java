@@ -6,7 +6,7 @@ import java.util.List;
 //import org.hibernate.annotations.Entity;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
-import com.ideas2it.employeemanagement.project.model.Project;
+
 
 /**
  * POJO class for employee providing id,
@@ -24,17 +24,19 @@ public class Employee {
     private double salary;
     private boolean isDeleted;
     private List<Address> addresses;  
-    private List<Project> projectList;
+    //private List<Project> projectList;
     
-    public Employee(String name, String designation, double salary,
-            int id, long mobile, Date dob, List<Address> addresses) {
-    	this.id = id;
+    public Employee() {
+    	
+    }
+    public Employee(String name, String designation, double salary,long mobile, Date dob, List<Address> addresses, boolean isDeleted) {
         this.name = name;
         this.dob = dob;
         this.mobile = mobile; 
     	this.designation = designation;
     	this.salary = salary; 
-        this.addresses = addresses;	
+        this.addresses = addresses;
+        this.isDeleted = isDeleted;	
     }
  
     public int getId() {
@@ -93,22 +95,21 @@ public class Employee {
 	this.isDeleted = isDeleted;
     }
 
-    public List<Address> getEmployeeAddresses() {
+    public List<Address> getAddresses() {
 	return addresses;
     }
 	
-    public void setEmployeeAddresses(List<Address> employeeAddresses) {
-	this.addresses = employeeAddresses;
+    public void setAddresses(List<Address> addresses) {
+	this.addresses = addresses;
     }
 
-    public List<Project> getProjectList() {
+   /* public List<Project> getProjectList() {
 	return projectList;
     }
 	
     public void setProjectList(List<Project> projectList) {
 	this.projectList = projectList;
-    }
-	
+    }*/
     public String toString() {
     	return "\nEmployee Id             =  " + id + "\nEmployee Name           =  "
                 + name + "\nEmployee Designation    =  " + designation

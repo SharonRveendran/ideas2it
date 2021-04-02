@@ -1,6 +1,6 @@
 package com.ideas2it.employeemanagement.employee.model;
 
-import com.ideas2it.employeemanagement.employee.model.Employee;
+//import com.ideas2it.employeemanagement.employee.model.Employee;
 
 /**
  * Calss for address Pojo
@@ -10,7 +10,6 @@ import com.ideas2it.employeemanagement.employee.model.Employee;
 
 public class Address {  
     private int addressId;
-    private int employeeId;
     private String doorNumber;
     private String street;
     private String district;
@@ -18,28 +17,20 @@ public class Address {
     private String country;
     private String addressType;
     private boolean isDeleted;
-    private Employee employee;
-	      
-    public Address(int addressId, int employeeId, String doorNumber, String street,
-            String district, String state, String country, String addressType) {
-        this.addressId = addressId;
-        this.employeeId = employeeId;
-        this.doorNumber = doorNumber;
-        this.street = street;
-        this.district = district;
-        this.state = state;
-        this.country = country;
-        this.addressType = addressType;
-    }
+    //private Employee employee;
 
+    public Address(){
+         
+    }	      
     public Address(String doorNumber, String street, String district,
-            String state, String country, String addressType) {
+            String state, String country, String addressType,boolean isDeleted) {
         this.doorNumber = doorNumber;
         this.street = street;
         this.district = district;
         this.state = state;
         this.country = country;
         this.addressType = addressType;
+        this.isDeleted = isDeleted;
     }
     
     public void setAddressId(int addressId) {
@@ -48,14 +39,6 @@ public class Address {
 
     public int getAddressId() {
         return addressId; 
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public int getEmployeeId() {
-        return employeeId;
     }
 	
     public void setDoorNumber(String doorNumber) {

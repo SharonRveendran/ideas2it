@@ -27,11 +27,11 @@ public class DatabaseConnection {private static DatabaseConnection databaseConne
      */
     public static SessionFactory getSessionFactoryInstance() {
        if (null == sessionFactory) {
-           Configuration configuration = new Configuration()
-                        .configure("/resources/hibernate/property/hibernate.cfg.xml");
-                StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties()).build();
-                sessionFactory = configuration.buildSessionFactory(standardServiceRegistry); 
+           Configuration configuration = new Configuration();
+
+           configuration.configure("resources/hibernate/property/hibernate.cfg.xml");
+		
+           sessionFactory = configuration.buildSessionFactory();
        }
        return sessionFactory;
     }

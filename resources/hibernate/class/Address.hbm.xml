@@ -2,22 +2,19 @@
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="com.ideas2it.employeemanagement.employee.model">
-    <class name="Address" table="address">
-        <id name="addressId" column="id">
-            <generator class="native"/>
+<hibernate-mapping>
+    <class name="com.ideas2it.employeemanagement.employee.model.Address" table="address">
+        <id name="addressId" column="id" type="int">
+            <generator class="increment"/>
         </id>
-        <property name="doorNumber" column="door_number" />
-        <property name="street" column="street" />
-        <property name="district" column="district" />
-        <property name="state" column="state" />
-        <property name="country" column="country" />
-        <property name="addressType" column="type" />
-        <property name="isDeleted" column="is_deleted" />
-        <property name="employeeId" column="employee_id" />
+        <property name="doorNumber" column="door_number" type="string"/>
+        <property name="street" column="street" type="string"/>
+        <property name="district" column="district" type="string"/>
+        <property name="state" column="state" type="string"/>
+        <property name="country" column="country" type="string"/>
+        <property name="addressType" column="type" type="string"/>
+        <property name="isDeleted" column="is_deleted" type="boolean"/>
  
-        <many-to-one name="employee" class="Employee"
-            column="employee_id" not-null="true"/>
     </class> 
 </hibernate-mapping>
 

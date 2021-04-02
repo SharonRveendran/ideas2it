@@ -33,25 +33,8 @@ public class EmployeeController {
                 mobile, dob, employeeAddresses);
     }
     
-    /**
-     * Method to get the employee details based on employee id
-     * @param id Employee id
-     * @return Employee details as string
-     */
-    public String getEmployee(int id) {
-    	return employeeService.getEmployee(id);
-    }
     
-    /**
-     * Methode to update the employee name
-     * @param id Employee id
-     * @param employeeName Name of employee
-     * @return true for successful updation of name else return false
-     */
-    public void updateName(int id, String employeeName) {
-    	employeeService.updateEmployee(id, employeeName,
-                null, 0l, null, 0l, "name");
-    }
+ 
     
     /**
      * Method to check whether the id is present in collection or not 
@@ -62,61 +45,9 @@ public class EmployeeController {
     	return employeeService.isIdExist(id);
     }
     
-    /**
-     * Method to update Employee designation
-     * @param id Employee id
-     * @param designation Employee Designation   
-     */
-    public void updateDesignation(int id, String designation) {
-    	employeeService.updateEmployee(id, null, designation,
-                0l, null, 0l, "designation");
-    }
     
-    /**
-     * Method to update Employee salary
-     * @param id Employee id
-     * @param employeeSalary Salary of Employee
-     */
-    public void updateSalary(int id, double employeeSalary) {
-    	employeeService.updateEmployee(id, null, null,
-                employeeSalary, null, 0l, "salary");
-    }
     
-    /**
-     * Method to update Employee date of birth
-     * @param id Employee id
-     * @param dob Employee date of birth
-     */
-    public void updateDob(int id, Date dob) {
-    	employeeService.updateEmployee(id, null, null, 0l, dob, 0l, "dob");
-    }
-    
-    /**
-     * Method to update employee mobile number
-     * @param id Employee id
-     * @param mobile Employee mobile number
-     */
-    public void updateMobile(int id, long mobile) {
-    	employeeService.updateEmployee(id, null, null,
-                0l, null, mobile, "mobile");
-    }
-    
-    /**
-     * Method to delete the Employee based on employee id
-     * @param id Employee id
-     * @return true for successfull deletion else false
-     */
-    public boolean deleteEmployee(int id) {
-    	return employeeService.deleteEmployee(id);
-    }
 
-    /**
-     * Method to return all employee details present in collection
-     * @return list of all employee delails
-     */
-    public List<String> getAll() {
-    	return employeeService.getAll();
-    }
     
     /**
      * Method to validate date
@@ -154,107 +85,4 @@ public class EmployeeController {
         return employeeService.isValidId(id);
     }
 
-    /**
-     * Methode to update address
-     * @param addressId employee address id
-     * @param addressDetails array of address details
-     */
-    public void updateAddress(int addressId, String[] addressDetails) {
-        employeeService.updateAddress(addressId, addressDetails);
-    }
-
-    /**
-     * Methode to recover deleted employee
-     * @param id employee id
-     * @return recovery status string
-     */
-    public String recoverEmployee(int id) {
-        return employeeService.recoverEmployee(id);
-    }
-    
-    /**
-     * Method to get addressList of a employee
-     * @param employeeId
-     * @return list of employee address strings
-     */
-    public Map<Integer, String> getAddressList(int employeeId) {
-        return employeeService.getAddressList(employeeId);
-    }
-
-    /**
-     * Method to delete employee address
-     * @param addressId
-     */
-    public void deleteAddress(int addressId) {
-        employeeService.deleteAddress(addressId);
-    }
-    
-    /**
-     * Methode to get deleted address list
-     * @param employeeId
-     * @return map of deleted address with address id 
-     */
-    public Map<Integer, String> getDeletedAddressList(int employeeId) {
-        return employeeService.getDeletedAddressList(employeeId);
-    }
-
-    /**
-     * Method to recover deleted employee
-     * @param addressId
-     */
-    public void recoverAddress(int addressId) {
-        employeeService.recoverAddress(addressId);
-    }
-
-    /**
-     * Method to get all deleted employees
-     * @return list of  deleted employees 
-     */
-    public List<String> getDeletedEmployees() {
-        return employeeService.getDeletedEmployees();
-    }
-
-    /**
-     * Method to get projects basic details
-     * @return map of Project id as key and project basic details as value
-     */
-    public Map<Integer, String> getAllProjectsBasicDetails() {
-        return employeeService.getAllProjectsBasicDetails();
-    }
-
-    /**
-     * Method to get all employee basic details
-     * @return map of employee id as key and basic details as value
-     */
-    public Map<Integer, String> getAllEmployeeBasicDetails() {
-        return employeeService.getAllEmployeeBasicDetails();
-    }
-
-    /**
-     * Method to assign projects to employee
-     * @param projectIdList list of project ids which need to assign
-     * @param employeeId employee id 
-     */
-    public boolean assignProject(List<Integer> projectIdList, int employeeId) {
-        return employeeService.assignProject(projectIdList, employeeId);
-    }
-
-    /**
-     * Method to get assigned projects details of specified employee
-     * @param employeeId employee id to get the assigned projects details
-     * @ return list of project basic details
-     */
-    public List<String> getProjectsBasicDetails(int employeeId) {
-        return employeeService.getProjectsBasicDetails(employeeId);
-    }
-
-    /**
-     * Method to remove assigned project of employee
-     * @param employeeId
-     * @param projectId
-     * @return true for successfull removing of project
-     */
-    public boolean removeProject(int employeeId, int projectId) {
-        return employeeService.removeProject(employeeId, projectId);
-    }
 }
