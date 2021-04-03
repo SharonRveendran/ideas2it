@@ -17,6 +17,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import org.hibernate.Criteria;
+
+import org.hibernate.criterion.Restrictions;
+
 import com.ideas2it.employeemanagement.employee.dao.EmployeeDao;
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
@@ -29,28 +33,20 @@ import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
  * @created 21-03-2021
  */
 public class EmployeeDaoImpl implements EmployeeDao {
-    private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();	
-  
-  
-
-      
+    private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();	
+    private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+   
     /** 
      * {@inheritdoc}
      */
     @Override
      public void insertEmployee(Employee employee) {
-        Connection connection = databaseConnection.getDatabaseConnection();
-        SessionFactory sessionFactory = databaseConnection.getSessionFactoryInstance();
         Session session = sessionFactory.openSession();
-        Transaction t = session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
         session.save(employee);
-        t.commit();
-
-
+        transaction.commit();
+        session.close();
     }
-
-    
-
 
     /**
      * {@inheritdoc}
@@ -81,8 +77,34 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } 
     }
 
-   
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Employee getEmployee(int id) {
+        Session session = sessionFactory.openSession();
+        Employee employee = session.get(Employee.class, id);
+        session.close();
+        if (true == employee.getIsDeleted()) {
+            employee = null;
+        }  
+        return employee; 
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Employee> getAllEmployee() {
+        Session session = sessionFactory.openSession();
+        List<Employee> employees = new ArrayList<Employee>();  
+        Criteria criteria = session.createCriteria(Employee.class);
+        criteria.add(Restrictions.eq("isDeleted",false));
+        for (Object object : criteria.list()) {
+            employees.add((Employee)object);
+        }
+        return employees;
+    }
     
 
    

@@ -34,7 +34,7 @@ public class EmployeeView {
    	            createEmployee();
    		    break;
    	        case "2":
-   	            //displayEmployee();
+   	            displayEmployee();
    		    break;	
    	        case "3":
    	           // updateEmployee();
@@ -43,7 +43,7 @@ public class EmployeeView {
    	           // deleteEmployee();
    		    break;
    	        case "5":
-   	           // displayAll();
+   	            displayAll();
    	            break;
    	        case "6":
    	           // recoverEmployee();
@@ -223,8 +223,32 @@ public class EmployeeView {
         return employeeController.isValidDate(date);
     }
 
-    
+    /**
+     * Method to display employee based on employee id
+     */
+    private void displayEmployee() {
+        int id = getAndValidateId();
+    	String employeeDetails = employeeController.getEmployee(id);
+    	if(null == employeeDetails) {
+    	    System.out.println(Constants.NO_EMPLOYEE);
+    	} else {
+    	    System.out.println(employeeDetails);
+    	}
+    }
 
+    /**
+     * Method to display all employee details present in collection
+     */
+    private void displayAll() {
+        List<String> employeesDetails = employeeController.getAllEmployeesDetails();
+        if (0 == employeesDetails.size()) {
+            System.out.println(Constants.NO_EMPLOYEE);
+        } else {
+            for(String employeeDetails : employeesDetails) {
+                System.out.println(employeeDetails);
+            }
+        }
+    }
     
     
     

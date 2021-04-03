@@ -122,10 +122,58 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeId;
     }
 
-  
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public String getEmployee(int id) {    
+        Employee employee = employeeDao.getEmployee(id);
+        return getEmployeeDetails(employee);
+    }
    
+    /**
+     * @param employee employee object
+     */
+    private String getEmployeeDetails(Employee employee) {
+        if (null != employee ) {
+            int temporaryAddressCount = 1;
+            String employeeDetails = employee.toString();
+            List<Address> employeeAddresses = employee.getAddresses();
+            
+                for (int index = 0; index < employeeAddresses.size(); index++) {
+                    if ("permanent".equals(employeeAddresses.get(index).getAddressType())) {
+                        employeeDetails = employeeDetails +
+                                "\nPermanent address\n-----------------\n\n";
+                    }
+                    if ("temporary".equals(employeeAddresses.get(index).getAddressType())) {
+                        employeeDetails = employeeDetails + "\nTemporary address " +
+                                temporaryAddressCount + "\n--------------------\n\n";
+                        temporaryAddressCount++;
+                    } 
+                    if (null != employeeAddresses.get(index).getDoorNumber()) { 
+                        employeeDetails = employeeDetails + (employeeAddresses.get(index)).toString();
+                    } 
+               }
+            
+        return employeeDetails;
+        } else {
+            return null;
+        }        
+    }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<String> getAllEmployeesDetails() {
+        List<String> employeesDetails = new ArrayList<String>();
+        List<Employee> employees = new ArrayList<Employee>();
+        employees = employeeDao.getAllEmployee();
+        for(int index = 0; index < employees.size(); index++) {
+            employeesDetails.add(getEmployeeDetails(employees.get(index)));
+        }
+        return employeesDetails;
+    }
 
    
   

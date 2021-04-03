@@ -34,10 +34,17 @@ public interface EmployeeDao {
      */
     public boolean isIdExist(int id);
 
-    
+    /**
+     * Method to get employee from database
+     * @param id employee id
+     * @return employee details as a string
+     */
+     public Employee getEmployee(int id);
 
-
-   
+    /**
+     * Methode to get all employee object as a list
+     */
+     public List<Employee> getAllEmployee(); 
 
 
 }

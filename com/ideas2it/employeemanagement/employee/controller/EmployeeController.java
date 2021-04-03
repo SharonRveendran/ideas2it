@@ -45,10 +45,15 @@ public class EmployeeController {
     	return employeeService.isIdExist(id);
     }
     
-    
-    
+    /**
+     * Method to get the employee details based on employee id
+     * @param id Employee id
+     * @return Employee details as string
+     */
+    public String getEmployee(int id) {
+    	return employeeService.getEmployee(id);
+    }
 
-    
     /**
      * Method to validate date
      * @param date User given date string
@@ -85,4 +90,11 @@ public class EmployeeController {
         return employeeService.isValidId(id);
     }
 
+    /**
+     * Method to return all employee details present in collection
+     * @return list of all employee delails
+     */
+    public List<String> getAllEmployeesDetails() {
+    	return employeeService.getAllEmployeesDetails();
+    }
 }

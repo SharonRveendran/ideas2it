@@ -28,7 +28,12 @@ public interface EmployeeService {
            double salary, long mobile, Date dob,
            List<String[]> employeeAddresses);
     
-   
+   /**
+     * Method to return employee details based on employee id
+     * @param id Employee id
+     * @return employee object if employee present else return null
+     */
+   public String getEmployee(int id);
         
    
     /**
@@ -69,8 +74,11 @@ public interface EmployeeService {
      */
     public int isValidId(String id);
     
-   
-
+    /**
+     * Method to return all employee details present in collection
+     * @return list of employee details
+     */
+    public List<String> getAllEmployeesDetails();
   
     
 
