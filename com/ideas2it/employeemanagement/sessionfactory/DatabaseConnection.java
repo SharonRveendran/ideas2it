@@ -52,7 +52,7 @@ public class DatabaseConnection {private static DatabaseConnection databaseConne
     public Connection getDatabaseConnection() {
         try {            
             connection = DriverManager.getConnection
-                    ("jdbc:mysql://localhost:3306/employeemanagement",
+                    ("jdbc:mysql://localhost:3306/employeemanagementnew",
                     "root", "25562556");
         } catch(SQLException e) {
                 System.out.println("Can't connect to database");

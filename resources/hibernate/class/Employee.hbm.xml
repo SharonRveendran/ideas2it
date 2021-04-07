@@ -13,11 +13,10 @@
         <property name="designation" column="designation" type="string"/>
         <property name="salary" column="salary" type="double"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
-        <list name="addresses"  cascade="all" lazy="false">
+        <bag name="addresses" cascade="all" lazy="false">
             <key column="employee_id"/>
-            <index  column="idx" />
             <one-to-many class="com.ideas2it.employeemanagement.employee.model.Address"/>
-        </list>
+        </bag>
     </class> 
 </hibernate-mapping>
 

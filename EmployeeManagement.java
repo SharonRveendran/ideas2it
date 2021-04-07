@@ -1,5 +1,5 @@
 import com.ideas2it.employeemanagement.employee.view.EmployeeView;
-//import com.ideas2it.employeemanagement.project.view.ProjectView;
+import com.ideas2it.employeemanagement.project.view.ProjectView;
 
 
 import java.util.Scanner;
@@ -13,7 +13,7 @@ public class EmployeeManagement {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         EmployeeView employeeView = new EmployeeView();
-        //ProjectView projectView = new ProjectView();
+        ProjectView projectView = new ProjectView();
         System.out.println("\n\n.............. WELCOME TO EMPLOYEE MANAGEMENT SYSTEM ...............");
         String message = "\n1 : Employee Management\n\n2 : Project Management\n\n3 : Exit\n"
                + "------------------------";
@@ -29,7 +29,7 @@ public class EmployeeManagement {
                     break;
                 case "2":
                     System.out.println("\n.............. WELCOME TO PROJECT MANAGEMENT ...............");
-                    //projectView.start();
+                    projectView.start();
                     break;
                 case "3":
                     System.out.println("\nThank you....");

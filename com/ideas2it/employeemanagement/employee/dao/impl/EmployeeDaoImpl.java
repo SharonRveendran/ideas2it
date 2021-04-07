@@ -53,28 +53,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public boolean isIdExist(int id) {
-        Connection connection = databaseConnection.getDatabaseConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {  
-            preparedStatement = connection.prepareStatement
-                    ("select id from employee where id = ?");
-            preparedStatement.setInt(1, id);
-            resultSet = preparedStatement.executeQuery();
-            boolean isIdExist = resultSet.next();
-            return isIdExist;  
-        } catch(SQLException e) {
-            e.printStackTrace();
-            return false; 
-        } finally {
-            try{
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } 
+        Session session = sessionFactory.openSession();
+        Employee employee = session.get(Employee.class, id);
+        session.close();
+        return (null == employee) ? false : true;
     }
 
     /**
@@ -85,9 +67,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
         Session session = sessionFactory.openSession();
         Employee employee = session.get(Employee.class, id);
         session.close();
-        if (true == employee.getIsDeleted()) {
-            employee = null;
-        }  
         return employee; 
     }
 
@@ -106,12 +85,49 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return employees;
     }
     
-
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+     public boolean updateEmployee(Employee employee) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(employee);
+        transaction.commit();
+        session.close();
+        return true;
+     }
    
+    /**
+     * {@inheritdoc} 
+     */
+    @Override
+    public List <Employee> getDeletedEmployees() { 
+        Session session = sessionFactory.openSession();
+        List<Employee> employees = new ArrayList<Employee>();  
+        Criteria criteria = session.createCriteria(Employee.class);
+        criteria.add(Restrictions.eq("isDeleted",true));
+        for (Object object : criteria.list()) {
+            employees.add((Employee)object);
+        }
+        return employees;
+    }
 
-   
-   
-
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Map <Integer, Address> getAddressList(int employeeId) {
+        Session session = sessionFactory.openSession();
+        Map<Integer, Address> addressList = new HashMap<Integer, Address>();
+        Employee employee = session.get(Employee.class, employeeId);
+        for (Address address : employee.getAddresses()) {
+            if (!address.getIsDeleted()) {
+                addressList.put(address.getAddressId(), address);
+            }
+        }
+        return addressList;
+    }
    
 
 }

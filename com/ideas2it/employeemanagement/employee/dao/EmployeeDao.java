@@ -46,5 +46,24 @@ public interface EmployeeDao {
      */
      public List<Employee> getAllEmployee(); 
 
+    /**
+     * Methode to delete employee based on employee id
+     * @param employee employee object  
+     * @return true for successfull deletion
+     */
+     public boolean updateEmployee(Employee employee);
+    
+    /**
+     * Method to get all deleted employees
+     * @return list of  deleted employees 
+     */
+    public List <Employee> getDeletedEmployees();
+
+    /**
+     * Methode to get addressList of employee
+     * @param employeeId
+     * @return employee address list.
+     */
+    public Map <Integer, Address> getAddressList(int employeeId); 
 
 }

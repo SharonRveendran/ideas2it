@@ -175,9 +175,120 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeesDetails;
     }
 
-   
-  
-    
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public boolean deleteEmployee(int id) {
+        List<Address> addresses = new ArrayList<Address>();
+        Employee employee = employeeDao.getEmployee(id);
+        employee.setIsDeleted(true);
+        for (Address address : employee.getAddresses()) {
+            address.setIsDeleted(true);
+            addresses.add(address); 
+        }
+        employee.setAddresses(addresses);   
+    	return employeeDao.updateEmployee(employee);
+    }   
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public String recoverEmployee(int id) {
+        List<Address> addresses = new ArrayList<Address>();
+        String recoveryStatus = null;
+        Employee employee = employeeDao.getEmployee(id);
+        if (null != employee) {
+            if (!employee.getIsDeleted()) {
+                recoveryStatus = "Employee already exist....!!!"; 
+            } else {    
+                employee.setIsDeleted(false);
+                for (Address address : employee.getAddresses()) {
+                    address.setIsDeleted(false);
+                    addresses.add(address);
+                }
+                employee.setAddresses(addresses);
+                if (employeeDao.updateEmployee(employee)) {
+                    recoveryStatus = "\nRecovery successfull...!!!";
+                } else {
+                    recoveryStatus = "\nInvalid details....!!!";
+                }
+            }
+        }
+        return recoveryStatus;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List <String> getDeletedEmployees() {
+        List <String> deletedEmployees = new ArrayList <String> ();
+        List <Employee> deletedEmployeesObjects = employeeDao.getDeletedEmployees();
+        for (int index = 0; index < deletedEmployeesObjects.size(); index++) {
+            deletedEmployees.add(deletedEmployeesObjects.get(index).toString());
+        }
+        return deletedEmployees;
+    }  
+    
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public void updateEmployee(int id, String name, String designation,
+            double salary, Date dob, long mobile, String option) {
+        Employee employee = employeeDao.getEmployee(id);
+        if ("name".equals(option)) {
+            employee.setName(name);           
+    	}
+    	if ("designation".equals(option)) {
+    	    employee.setDesignation(designation);   
+    	}
+    	if ("salary".equals(option)) {
+    	    employee.setSalary(salary);
+    	}
+    	if ("dob".equals(option)) {
+    	    employee.setDob(dob);   
+    	}
+    	if ("mobile".equals(option)) {
+    	   employee.setMobile(mobile);
+    	}
+    	employeeDao.updateEmployee(employee);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public void updateAddress(int employeeId, int addressId, String[] addressDetails) {
+        Employee employee = employeeDao.getEmployee(employeeId);
+        List<Address> addresses = new ArrayList<Address>();
+        for (Address address : employee.getAddresses()) {
+            if (address.getAddressId() == addressId) {
+                address = new Address(addressDetails[0],
+                addressDetails[1], addressDetails[2], addressDetails[3],
+                addressDetails[4], addressDetails[5], false);
+                address.setAddressId(addressId);
+            }
+            addresses.add(address);
+        }
+        employee.setAddresses(addresses);
+        employeeDao.updateEmployee(employee);
+    }
    
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public Map <Integer, String> getAddressList(int employeeId) {
+        Map <Integer, String> addressList = new HashMap <Integer, String> ();
+        Map <Integer, Address> addresses = employeeDao.getAddressList(employeeId);
+        List <Integer> addressIdList = new ArrayList <Integer> (addresses.keySet());
+        for(int index = 0; index < addressIdList.size(); index++) {
+           addressList.put((addressIdList.get(index)),
+                   (addresses.get(addressIdList.get(index))).toString());
+        }
+        return addressList;
+    } 
 }

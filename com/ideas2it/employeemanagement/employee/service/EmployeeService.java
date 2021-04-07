@@ -80,7 +80,50 @@ public interface EmployeeService {
      */
     public List<String> getAllEmployeesDetails();
   
-    
+    /**
+     * Method to delete the Employee based on employee id
+     * @param id Employee id
+     * @return true for successfull deletion else false
+     */
+    public boolean deleteEmployee(int id);    
 
+    /**
+     * Methode to recover deleted employee
+     * @param id employee id
+     */
+    public String recoverEmployee(int id);
+
+    /**
+     * Method to get all deleted employees
+     * @return list of  deleted employees 
+     */
+    public List <String> getDeletedEmployees();
+
+    /**
+     * Methode to update employee details
+     * @param id Employee id
+     * @param name employee name
+     * @param designation employee designation
+     * @param salary employee salary
+     * @param dob employee date of birth
+     * @param mobile employee mobile number
+     * @param option option to specify the attribute that need to update
+     */
+    public void updateEmployee(int id, String name, String designation,
+            double salary, Date dob, long mobile, String option);
+
+    /**
+     * Methode to update address
+     * @param addressId employee address id
+     * @param employeeId employee id
+     * @param addressDetails array of address details
+     */
+    public void updateAddress(int employeeId, int addressId, String[] addressDetails);   
   
+    /**
+     * Method to get addressList of a employee
+     * @param employeeId
+     * @return list of employee address strings
+     */
+    public Map <Integer, String> getAddressList(int employeeId);
 }

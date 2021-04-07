@@ -97,4 +97,99 @@ public class EmployeeController {
     public List<String> getAllEmployeesDetails() {
     	return employeeService.getAllEmployeesDetails();
     }
+
+    /**
+     * Method to delete the Employee based on employee id
+     * @param id Employee id
+     * @return true for successfull deletion else false
+     */
+    public boolean deleteEmployee(int id) {
+    	return employeeService.deleteEmployee(id);
+    }
+
+    /**
+     * Methode to recover deleted employee
+     * @param id employee id
+     * @return recovery status string
+     */
+    public String recoverEmployee(int id) {
+        return employeeService.recoverEmployee(id);
+    }
+
+    /**
+     * Method to get all deleted employees
+     * @return list of  deleted employees 
+     */
+    public List<String> getDeletedEmployees() {
+        return employeeService.getDeletedEmployees();
+    }
+
+    /**
+     * Methode to update the employee name
+     * @param id Employee id
+     * @param employeeName Name of employee
+     * @return true for successful updation of name else return false
+     */
+    public void updateName(int id, String employeeName) {
+    	employeeService.updateEmployee(id, employeeName,
+                null, 0l, null, 0l, "name");
+    }
+    
+    /**
+     * Method to update Employee designation
+     * @param id Employee id
+     * @param designation Employee Designation   
+     */
+    public void updateDesignation(int id, String designation) {
+    	employeeService.updateEmployee(id, null, designation,
+                0l, null, 0l, "designation");
+    }
+    
+    /**
+     * Method to update Employee salary
+     * @param id Employee id
+     * @param employeeSalary Salary of Employee
+     */
+    public void updateSalary(int id, double employeeSalary) {
+    	employeeService.updateEmployee(id, null, null,
+                employeeSalary, null, 0l, "salary");
+    }
+    
+    /**
+     * Method to update Employee date of birth
+     * @param id Employee id
+     * @param dob Employee date of birth
+     */
+    public void updateDob(int id, Date dob) {
+    	employeeService.updateEmployee(id, null, null, 0l, dob, 0l, "dob");
+    }
+    
+    /**
+     * Method to update employee mobile number
+     * @param id Employee id
+     * @param mobile Employee mobile number
+     */
+    public void updateMobile(int id, long mobile) {
+    	employeeService.updateEmployee(id, null, null,
+                0l, null, mobile, "mobile");
+    }
+
+    /**
+     * Methode to update address
+     * @param addressId employee address id
+     * @param employeeId employee id
+     * @param addressDetails array of address details
+     */
+    public void updateAddress(int employeeId, int addressId, String[] addressDetails) {
+        employeeService.updateAddress(employeeId, addressId, addressDetails);
+    }
+
+    /**
+     * Method to get addressList of a employee
+     * @param employeeId
+     * @return list of employee address strings
+     */
+    public Map<Integer, String> getAddressList(int employeeId) {
+        return employeeService.getAddressList(employeeId);
+    }
 }

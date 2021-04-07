@@ -37,16 +37,16 @@ public class EmployeeView {
    	            displayEmployee();
    		    break;	
    	        case "3":
-   	           // updateEmployee();
+   	            updateEmployee();
    		    break;
    	        case "4":
-   	           // deleteEmployee();
+   	            deleteEmployee();
    		    break;
    	        case "5":
    	            displayAll();
    	            break;
    	        case "6":
-   	           // recoverEmployee();
+   	            recoverEmployee();
    	            break;
                 case "7":
    	          //  assignProjects();
@@ -250,11 +250,181 @@ public class EmployeeView {
         }
     }
     
+    /**
+     * Method to delete employee based on employee id
+     */
+    private void deleteEmployee() { 
+    	int id = getAndValidateId() ;  
+    	if (employeeController.isIdExist(id)) {
+            if (employeeController.deleteEmployee(id)) {
+                System.out.println(Constants.SUCCESSFULL_DELETION);
+            } else {
+                System.out.println("Deletion failed...!!!");
+            }   
+        } else {
+            System.out.println(Constants.NO_EMPLOYEE);
+        }
+    }    
     
-    
-    
+    /**
+     * Method to recover a deleted employee
+     */
+    private void recoverEmployee() {
+        int employeeId; 
+        List <String> deletedEmployees = employeeController.getDeletedEmployees();
+        if (0 != deletedEmployees.size()) {
+            System.out.println("Deleted employees are given below");
+            for(int index = 0; index < deletedEmployees.size(); index++) {
+                System.out.println((index + 1) + " :\n    " + deletedEmployees.get(index));
+            }
+            employeeId = getAndValidateId();
+            String recoveryStatus = employeeController.recoverEmployee(employeeId);
+            if (null == recoveryStatus) {
+                System.out.println("\nNo employee to recover with given id");
+            } else {
+                System.out.println(recoveryStatus);
+            }
+        } else {
+            System.out.println("\nNo employees to recover");
+        }   
+    }    
 
-   
-
-  
+    /**
+     * Method to update the employee details
+     */
+    private void updateEmployee() {
+    	int id = getAndValidateId();
+    	if (employeeController.isIdExist(id)) {	
+            String option;
+            do {
+                System.out.println(Constants.UPDATE_OPTION);
+                option = scanner.nextLine();
+    	        switch (option) {
+    	            case "1":
+    	    	        updateName(id);
+    	    	        break;
+    	    	    case "2":
+    	    	        updateDesignation(id);
+    	    	        break;
+    	    	    case "3":
+    	    	        updateSalary(id);
+    	    	        break;
+    	            case "4":
+    	    	        updateDob(id);
+    	    	        break;
+    	    	    case "5":
+    	    	       updateMobile(id);
+                       break;
+                   case "6":
+    	    	       updateAddress(id);
+                       break;
+                   default:
+                       option = null;
+                       System.out.println(Constants.INVALID_DETAILS);
+    	        }
+            } while (null == option);
+    	} else {
+    	    System.out.println(Constants.NO_EMPLOYEE);
+    	}		
+    }  
+    
+    /**
+     * This method will update the employee name
+     * @param id the employee id
+     */
+    private void updateName(int id) {
+    	System.out.println(Constants.GET_NAME_MESSAGE);
+        String employeeName = scanner.nextLine();
+        if(employeeController.isIdExist(id)) {
+            employeeController.updateName(id, employeeName);
+            System.out.println(Constants.SUCCESSFULL_UPDATION);
+        } else {
+            System.out.println(Constants.NO_EMPLOYEE);
+        }  
+    }
+    
+    /**
+     * This method will update the employee Designation
+     * @param id the employee id
+     */
+    private void updateDesignation(int id) {
+    	System.out.println(Constants.GET_DESIGNATION_MESSAGE);
+        String designation = scanner.nextLine();
+        employeeController.updateDesignation(id, designation);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
+    }
+    
+    /**
+     * This method will update the employee Salary
+     * @param id the employee id
+     */
+    private void updateSalary(int id) {
+    	double employeeSalary = getAndValidateSalary();
+        employeeController.updateSalary(id, employeeSalary);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
+    }
+    
+    /**
+     * This method will update the employee Date of birth
+     * @param id the employee id
+     */
+    private void updateDob(int id) {
+    	System.out.println(Constants.GET_DATE_MESSAGE);
+    	String date;
+    	do {
+            date = scanner.nextLine();
+	    if (null == employeeController.isValidDate(date)) { 
+                System.out.println(Constants.INVALID_DETAILS);
+	        date = "invalidDate";
+            }
+        } while("invalidDate".equals(date));
+	employeeController.updateDob(id, employeeController.isValidDate(date));
+	System.out.println(Constants.SUCCESSFULL_UPDATION);
+    }
+    
+    /**
+     * This method will update the employee Mobile number
+     * @param id the employee id
+     */
+    private void updateMobile(int id) {
+    	String input;
+    	long mobile = getAndValidateMobile();
+        employeeController.updateMobile(id, mobile);
+        System.out.println(Constants.SUCCESSFULL_UPDATION);
+    }
+    
+    /**
+     * Methode to update employee address
+     */
+    private void updateAddress(int employeeId) {
+        Map<Integer, String> addressList = employeeController.getAddressList(employeeId);
+        List<Integer> employeeIdList = new ArrayList<Integer>(addressList.keySet());
+        System.out.println("Which address you want to update ?");
+        if (0 != addressList.size()) { 
+            int input; 
+            do {
+                int index;              
+                for(index = 0; index < employeeIdList.size(); index++) {
+                    System.out.println((index + 1) + " :\n    "
+                            + addressList.get(employeeIdList.get(index)));
+                }
+                try {
+                    input = Integer.parseInt(scanner.nextLine());
+                } catch(NumberFormatException e) {
+                    input = index + 1;
+                }
+                if (input <= index) {
+                    int addressId = employeeIdList.get(input - 1);              
+                    String addressDetails[] = getAddress(null);
+                    employeeController.updateAddress(employeeId, addressId, addressDetails);
+                    System.out.println("Address updated successfully...");
+                } else {
+                    System.out.println(Constants.INVALID_DETAILS);
+                    input = 0;
+                }
+            } while (0 == input); 
+        } else {
+            System.out.println("No address present for the given employee");
+        }
+    }
 }
