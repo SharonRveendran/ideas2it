@@ -26,6 +26,13 @@ public interface ProjectDao {
     public Project getProject(int projectId);
 
     /**
+     * Methode to get project object with employee object list based on project id
+     * @param projectId id of project which need to display
+     * @return project object
+     */
+    public Project getProjectWithEmployee(int projectId);
+
+    /**
      * Method to display all project present in database
      * @param isDeleted indicating the project is deleted or not
      * @return list of project objects 
@@ -39,4 +46,9 @@ public interface ProjectDao {
      */
     public boolean updateProject(Project project);
 
+    /**
+     * Method to display all project present in database
+     * @return list of project objects 
+     */
+    public List<Project> getAllProjectWithEmployee();
 }

@@ -12,5 +12,10 @@
         <property name="startDate" column="start_date" type="date"/>
         <property name="endDate" column="end_date" type="date"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
+
+        <bag name="employees" table="employee_project" cascade="merge">
+            <key column="project_id" />
+            <many-to-many class="com.ideas2it.employeemanagement.employee.model.Employee" column="employee_id" />
+        </bag>
     </class> 
 </hibernate-mapping>

@@ -17,27 +17,27 @@ public class Project {
     private Date startDate;
     private Date endDate;
     private boolean isDeleted;
-    private List<Employee> employeeList;
+    private List<Employee> employees;
 
     public Project() {}
     public Project(int id, String name, String managerName,
-            Date startDate, Date endDate, boolean isDeleted, List<Employee> employeeList) {
+            Date startDate, Date endDate, boolean isDeleted, List<Employee> employees) {
         this.id = id;
         this.name = name;
         this.managerName = managerName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.employeeList = employeeList;
+        this.employees = employees;
         this.isDeleted = isDeleted;
     }
 
     public Project(String name, String managerName,
-            Date startDate, Date endDate, boolean isDeleted, List<Employee> employeeList) {
+            Date startDate, Date endDate, boolean isDeleted, List<Employee> employees) {
         this.name = name;
         this.managerName = managerName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.employeeList = employeeList;
+        this.employees = employees;
         this.isDeleted = isDeleted;
     }
 
@@ -88,12 +88,12 @@ public class Project {
     public boolean getIsDeleted() {
         return isDeleted;
     }
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
  
-    public List<Employee> getEmployeeList() {
-        return employeeList;
+    public List<Employee> getEmployees() {
+        return employees;
     }    
 
     public String toString() {

@@ -25,11 +25,13 @@ public class ProjectView {
      */
     public void start() {
         String message = "\n1 : Create new project            |  4 : Delete project     "
-                + "           |  7 : Assign Employee in project     |\n2 : Display existing project"
+                + "           |  7 : Assign Employee in project     |  10 : Exit        "
+                + " |\n2 : Display existing project"
                 + "      |  5 : Update project                |  8 : Remove Employee from Project   "
-                + "|\n3 : Display all existing projects |  6 : Recover deleted project       |  9 : Exit "
-                + "                          |\n---------------------------------------------------"
-                + "-----------------------------------------------------------\n";	
+                + "|  ----------        |\n3 : Display all existing projects |  6 : Recover deleted project"
+                + "       |  9 : Display Assigned Employees "
+                + "    |  ----------        |\n---------------------------------------------------"
+                + "--------------------------------------------------------------------------------\n";	
         System.out.println("\nSelect your option");
         String option;
         do {
@@ -49,24 +51,27 @@ public class ProjectView {
    	            deleteProject();
    		    break;
    	        case "5":
-   	           // updateProject();
+   	            updateProject();
    	            break;
    	        case "6":
    	            recoverProject();
    	            break;
                 case "7":
-                   // assignEmployee();
+                    assignEmployee();
                     break;
                 case "8":
-                    //removeEmployee();
+                    removeEmployee();
                     break;
                 case "9":
+                    displayAssignedEmployees();
+                    break;
+                case "10":
    	            System.out.println(Constants.END_MESSAGE);
    	            break;
    	        default:
    	            System.out.println(Constants.INVALID_DETAILS);
    	    } 	 
-	} while(!"9".equals(option));  
+	} while(!"10".equals(option));  
     }
 
     /**
@@ -191,5 +196,199 @@ public class ProjectView {
                 System.out.println("Wrong project id");
             }
         }
+    }
+
+    /**
+     * Method to update existing project
+     */
+    private void updateProject() {
+        displayAllProject();
+        System.out.print("\nEnter project id : ");
+        int projectId = getValidId();
+        String updateMessage = "\n1 : name          |    3 : Start date   "
+                + "|\n2 : ManagerName   |    4 : End date     "
+                + "|\n-----------------------------------------";
+        System.out.println("\nSelect your option which  need to update");
+        String option = "";
+        do {
+            System.out.println(updateMessage);
+            option = scanner.nextLine();
+    	    switch (option) {
+    	         case "1":
+    	    	    updateName(projectId);
+    	    	    break;
+    	    	 case "2":
+    	    	    updateManagerName(projectId);
+    	    	    break;
+    	         case "3":
+    	    	    updateStartDate(projectId);
+    	    	    break;
+    	         case "4":
+    	            updateEndDate(projectId);
+    	            break;
+                 default:
+                    option = null;
+                    System.out.println("Please select valid option");
+    	    }
+        } while (null == option);   
+    }  
+    
+    /**      
+     * Methode to update project name
+     * @param projectId project id for update project details
+     */
+    private void updateName(int projectId) {
+        System.out.print("\nEnter new name : ");
+        String name = scanner.nextLine();
+        if (projectController.updateProject(projectId, name, null, null, null, "name")) {
+            System.out.println("\nProject updated successfully");
+        } else {
+            System.out.println("\nNo project exist with given id");
+        }
+    }    
+
+    /**      
+     * Methode to update project manager name
+     * @param projectId project id for update project details
+     */
+    private void updateManagerName(int projectId) {
+        System.out.print("\nEnter new manager name : ");
+        String managerName = scanner.nextLine();
+        if (projectController.updateProject(projectId, null, managerName, null, null, "manager name")) {
+            System.out.println("\nProject updated successfully");
+        } else {
+            System.out.println("\nNo project exist with given id");
+        }
+    }
+
+    /**      
+     * Methode to update project start date
+     * @param projectId project id for update project details
+     */
+    private void updateStartDate(int projectId) {
+        System.out.print("\nEnter new project start date : ");
+        Date startDate = getAndValidateDate();
+        if (projectController.updateProject(projectId, null, null, startDate, null, "start date")) {
+            System.out.println("\nProject updated successfully");
+        } else {
+            System.out.println("\nNo project exist with given id");
+        }
+    }
+   
+    /**      
+     * Methode to update project name
+     * @param projectId project id for update project details
+     */
+    private void updateEndDate(int projectId) {
+        System.out.print("\nEnter new project end date : ");
+        Date endDate = getAndValidateDate();
+        if (projectController.updateProject(projectId, null, null, null, endDate, "end date")) {
+            System.out.println("\nProject updated successfully");
+        } else {
+            System.out.println("\nNo project exist with given id");
+        }
+    }
+
+    /**
+     * Method to assign employees to the project
+     */
+    private void assignEmployee() {
+        Map<Integer, String> employeesDetails = projectController.getAllEmployeesDetails();
+        Map<Integer, String> projectsDetails = projectController.getAllProjectBasicDetails();
+        List<Integer> employeeIdList = new ArrayList<Integer>();
+        if (0 != projectsDetails.size()) {
+            Set<Integer> projectIdSet = projectsDetails.keySet();
+            System.out.println("................. LIST OF PROJECTS ..................");
+            for (int projectsId : projectIdSet) {
+                System.out.println(projectsDetails.get(projectsId));
+            }
+            System.out.print("\nEnter project id : ");
+            int projectId = getValidId();
+            if (projectIdSet.contains(projectId)) {
+                if (0 != employeesDetails.size()) {
+                    Set<Integer> employeeIdSet = employeesDetails.keySet();
+                    System.out.println("\n................. LIST OF EMPLOYEES ..................");
+                    for (int employeesId : employeeIdSet) {
+                        System.out.println(employeesDetails.get(employeesId));
+                    }
+                    String input = null;
+                    do {
+                        System.out.print("\nEnter employee id : ");
+                        int employeeId = getValidId();
+                    
+                        if (employeeIdSet.contains(employeeId)) {
+                            employeeIdList.add(employeeId);
+                        } else {
+                            System.out.println("\nNo employee Available with given employee id");
+                        } 
+                        System.out.println("\nDo you want to add more employees ?\n1 : Yes\n2 : No");
+                        input = scanner.nextLine();
+                    } while ("1".equals(input));
+                    if (projectController.assignEmployee(employeeIdList, projectId)) {
+                        System.out.println("\nEmployee assigned successfully...!!!");
+                    } else { 
+                        System.out.println("\nEmployee Assignment Failed...Because Some Employee already assigned");
+                    }
+                } else {
+                    System.out.println("No employee availabale");
+                }
+             } else {
+                 System.out.println("\nNo project Available with given project id");
+             }
+        } else {
+            System.out.println("No Projects availabale");
+        }
+    } 
+
+     /** 
+     * Methode to remove assigned employee from project
+     */
+    private void removeEmployee() {
+        System.out.print("\nEnter project id : ");
+        int projectId = getValidId();
+        String projectDetails = projectController.getProjectDetails(projectId);
+        if (null == projectDetails) {
+            System.out.println("No project exist with given id");
+        } else {
+            System.out.println("\n............. PROJECT DETAILS ..............\n"
+                    + projectDetails);
+            System.out.print("\nEnter employee id : ");
+            int employeeId = getValidId();
+            if (projectController.removeEmployee(projectId, employeeId)) {
+                System.out.println("Employee removed successfully...!!!");
+            } else {
+                System.out.println("Invalid details....!!!");
+            }
+        }     
+    } 
+
+    /**
+     * Methode to display projects assigned to employee
+     */
+    private void displayAssignedEmployees() {
+        Map<Integer, String> projectBasicsDetails = projectController.getAllProjectBasicDetails();  
+        if (0 != projectBasicsDetails.size()) {
+            Set<Integer> projectIdSet = projectBasicsDetails.keySet();
+            System.out.println("................. LIST OF PROJECTS ..................\n");
+            for (int projectId : projectIdSet) {
+                System.out.println(projectBasicsDetails.get(projectId));
+            }
+            int projectId = getValidId();
+            if (projectIdSet.contains(projectId)) {
+                List<String> employeesBasicDetails = projectController.getEmployeesBasicDetails(projectId);
+                if (0 != employeesBasicDetails.size()) {
+                    System.out.println("\n.............LIST OF ASSIGNED EMPLOYEES.................\n");
+                    for (String employeeBasicDetails : employeesBasicDetails) {
+                        System.out.println(employeeBasicDetails);
+                    }
+                } else {
+                    System.out.println("\nNo Employees assigned for given project");
+                }
+            } else {
+                System.out.println("No project exist with given id");
+            }
+        } else {
+            System.out.println("No Projects availabale");
+        } 
     }
 }

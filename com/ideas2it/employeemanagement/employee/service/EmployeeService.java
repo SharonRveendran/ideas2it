@@ -126,4 +126,45 @@ public interface EmployeeService {
      * @return list of employee address strings
      */
     public Map <Integer, String> getAddressList(int employeeId);
+
+    /**
+     * Method to get projects basic details
+     * @return map of Project id as key and project basic details as value
+     */
+    public Map<Integer, String> getAllProjectsBasicDetails();
+
+    /**
+     * Method to get all employee basic details
+     * @return map of employee id as key and basic details as value
+     */
+    public Map<Integer, String> getAllEmployeeBasicDetails();
+
+    /**
+     * Method to assign projects to employee
+     * @param projectIdList list of project ids which need to assign
+     * @param employeeId employee id 
+     */
+    public boolean assignProject(List<Integer> projectIdList, int employeeId);
+
+    /**
+     * Method to get assigned projects details of specified employee
+     * @param employeeId employee id to get the assigned projects details
+     * @ return list of project basic details
+     */
+    public List<String> getProjectsBasicDetails(int employeeId);
+
+    /**
+     * Method to remove assigned project of employee
+     * @param employeeId
+     * @param projectId
+     * @return true for successfull removing of project
+     */
+    public boolean removeProject(int employeeId, int projectId);
+
+    /**
+     * @param id employee id
+     * @return Emnployee object
+     */
+    public Employee getEmployeeObject(int id);
+
 }

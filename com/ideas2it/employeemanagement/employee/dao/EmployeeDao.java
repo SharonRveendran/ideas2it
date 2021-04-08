@@ -66,4 +66,18 @@ public interface EmployeeDao {
      */
     public Map <Integer, Address> getAddressList(int employeeId); 
 
+    /**
+     * Methode to get id of all projects assigned to the given employee
+     * @param employeeId
+     * @return list of project ids
+     */
+    public List<Integer> getProjectIdList(int employeeId);
+
+    /**
+     * Method to get employee with project from database
+     * @param employeeId employee id
+     * @return employee details as a string
+     */
+     public Employee getEmployeeWithProject(int employeeId);
+
 }

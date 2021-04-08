@@ -8,7 +8,7 @@ import java.util.List;
 //import org.hibernate.annotations.Entity;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
-
+import com.ideas2it.employeemanagement.project.model.Project;
 
 /**
  * POJO class for employee providing id,
@@ -26,7 +26,7 @@ public class Employee {
     private double salary;
     private boolean isDeleted;
     private List<Address> addresses;  
-    //private List<Project> projectList;
+    private List<Project> projects;
     
     public Employee() {
     	
@@ -41,6 +41,16 @@ public class Employee {
         this.isDeleted = isDeleted;	
     }
  
+    public Employee(String name, String designation, double salary,long mobile, Date dob, List<Address> addresses, boolean isDeleted, List<Project> projects) {
+        this.name = name;
+        this.dob = dob;
+        this.mobile = mobile; 
+    	this.designation = designation;
+    	this.salary = salary; 
+        this.addresses = addresses;
+        this.isDeleted = isDeleted;	
+        this.projects = projects;
+    }
     public int getId() {
 	return id;
     }
@@ -105,13 +115,13 @@ public class Employee {
 	this.addresses = addresses;
     }
 
-   /* public List<Project> getProjectList() {
-	return projectList;
+    public List<Project> getProjects() {
+	return projects;
     }
 	
-    public void setProjectList(List<Project> projectList) {
-	this.projectList = projectList;
-    }*/
+    public void setProjects(List<Project> projects) {
+	this.projects = projects;
+    }
     public String toString() {
     	return "\nEmployee Id             =  " + id + "\nEmployee Name           =  "
                 + name + "\nEmployee Designation    =  " + designation

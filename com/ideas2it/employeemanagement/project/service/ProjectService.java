@@ -64,4 +64,56 @@ public interface ProjectService {
      * @return true for successfull recovery else false
      */
     public boolean recoverProject(int projectId);
+
+    /**
+     * Method to update project details
+     * @param projectId project id for update project
+     * @param name project name
+     * @param managerName name of projectManager
+     * @param startDate project starting date
+     * @param endDate project ending date
+     * @param option indicating which project details need to update
+     * @return true for successfull updation else false
+     */
+    public boolean updateProject(int projectId, String name, String managerName,
+            Date startDate, Date endDate, String option);
+
+    /**
+     * Methode to get basic details of employees 
+     * @return Map of employee id as key and employee's basic details as value
+     */
+    public Map<Integer, String> getAllEmployeesDetails();
+
+    /**
+     * Method to assign employees to project
+     * @param employeeIdList list of employee ids
+     * @param projectId project id in which we need to assign employees
+     * @return true for successfull assignment else false
+     */
+    public boolean assignEmployee(List<Integer> employeeIdList, int projectId);
+
+    /**
+     * Method to get all projects basics details
+     * @return map of project id as key and project details as value
+     */
+    public Map<Integer, String> getAllProjectBasicDetails();
+    /**
+     * Method to get project object
+     * @param projectId
+     * @return project object
+     */
+    public Project getProject(int projectId);
+
+    /**
+     * Method to remove assigned employee from project
+     * @return true for successfull remove else false
+     */
+    public boolean removeEmployee(int projectId, int employeeId);
+
+    /**
+     * Method to get details of employees assigned for given project
+     * @param projectId project id  
+     * @return list of employee details
+     */
+    public List<String> getEmployeesBasicDetails(int projectId);
 }

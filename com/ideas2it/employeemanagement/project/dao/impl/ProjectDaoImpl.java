@@ -58,6 +58,18 @@ public class ProjectDaoImpl implements ProjectDao {
      * {@inheritdoc}
      */
     @Override
+    public Project getProjectWithEmployee(int projectId){
+        Session session = sessionFactory.openSession();
+        Project project = session.get(Project.class, projectId);
+        for (Employee employee : project.getEmployees()) {}
+        session.close();
+        return project;
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public List<Project> getAllProject(boolean isDeleted) {
         Session session = sessionFactory.openSession();
         List<Project> projects = new ArrayList<Project>();  
@@ -65,6 +77,23 @@ public class ProjectDaoImpl implements ProjectDao {
         criteria.add(Restrictions.eq("isDeleted",isDeleted));
         for (Object object : criteria.list()) {
             projects.add((Project)object);
+        }
+        return projects;   
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Project> getAllProjectWithEmployee() {
+        Session session = sessionFactory.openSession();
+        List<Project> projects = new ArrayList<Project>();  
+        Criteria criteria = session.createCriteria(Project.class);
+        criteria.add(Restrictions.eq("isDeleted",false));
+        for (Object object : criteria.list()) {
+            Project project = (Project) object;
+            for (Employee employee : project.getEmployees()) {}
+            projects.add(project);
         }
         return projects;   
     }

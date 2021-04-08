@@ -49,13 +49,13 @@ public class EmployeeView {
    	            recoverEmployee();
    	            break;
                 case "7":
-   	          //  assignProjects();
+   	            assignProjects();
    	            break;
                 case "8":
-   	           // displayAssignedProjects();
+   	            displayAssignedProjects();
    	            break;
                 case "9":
-   	           // removeProject();
+   	            removeProject();
    	            break;
                 case "10":
    	            System.out.println(Constants.END_MESSAGE);
@@ -426,5 +426,109 @@ public class EmployeeView {
         } else {
             System.out.println("No address present for the given employee");
         }
+    }
+
+    /**
+     * Method to assign projects to employee
+     */
+    private void assignProjects() {
+        Map<Integer, String> projectsBasicsDetails = employeeController.getAllProjectsBasicDetails();System.out.println("ssssssssssssssssssssssss");
+        Map<Integer, String> employeeBasicsDetails = employeeController.getAllEmployeeBasicDetails();
+        List<Integer> projectIdList = new ArrayList<Integer>();
+        if (0 != employeeBasicsDetails.size()) {
+            Set<Integer> employeeIdSet = employeeBasicsDetails.keySet();
+            System.out.println("................. LIST OF EMPLOYEES ..................\n");
+            for (int employeeId : employeeIdSet) {
+                System.out.println(employeeBasicsDetails.get(employeeId));
+            }
+            int employeeId = getAndValidateId();
+            if (employeeIdSet.contains(employeeId)) {
+                if (0 != projectsBasicsDetails.size()) {
+                    Set<Integer> projectIdSet = projectsBasicsDetails.keySet();
+                    System.out.println("\n................. LIST OF PROJECTS ..................");
+                    for (int projectId : projectIdSet) {
+                        System.out.println(projectsBasicsDetails.get(projectId));
+                    }
+ 
+                    String input = null;
+                    do {
+                        int projectId = getAndValidateId();
+                    
+                        if (projectIdSet.contains(projectId)) {
+                            projectIdList.add(projectId);
+                        } else {
+                            System.out.println("\nNo project Available with given project id");
+                        } 
+                        System.out.println("\nDo you want to add more projects ?\n1 : Yes\n2 : No");
+                        input = scanner.nextLine();
+                    } while ("1".equals(input));
+                    if (employeeController.assignProject(projectIdList, employeeId)) {
+                            System.out.println("\nProjects assigned successfully...!!!");
+                    } else { 
+                            System.out.println("\nProject assignment failed because Some Projects already assigned");
+                    }
+                } else {
+                    System.out.println("No project availabale");
+                }
+            } else {
+                 System.out.println("\nNo employee Available with given employee id");
+            }
+        } else {
+            System.out.println("No Employees availabale");
+        }
+    } 
+
+    /**
+     * Methode to display projects assigned to employee
+     */
+    private void displayAssignedProjects() {
+        Map<Integer, String> employeeBasicsDetails = employeeController.getAllEmployeeBasicDetails();  
+        if (0 != employeeBasicsDetails.size()) {
+            Set<Integer> employeeIdSet = employeeBasicsDetails.keySet();
+            System.out.println("................. LIST OF EMPLOYEES ..................\n");
+            for (int employeeId : employeeIdSet) {
+                System.out.println(employeeBasicsDetails.get(employeeId));
+            }
+            int employeeId = getAndValidateId();
+            if (employeeIdSet.contains(employeeId)) {
+                List<String> projectsBasicDetails = employeeController.getProjectsBasicDetails(employeeId);
+                if (0 != projectsBasicDetails.size()) {
+                    System.out.println("\n.............LIST OF ASSIGNED PROJECTS.................\n");
+                    for (String projectBasicDetails : projectsBasicDetails) {
+                        System.out.println(projectBasicDetails);
+                    }
+                } else {
+                    System.out.println("\nNo projects assigned for given employee");
+                }
+            } else {
+                System.out.println("No employee exist with given id");
+            }
+        } else {
+            System.out.println("No Employees availabale");
+        } 
+    } 
+  
+     /**
+     * Method to remove assigned projects of employee
+     */
+    private void removeProject() {
+        System.out.print("\n.........Enter employee details............\n");
+        int employeeId = getAndValidateId();
+        List<String> projectsBasicDetails = employeeController.getProjectsBasicDetails(employeeId);
+        if (0 == projectsBasicDetails.size()) {
+            System.out.println("No project exist with given id");
+        } else {
+            for (String projectBasicDetails : projectsBasicDetails) {
+                System.out.println("\n............. PROJECT DETAILS ..............\n"
+                        + projectBasicDetails);
+            }
+            System.out.println("\n........Enter project details.......");
+            int projectId = getAndValidateId();
+            if (employeeController.removeProject(employeeId, projectId)) {
+                System.out.println("Project removed successfully....!!!"); 
+            } else {
+                System.out.println("Project removing Failed due to invalid details...!!!");   
+            }
+        }     
     }
 }
