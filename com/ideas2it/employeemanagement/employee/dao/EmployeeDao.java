@@ -15,18 +15,12 @@ import com.ideas2it.employeemanagement.employee.model.Employee;
  */
 public interface EmployeeDao {
     
- 
     /**
      * Method to insert employee to database  
      * @param employee
      */
      public void insertEmployee(Employee employee);
-
-   
   
-    
-   
-    
     /**
      * Methode to check the id present in database or not
      * @param id employee id
@@ -67,17 +61,9 @@ public interface EmployeeDao {
     public Map <Integer, Address> getAddressList(int employeeId); 
 
     /**
-     * Methode to get id of all projects assigned to the given employee
-     * @param employeeId
-     * @return list of project ids
-     */
-    public List<Integer> getProjectIdList(int employeeId);
-
-    /**
      * Method to get employee with project from database
      * @param employeeId employee id
      * @return employee details as a string
      */
      public Employee getEmployeeWithProject(int employeeId);
-
 }

@@ -1,28 +1,19 @@
-
 package com.ideas2it.employeemanagement.employee.dao.impl;
 
-import java.sql.Connection;
-import java.sql.BatchUpdateException;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.hibernate.Criteria;
 
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
-
-
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.ideas2it.employeemanagement.employee.dao.EmployeeDao;
 import com.ideas2it.employeemanagement.employee.model.Address;
@@ -37,18 +28,28 @@ import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
  */
 public class EmployeeDaoImpl implements EmployeeDao {
     private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();	
-    private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
    
     /** 
      * {@inheritdoc}
      */
     @Override
      public void insertEmployee(Employee employee) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(employee);
-        transaction.commit();
-        session.close();
+        Session session = null; 
+        Transaction transaction = null; 
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(employee);
+            transaction.commit();
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -56,9 +57,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public boolean isIdExist(int id) {
-        Session session = sessionFactory.openSession();
-        Employee employee = session.get(Employee.class, id);
-        session.close();
+        Session session = null; 
+        Employee employee = null;
+        try {
+            session = sessionFactory.openSession();
+            employee = session.get(Employee.class, id);
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return (null == employee) ? false : true;
     }
 
@@ -67,10 +79,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public Employee getEmployee(int id) {
-        Session session = sessionFactory.openSession();
-        Employee employee = session.get(Employee.class, id);
-        for (Address address : employee.getAddresses()){}
-        session.close();
+        Session session = null; 
+        Employee employee = null;
+        try {
+            session = sessionFactory.openSession();
+            employee = session.get(Employee.class, id);
+            for (Address address : employee.getAddresses()){}    
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return employee; 
     }
 
@@ -80,10 +103,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @return employee details as a string
      */
      public Employee getEmployeeWithProject(int employeeId) {
-        Session session = sessionFactory.openSession();
-        Employee employee = session.get(Employee.class, employeeId);
-        for (Project project : employee.getProjects()){}
-        session.close();
+        Session session = null; 
+        Employee employee = null;
+        try {
+            session = sessionFactory.openSession();
+            employee = session.get(Employee.class, employeeId);
+        for (Project project : employee.getProjects()){}   
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return employee; 
      }
 
@@ -92,11 +126,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getAllEmployee() {
-        Session session = sessionFactory.openSession();
+        Session session = null; 
         List<Employee> employees = new ArrayList<Employee>();  
-        Criteria criteria = session.createCriteria(Employee.class);
-        criteria.add(Restrictions.eq("isDeleted",false));
-        employees = criteria.list();
+        try {
+            session = sessionFactory.openSession();
+            Criteria criteria = session.createCriteria(Employee.class);
+            criteria.add(Restrictions.eq("isDeleted",false));
+            employees = criteria.list();   
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return employees;
     }
     
@@ -105,12 +150,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
      public boolean updateEmployee(Employee employee) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(employee);
-        transaction.commit();
-        session.close();
-        return true;
+        boolean updateStatus = true;
+        Session session = null; 
+        Transaction transaction = null; 
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(employee);
+            transaction.commit();   
+        } catch (Exception e1) {
+            updateStatus = false;
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return updateStatus;
      }
    
     /**
@@ -118,11 +176,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List <Employee> getDeletedEmployees() { 
-        Session session = sessionFactory.openSession();
-        List<Employee> employees = new ArrayList<Employee>();  
-        Criteria criteria = session.createCriteria(Employee.class);
-        criteria.add(Restrictions.eq("isDeleted",true));
-        employees = criteria.list();
+        List<Employee> employees = new ArrayList<Employee>();
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();  
+            Criteria criteria = session.createCriteria(Employee.class);
+            criteria.add(Restrictions.eq("isDeleted",true));
+            employees = criteria.list();    
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return employees;
     }
 
@@ -131,52 +200,26 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public Map <Integer, Address> getAddressList(int employeeId) {
-        Session session = sessionFactory.openSession();
         Map<Integer, Address> addressList = new HashMap<Integer, Address>();
-        Employee employee = session.get(Employee.class, employeeId);
-        for (Address address : employee.getAddresses()) {
-            if (!address.getIsDeleted()) {
-                addressList.put(address.getAddressId(), address);
+        Session session = null; 
+        Employee employee = null;
+        try {
+            session = sessionFactory.openSession();
+            employee = session.get(Employee.class, employeeId);
+            for (Address address : employee.getAddresses()) {
+                if (!address.getIsDeleted()) {
+                    addressList.put(address.getAddressId(), address);
+                }
+            }   
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
             }
         }
         return addressList;
     }
-   
-    /**
-     * {@inheritdoc} 
-     */
-    @Override
-    public List<Integer> getProjectIdList(int employeeId) {
-        /*Session session = sessionFactory.openSession();
-        List<Integer> projectIdList = new ArrayList<Integer>();
-        Query query = session.createQuery("select id from employee_project where id =" + employeeId);
-        projectIdList = query.list();
-        return projectIdList;*/
-        /*List<Integer> projectIdList = new ArrayList<Integer>();
-        Connection connection = databaseConnection.getDatabaseConnection();
-        ResultSet resultSet = null;
-        PreparedStatement preparedStatement = null;
-       try {  
-           preparedStatement = connection.prepareStatement
-                   ("select project_id from employee_project where employee_id = ?");        
-	   preparedStatement.setInt(1, employeeId);
-           resultSet = preparedStatement.executeQuery();
-           while(resultSet.next()) {
-               projectIdList.add(resultSet.getInt(1));
-           }
-        } catch(SQLException e) {
-           e.printStackTrace(); 
-        } finally {
-            try{
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } 
-        return projectIdList;*/
-        return null;
-    }
-
 }

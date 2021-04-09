@@ -34,18 +34,14 @@ public interface EmployeeService {
      * @return employee object if employee present else return null
      */
    public String getEmployee(int id);
-        
-   
+           
     /**
      * Method to check whether the id is present in collection or not 
      * @param id Employee id
      * @return true if id present in collection else return false
      */
     public boolean isIdExist(int id);
-     
-   
-    	
-    
+        
     /**
      * Method to validate date
      * @param date input date as string
@@ -166,5 +162,4 @@ public interface EmployeeService {
      * @return Emnployee object
      */
     public Employee getEmployeeObject(int id);
-
 }

@@ -1,4 +1,3 @@
-
 package com.ideas2it.employeemanagement.project.service.impl;
   
 import java.sql.Date;
@@ -42,26 +41,11 @@ public class ProjectServiceImpl implements ProjectService {
     public String getProjectDetails(int projectId) {
         EmployeeService employeeService = new EmployeeServiceImpl();
         String projectDetails = "";
-        Project project = projectDao.getProject(projectId);
-        /*List<Employee> employees = new ArrayList<Employee>();
-        List<Integer> employeeIdList = projectDao.getEmployeesId(projectId);
-        for (int employeeId : employeeIdList) {
-            employees.add(employeeService.getEmployeeObject(employeeId));
-        }*/   
+        Project project = projectDao.getProject(projectId);  
         if (null == project||project.getIsDeleted()) {
             return null;
         } else {
-            projectDetails = project.toString() + "\n";
-            /*if (0 != employees.size()) {
-                projectDetails = projectDetails + "\n........... LIST OF ASSIGNED "
-                        + "EMPLOYEES DETAILS ............\n";
-                for (Employee employee : employees) {
-                    projectDetails = projectDetails + "\nEmployee Id       : " + 
-                            employee.getId() + "\nEmployee Name"
-                            + "     : " + employee.getName() + "\nEmployee Mobile   : " 
-                            + employee.getMobile() + "\n";
-                }
-            }*/   
+            projectDetails = project.toString() + "\n";   
             return projectDetails;
         }
     }  
@@ -222,12 +206,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
+        Project project = projectDao.getProjectWithEmployee(projectId);
         EmployeeService employeeService = new EmployeeServiceImpl();
-        List<Employee> employeeList = new ArrayList<Employee>();
+        List<Employee> employeeList = project.getEmployees();
         for (int employeeId : employeeIdList) {
             employeeList.add(employeeService.getEmployeeObject(employeeId));
-        }
-        Project project = projectDao.getProject(projectId);
+        }        
         project.setEmployees(employeeList);
         return projectDao.updateProject(project);      
     }

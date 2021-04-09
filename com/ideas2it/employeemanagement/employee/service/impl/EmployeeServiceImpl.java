@@ -1,7 +1,6 @@
 package com.ideas2it.employeemanagement.employee.service.impl;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDao.insertEmployee(employee);   
     }
 
-    
-
-    
-
     /**
      * {@inheritdoc}
      */
@@ -58,10 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public boolean isIdExist(int id) {
         return employeeDao.isIdExist(id);
     }
-     
-   
- 
-    
+        
     /**
      * {@inheritdoc}
      */
@@ -321,12 +313,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean assignProject(List<Integer> projectIdList, int employeeId) {
+        Employee employee = employeeDao.getEmployeeWithProject(employeeId);
         ProjectService projectService = new ProjectServiceImpl();
-        List<Project> projects = new ArrayList<Project>();
+        List<Project> projects = employee.getProjects();
         for (int projectId : projectIdList) {
             projects.add(projectService.getProject(projectId));
-        }
-        Employee employee = employeeDao.getEmployee(employeeId);
+        }        
         employee.setProjects(projects);
         return employeeDao.updateEmployee(employee);
     }
@@ -338,12 +330,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<String> getProjectsBasicDetails(int employeeId) {
         ProjectService projectService = new ProjectServiceImpl();
         Employee employee = employeeDao.getEmployeeWithProject(employeeId);
-        //List<Integer> projectIdList = employeeDao.getProjectIdList(employeeId);
         List<String> projectsBasicDetails = new ArrayList<String>();
         List<Project> projects = new ArrayList<Project>();
-        /*for (int projectId : projectIdList) {
-            projects.add(projectService.getProject(projectId));
-        }*/
         for (Project project : employee.getProjects()) {     
             projectsBasicDetails.add("\nProject id   : " 
                     + project.getId() + "\nProject Name : " + project.getName());

@@ -1,21 +1,16 @@
 package com.ideas2it.employeemanagement.project.dao.impl;
 
-import java.sql.BatchUpdateException;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.hibernate.Criteria;
 
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.project.dao.ProjectDao;
@@ -35,12 +30,25 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public boolean insertProject(Project project) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(project);
-        transaction.commit();
-        session.close();
-        return true;
+        boolean insertStatus = true;
+        Session session = null; 
+        Transaction transaction = null; 
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(project);
+            transaction.commit();    
+        } catch (HibernateException e1) {
+            insertStatus = false;
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return insertStatus;
     }	
   
     /**
@@ -48,9 +56,20 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public Project getProject(int projectId){
-        Session session = sessionFactory.openSession();
-        Project project = session.get(Project.class, projectId);
-        session.close();
+        Session session = null; 
+        Project project = null;
+        try {
+            session = sessionFactory.openSession();
+            project = session.get(Project.class, projectId);      
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return project;
     }  
 
@@ -59,10 +78,21 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public Project getProjectWithEmployee(int projectId){
-        Session session = sessionFactory.openSession();
-        Project project = session.get(Project.class, projectId);
-        for (Employee employee : project.getEmployees()) {}
-        session.close();
+        Project project = null;
+        Session session = null; 
+        try {
+            session = sessionFactory.openSession();
+            project = session.get(Project.class, projectId);
+            for (Employee employee : project.getEmployees()) {}
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
         return project;
     } 
 
@@ -71,12 +101,23 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public List<Project> getAllProject(boolean isDeleted) {
-        Session session = sessionFactory.openSession();
         List<Project> projects = new ArrayList<Project>();  
-        Criteria criteria = session.createCriteria(Project.class);
-        criteria.add(Restrictions.eq("isDeleted",isDeleted));
-        for (Object object : criteria.list()) {
-            projects.add((Project)object);
+        Session session = null;  
+        try {
+            session = sessionFactory.openSession();
+            Criteria criteria = session.createCriteria(Project.class);
+            criteria.add(Restrictions.eq("isDeleted",isDeleted));
+            for (Object object : criteria.list()) {
+                projects.add((Project)object);
+            }
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
         }
         return projects;   
     }
@@ -86,14 +127,25 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public List<Project> getAllProjectWithEmployee() {
-        Session session = sessionFactory.openSession();
-        List<Project> projects = new ArrayList<Project>();  
-        Criteria criteria = session.createCriteria(Project.class);
-        criteria.add(Restrictions.eq("isDeleted",false));
-        for (Object object : criteria.list()) {
-            Project project = (Project) object;
-            for (Employee employee : project.getEmployees()) {}
-            projects.add(project);
+        List<Project> projects = new ArrayList<Project>();
+        Session session = null; 
+        try {
+            session = sessionFactory.openSession();  
+            Criteria criteria = session.createCriteria(Project.class);
+            criteria.add(Restrictions.eq("isDeleted",false));
+            for (Object object : criteria.list()) {
+                Project project = (Project) object;
+                for (Employee employee : project.getEmployees()) {}
+                projects.add(project);
+            }
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
         }
         return projects;   
     }
@@ -103,11 +155,24 @@ public class ProjectDaoImpl implements ProjectDao {
      */
     @Override
     public boolean updateProject(Project project) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(project);
-        transaction.commit();
-        session.close();
-        return true;
+        boolean updateStatus = true;
+        Session session = null; 
+        Transaction transaction = null; 
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(project);
+            transaction.commit();
+        } catch (Exception e1) {
+            updateStatus = false;
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return updateStatus;
     } 
 }
