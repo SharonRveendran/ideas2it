@@ -15,6 +15,7 @@
         <property name="addressType" column="type" type="string"/>
         <property name="isDeleted" column="is_deleted" type="boolean"/>
  
+        <many-to-one name ="employee" class="com.ideas2it.employeemanagement.employee.model.Employee" column="employee_id"/>
     </class> 
 </hibernate-mapping>
 

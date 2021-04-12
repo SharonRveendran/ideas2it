@@ -97,12 +97,20 @@ public interface ProjectService {
      * @return map of project id as key and project details as value
      */
     public Map<Integer, String> getAllProjectBasicDetails();
+
     /**
      * Method to get project object
      * @param projectId
      * @return project object
      */
     public Project getProject(int projectId);
+
+    /**
+     * Method to get specified projects list
+     * @param projectIdList
+     * @return project objects list
+     */
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList);
 
     /**
      * Method to remove assigned employee from project

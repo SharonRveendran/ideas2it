@@ -145,7 +145,6 @@ public class EmployeeView {
         }
         return addressDetails;
     }
-
    
     /**
      * Method to get and validate the employee id
@@ -164,8 +163,7 @@ public class EmployeeView {
     	} while(0 == id);
     	return id;
     }
-	
-    
+	    
     /**
      * Method to get and validate Employee salary
      * @return valid salary
@@ -182,8 +180,6 @@ public class EmployeeView {
         } while (null == input);
     	return employeeController.isValidSalary(input);
     }
-    
-    
     
     /**
      * Method to get and validate Employee mobile number
@@ -204,9 +200,8 @@ public class EmployeeView {
          } while (0 == mobile);
          return mobile;      
     }
-    
-    
-     /**
+        
+    /**
      * Method to get the date of birth of employee
      * @return Employee date of birth
      */
@@ -432,7 +427,7 @@ public class EmployeeView {
      * Method to assign projects to employee
      */
     private void assignProjects() {
-        Map<Integer, String> projectsBasicsDetails = employeeController.getAllProjectsBasicDetails();System.out.println("ssssssssssssssssssssssss");
+        Map<Integer, String> projectsBasicsDetails = employeeController.getAllProjectsBasicDetails();
         Map<Integer, String> employeeBasicsDetails = employeeController.getAllEmployeeBasicDetails();
         List<Integer> projectIdList = new ArrayList<Integer>();
         if (0 != employeeBasicsDetails.size()) {
@@ -508,7 +503,7 @@ public class EmployeeView {
         } 
     } 
   
-     /**
+    /**
      * Method to remove assigned projects of employee
      */
     private void removeProject() {
@@ -518,9 +513,9 @@ public class EmployeeView {
         if (0 == projectsBasicDetails.size()) {
             System.out.println("No project exist with given id");
         } else {
+            System.out.println("\n............. PROJECT DETAILS ..............\n");
             for (String projectBasicDetails : projectsBasicDetails) {
-                System.out.println("\n............. PROJECT DETAILS ..............\n"
-                        + projectBasicDetails);
+                System.out.println(projectBasicDetails);
             }
             System.out.println("\n........Enter project details.......");
             int projectId = getAndValidateId();

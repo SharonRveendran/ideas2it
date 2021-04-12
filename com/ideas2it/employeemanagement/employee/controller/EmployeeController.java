@@ -1,11 +1,18 @@
 package com.ideas2it.employeemanagement.employee.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
 import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl;
 
@@ -14,8 +21,24 @@ import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl
  * @author Sharon V
  * @created 21-03-2021
  */
-public class EmployeeController {
+public class EmployeeController extends HttpServlet {
     private EmployeeService employeeService = new EmployeeServiceImpl();
+    
+    public void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    	PrintWriter out = res.getWriter();
+    	String option = "create_employee";//req.getParameter("action");
+        switch (option) {
+   	    case "create_employee":
+   	    	createEmployee(req, res);
+   	    	out.println("Employee created Successfully....!!!");
+   	        break;
+        case "10":
+   	        System.out.println(Constants.END_MESSAGE);
+   	        break;
+   	    default:
+   	        System.out.println(Constants.INVALID_DETAILS);
+   	    } 
+    } 
     
     /**
      * Method to create employee
@@ -27,15 +50,33 @@ public class EmployeeController {
      * @param employeeAddresses list of employee addresses
      * @return  employee id
      */
-    public void createEmployee(String name, String designation,
-            double salary,long mobile,Date dob, List<String[]> employeeAddresses) {
+    public void createEmployee(HttpServletRequest req, HttpServletResponse res) {
+    	String name = req.getParameter("name");
+    	String designation = req.getParameter("designation");
+    	Double salary = Double.parseDouble(req.getParameter("salary"));
+    	Long mobile = Long.parseLong(req.getParameter("mobile"));
+    	Date dob = Date.valueOf(req.getParameter("dob"));
+    	List<String[]> addresses = new ArrayList<String[]>();
+    	String permanentAddress[] = new String[6];
+    	permanentAddress[0] = req.getParameter("doorNumber");
+    	permanentAddress[1] = req.getParameter("street");   		
+    	permanentAddress[2] = req.getParameter("district");
+    	permanentAddress[3] = req.getParameter("state");
+    	permanentAddress[4] = req.getParameter("country");
+    	permanentAddress[5] = "Permanent";
+    	addresses.add(permanentAddress);
+    	String TemporaryAddress[] = new String[6];
+    	TemporaryAddress[0] = req.getParameter("temporaryDoorNumber");
+    	TemporaryAddress[1] = req.getParameter("temporaryStreet");   		
+    	TemporaryAddress[2] = req.getParameter("temporaryDistrict");
+    	TemporaryAddress[3] = req.getParameter("temporaryState");
+    	TemporaryAddress[4] = req.getParameter("temporaryCountry");
+    	TemporaryAddress[5] = "Temporary";
+    	addresses.add(TemporaryAddress);
         employeeService.createEmployee(name, designation, salary,
-                mobile, dob, employeeAddresses);
+                mobile, dob, addresses);
     }
-    
-    
- 
-    
+       
     /**
      * Method to check whether the id is present in collection or not 
      * @param id Employee id

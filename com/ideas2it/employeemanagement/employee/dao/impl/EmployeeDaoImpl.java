@@ -59,9 +59,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public boolean isIdExist(int id) {
         Session session = null; 
         Employee employee = null;
+        boolean isIdExist = false;
+        Query query;
         try {
             session = sessionFactory.openSession();
-            employee = session.get(Employee.class, id);
+            query = session.createQuery("select id from Employee where id = " + id);
+            isIdExist = null != query.uniqueResult() ? true : false;
         } catch (HibernateException e1) {
             e1.printStackTrace();
         } finally {
@@ -71,7 +74,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 e2.printStackTrace();
             }
         }
-        return (null == employee) ? false : true;
+        return isIdExist;
     }
 
     /**
@@ -95,6 +98,30 @@ public class EmployeeDaoImpl implements EmployeeDao {
             }
         }
         return employee; 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
+        Session session = null; 
+        List<Employee> employees = new ArrayList<Employee>();
+        try {
+            session = sessionFactory.openSession();
+            Criteria criteria = session.createCriteria(Employee.class);
+            criteria.add(Restrictions.in("id", employeeIdList));
+            employees = criteria.list();      
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return employees;
     }
 
     /**
@@ -203,10 +230,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
         Map<Integer, Address> addressList = new HashMap<Integer, Address>();
         Session session = null; 
         Employee employee = null;
+        Query query;
         try {
             session = sessionFactory.openSession();
-            employee = session.get(Employee.class, employeeId);
-            for (Address address : employee.getAddresses()) {
+            query = session.createQuery("from Address where employee_id = " + employeeId);
+            for (Object object : query.list()) {
+                Address address = (Address) object;
                 if (!address.getIsDeleted()) {
                     addressList.put(address.getAddressId(), address);
                 }

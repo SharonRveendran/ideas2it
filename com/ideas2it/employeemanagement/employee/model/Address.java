@@ -1,6 +1,6 @@
 package com.ideas2it.employeemanagement.employee.model;
 
-//import com.ideas2it.employeemanagement.employee.model.Employee;
+import com.ideas2it.employeemanagement.employee.model.Employee;
 
 /**
  * Calss for address Pojo
@@ -17,7 +17,7 @@ public class Address {
     private String country;
     private String addressType;
     private boolean isDeleted;
-    //private Employee employee;
+    private Employee employee;
 
     public Address(){
          
@@ -97,6 +97,13 @@ public class Address {
 	this.isDeleted = isDeleted;
     }
 
+    public Employee getEmployee() {
+	return employee;
+    }
+    
+    public void setEmployee(Employee employee) {
+	this.employee = employee;
+    }
     public String toString() {
     	return  "\nDoor number   = " + doorNumber
                 + "\nStreet        = " + street

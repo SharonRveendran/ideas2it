@@ -26,6 +26,13 @@ public interface ProjectDao {
     public Project getProject(int projectId);
 
     /**
+     * Method to get specified projects list
+     * @param projectIdList
+     * @return project objects list
+     */
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList);    
+
+    /**
      * Methode to get project object with employee object list based on project id
      * @param projectId id of project which need to display
      * @return project object

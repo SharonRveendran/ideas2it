@@ -25,6 +25,7 @@ import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
 public class ProjectDaoImpl implements ProjectDao {
     private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
     private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();
+
     /**
      * {@inheritdoc}
      */
@@ -72,6 +73,31 @@ public class ProjectDaoImpl implements ProjectDao {
         }
         return project;
     }  
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) {
+        Session session = null; 
+        Project project = null;
+        List<Project> projects = new ArrayList<Project>();
+        try {
+            session = sessionFactory.openSession();
+            Criteria criteria = session.createCriteria(Project.class);
+            criteria.add(Restrictions.in("id", projectIdList));
+            projects = criteria.list();      
+        } catch (HibernateException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return projects;
+    }
 
     /**
      * {@inheritdoc}

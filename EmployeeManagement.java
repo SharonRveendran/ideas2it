@@ -1,13 +1,12 @@
+import java.util.Scanner;
+
 import com.ideas2it.employeemanagement.employee.view.EmployeeView;
 import com.ideas2it.employeemanagement.project.view.ProjectView;
-
-
-import java.util.Scanner;
 
 /**
  * Doing CRUD operation in database
  * @author Sharon V
- * @created 21-03-2021
+ * @created 11-04-2021
  */
 public class EmployeeManagement {
     public static void main(String[] args) {

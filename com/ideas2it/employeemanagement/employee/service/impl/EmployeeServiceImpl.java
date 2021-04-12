@@ -17,7 +17,6 @@ import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
 
-
 /**
  * Class for Employee service
  * @author Sharon V
@@ -124,6 +123,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
    
     /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
+        return employeeDao.getSpecifiedEmployees(employeeIdList);
+    }
+
+    /**
      * @param employee employee object
      */
     private String getEmployeeDetails(Employee employee) {
@@ -173,12 +180,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean deleteEmployee(int id) {
         List<Address> addresses = new ArrayList<Address>();
-        Employee employee = employeeDao.getEmployee(id);
+        Employee employee = employeeDao.getEmployeeWithProject(id);
         employee.setIsDeleted(true);
         for (Address address : employee.getAddresses()) {
             address.setIsDeleted(true);
             addresses.add(address); 
         }
+        employee.setProjects(new ArrayList<Project>());
         employee.setAddresses(addresses);   
     	return employeeDao.updateEmployee(employee);
     }   
@@ -316,9 +324,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeDao.getEmployeeWithProject(employeeId);
         ProjectService projectService = new ProjectServiceImpl();
         List<Project> projects = employee.getProjects();
-        for (int projectId : projectIdList) {
-            projects.add(projectService.getProject(projectId));
-        }        
+        projects.addAll(projectService.getSpecifiedProjects(projectIdList));        
         employee.setProjects(projects);
         return employeeDao.updateEmployee(employee);
     }

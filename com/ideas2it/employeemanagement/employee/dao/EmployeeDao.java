@@ -1,7 +1,6 @@
 package com.ideas2it.employeemanagement.employee.dao;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
 
 /**
- * Class to interact with database
+ * Interface to interact with database
  * @author Sharon V
  * @created 21-03-2021
  */
@@ -24,7 +23,7 @@ public interface EmployeeDao {
     /**
      * Methode to check the id present in database or not
      * @param id employee id
-     * @ return true if id present else false
+     * @return true if id present else false
      */
     public boolean isIdExist(int id);
 
@@ -33,19 +32,26 @@ public interface EmployeeDao {
      * @param id employee id
      * @return employee details as a string
      */
-     public Employee getEmployee(int id);
+    public Employee getEmployee(int id);
+
+    /**
+     * Method to return spesified employee list
+     * @param id Employee id
+     * @return employee object if employee present else return null
+     */
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList);
 
     /**
      * Methode to get all employee object as a list
      */
-     public List<Employee> getAllEmployee(); 
+    public List<Employee> getAllEmployee(); 
 
     /**
      * Methode to delete employee based on employee id
      * @param employee employee object  
      * @return true for successfull deletion
      */
-     public boolean updateEmployee(Employee employee);
+    public boolean updateEmployee(Employee employee);
     
     /**
      * Method to get all deleted employees
@@ -65,5 +71,5 @@ public interface EmployeeDao {
      * @param employeeId employee id
      * @return employee details as a string
      */
-     public Employee getEmployeeWithProject(int employeeId);
+    public Employee getEmployeeWithProject(int employeeId);
 }

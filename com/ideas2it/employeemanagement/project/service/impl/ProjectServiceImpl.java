@@ -104,8 +104,9 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean deleteProject(int projectId) {
-        Project project = projectDao.getProject(projectId);
+        Project project = projectDao.getProjectWithEmployee(projectId);
         project.setIsDeleted(true);
+        project.setEmployees(new ArrayList<Employee>());
         return projectDao.updateProject(project);
     }
     /**
@@ -185,7 +186,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProject(int projectId) {
         return projectDao.getProject(projectId);
-    }/**
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) {
+        return projectDao.getSpecifiedProjects(projectIdList);
+    }
+
+    /**
      * {@inheritdoc}
      */
     @Override
@@ -205,13 +216,15 @@ public class ProjectServiceImpl implements ProjectService {
         return employeeService.getAllEmployeeBasicDetails();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
     public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
         Project project = projectDao.getProjectWithEmployee(projectId);
         EmployeeService employeeService = new EmployeeServiceImpl();
         List<Employee> employeeList = project.getEmployees();
-        for (int employeeId : employeeIdList) {
-            employeeList.add(employeeService.getEmployeeObject(employeeId));
-        }        
+        employeeList.addAll(employeeService.getSpecifiedEmployees(employeeIdList));        
         project.setEmployees(employeeList);
         return projectDao.updateProject(project);      
     }
