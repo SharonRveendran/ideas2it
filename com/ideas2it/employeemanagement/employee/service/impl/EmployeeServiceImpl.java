@@ -117,9 +117,31 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public String getEmployee(int id) {    
+    public Map<String, String> getEmployee(int id) {    
         Employee employee = employeeDao.getEmployee(id);
-        return getEmployeeDetails(employee);
+        Map<String, String> employeeDetails = new HashMap<String, String>();
+        employeeDetails.put("id", "" + employee.getId());
+        employeeDetails.put("name", "" + employee.getName());
+        employeeDetails.put("dob", "" + employee.getDob());
+        employeeDetails.put("mobile", "" + employee.getMobile());
+        employeeDetails.put("designation", "" + employee.getDesignation());
+        employeeDetails.put("salary", "" + employee.getSalary());
+        Address address1 = employee.getAddresses().get(0);
+        employeeDetails.put("permanentDoorNumber", "" + address1.getDoorNumber());
+        employeeDetails.put("permanentStreet", "" + address1.getStreet());
+        employeeDetails.put("permanentDistrict", "" + address1.getDistrict());
+        employeeDetails.put("permanentState", "" + address1.getState());
+        employeeDetails.put("permanentCountry", "" + address1.getCountry());
+        if (0 < employee.getAddresses().size()) {
+        	Address address = employee.getAddresses().get(1);
+        	employeeDetails.put("temporaryDoorNumber", "" + address.getDoorNumber());
+            employeeDetails.put("temporaryStreet", "" + address.getStreet());
+            employeeDetails.put("temporaryDistrict", "" + address.getDistrict());
+            employeeDetails.put("temporaryState", "" + address.getState());
+            employeeDetails.put("temporaryCountry", "" + address.getCountry());
+        }
+        return employeeDetails;
+       
     }
    
     /**

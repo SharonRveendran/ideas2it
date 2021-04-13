@@ -78,8 +78,8 @@ public class EmployeeView {
     	double salary = getAndValidateSalary();
     	long mobile = getAndValidateMobile();
     	Date dob = getDob();
-        employeeController.createEmployee(name, designation, salary,
-                mobile, dob, createAddresses());
+       // employeeController.createEmployee(name, designation, salary,
+              //  mobile, dob, createAddresses());
         System.out.println(Constants.SUCCESSFULL_CREATION);
     }
 
@@ -223,12 +223,12 @@ public class EmployeeView {
      */
     private void displayEmployee() {
         int id = getAndValidateId();
-    	String employeeDetails = employeeController.getEmployee(id);
-    	if(null == employeeDetails) {
+    	//String employeeDetails = employeeController.getEmployee(id);
+    	//if(null == employeeDetails) {
     	    System.out.println(Constants.NO_EMPLOYEE);
-    	} else {
-    	    System.out.println(employeeDetails);
-    	}
+    	//} else {
+    	//    System.out.println(employeeDetails);
+    //	}
     }
 
     /**

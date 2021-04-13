@@ -30,9 +30,9 @@ public interface EmployeeService {
     /**
      * Method to return employee details based on employee id
      * @param id Employee id
-     * @return employee object if employee present else return null
+     * @return map of employee details
      */
-    public String getEmployee(int id);
+    public Map<String, String> getEmployee(int id);
 
     /**
      * Method to return spesified employee list

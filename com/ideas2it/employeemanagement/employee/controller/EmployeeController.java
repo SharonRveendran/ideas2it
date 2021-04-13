@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,16 +25,16 @@ import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl
 public class EmployeeController extends HttpServlet {
     private EmployeeService employeeService = new EmployeeServiceImpl();
     
-    public void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
-    	PrintWriter out = res.getWriter();
-    	String option = "create_employee";//req.getParameter("action");
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    	PrintWriter out = response.getWriter();
+    	String option = "display_employee";//req.getParameter("action");
         switch (option) {
    	    case "create_employee":
-   	    	createEmployee(req, res);
+   	    	createEmployee(request, response);
    	    	out.println("Employee created Successfully....!!!");
    	        break;
-        case "10":
-   	        System.out.println(Constants.END_MESSAGE);
+        case "display_employee":
+   	        getEmployee(Integer.parseInt(request.getParameter("id")), request, response);
    	        break;
    	    default:
    	        System.out.println(Constants.INVALID_DETAILS);
@@ -42,35 +43,30 @@ public class EmployeeController extends HttpServlet {
     
     /**
      * Method to create employee
-     * @param name  Employee name
-     * @param designation Employee designation
-     * @param salary  Employee salary
-     * @param mobile  Employee mobile number
-     * @param dob  Employee date of birth
-     * @param employeeAddresses list of employee addresses
-     * @return  employee id
+     * @param request HttpServletRequest request
+     * @param response HttpServletResponse response
      */
-    public void createEmployee(HttpServletRequest req, HttpServletResponse res) {
-    	String name = req.getParameter("name");
-    	String designation = req.getParameter("designation");
-    	Double salary = Double.parseDouble(req.getParameter("salary"));
-    	Long mobile = Long.parseLong(req.getParameter("mobile"));
-    	Date dob = Date.valueOf(req.getParameter("dob"));
+    public void createEmployee(HttpServletRequest request, HttpServletResponse response) {
+    	String name = request.getParameter("name");
+    	String designation = request.getParameter("designation");
+    	Double salary = Double.parseDouble(request.getParameter("salary"));
+    	Long mobile = Long.parseLong(request.getParameter("mobile"));
+    	Date dob = Date.valueOf(request.getParameter("dob"));
     	List<String[]> addresses = new ArrayList<String[]>();
     	String permanentAddress[] = new String[6];
-    	permanentAddress[0] = req.getParameter("doorNumber");
-    	permanentAddress[1] = req.getParameter("street");   		
-    	permanentAddress[2] = req.getParameter("district");
-    	permanentAddress[3] = req.getParameter("state");
-    	permanentAddress[4] = req.getParameter("country");
+    	permanentAddress[0] = request.getParameter("doorNumber");
+    	permanentAddress[1] = request.getParameter("street");   		
+    	permanentAddress[2] = request.getParameter("district");
+    	permanentAddress[3] = request.getParameter("state");
+    	permanentAddress[4] = request.getParameter("country");
     	permanentAddress[5] = "Permanent";
     	addresses.add(permanentAddress);
     	String TemporaryAddress[] = new String[6];
-    	TemporaryAddress[0] = req.getParameter("temporaryDoorNumber");
-    	TemporaryAddress[1] = req.getParameter("temporaryStreet");   		
-    	TemporaryAddress[2] = req.getParameter("temporaryDistrict");
-    	TemporaryAddress[3] = req.getParameter("temporaryState");
-    	TemporaryAddress[4] = req.getParameter("temporaryCountry");
+    	TemporaryAddress[0] = request.getParameter("temporaryDoorNumber");
+    	TemporaryAddress[1] = request.getParameter("temporaryStreet");   		
+    	TemporaryAddress[2] = request.getParameter("temporaryDistrict");
+    	TemporaryAddress[3] = request.getParameter("temporaryState");
+    	TemporaryAddress[4] = request.getParameter("temporaryCountry");
     	TemporaryAddress[5] = "Temporary";
     	addresses.add(TemporaryAddress);
         employeeService.createEmployee(name, designation, salary,
@@ -89,10 +85,27 @@ public class EmployeeController extends HttpServlet {
     /**
      * Method to get the employee details based on employee id
      * @param id Employee id
-     * @return Employee details as string
+     * @param request HttpServletRequest request
+     * @param response HttpServletResponse response
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public String getEmployee(int id) {
-    	return employeeService.getEmployee(id);
+    public void getEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Map<String, String> employeeDetails = employeeService.getEmployee(id);	
+        String permanentAddress = employeeDetails.remove("permanentDoorNumber")
+        		+ "<br>" + employeeDetails.remove("permanentStreet") + "<br>" + employeeDetails.remove("permanentDistrict")
+        		+ "<br>" + employeeDetails.remove("permanentState") + "<br>" + employeeDetails.remove("permanentCountry");
+        employeeDetails.put("permanentAddress", permanentAddress);
+        if(11 < employeeDetails.size()) {
+        	String temporaryAddress = employeeDetails.remove("temporaryDoorNumber")
+        			+ "<br>" + employeeDetails.remove("temporaryStreet") + "<br>" + employeeDetails.remove("temporaryDistrict")
+        			+ "<br>" + employeeDetails.remove("temporaryState") + "<br>" + employeeDetails.remove("temporaryCountry");
+        	employeeDetails.put("temporaryAddress", temporaryAddress);
+        } else {
+        	employeeDetails.put("temporaryAddress", "---------------");
+        }
+        request.setAttribute("employeeDetails", employeeDetails);
+    	request.getRequestDispatcher("/display_employee.jsp").forward(request, response);
     }
 
     /**
