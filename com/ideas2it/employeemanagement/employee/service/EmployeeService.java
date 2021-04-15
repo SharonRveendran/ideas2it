@@ -78,9 +78,9 @@ public interface EmployeeService {
     
     /**
      * Method to return all employee details present in collection
-     * @return list of employee details
+     * @return List of employees details
      */
-    public List<String> getAllEmployeesDetails();
+    public List<Map<String,String>> getAllEmployeesDetails();
   
     /**
      * Method to delete the Employee based on employee id

@@ -33,9 +33,9 @@ public interface ProjectService {
     /**
      * Methode to get project details based on project id
      * @param projectId id of project which need to display
-     * @return project details as a string
+     * @return map of project details 
      */
-    public String getProjectDetails(int projectId);
+    public Map<String, String> getProjectDetails(int projectId);
 
     /**
      * Methode to validate id
@@ -47,9 +47,9 @@ public interface ProjectService {
     /**
      * Method to display all project present in database
      * @param isDeleted indicating the project is deleted or not
-     * @return list of project details in string format
+     * @return list of project details as map
      */
-    public List<String> getAllProjectDetails(boolean isDeleted);
+    public List<Map<String, String>> getAllProjectDetails(boolean isDeleted);
 
     /**
      * Method to delete project based on projectId

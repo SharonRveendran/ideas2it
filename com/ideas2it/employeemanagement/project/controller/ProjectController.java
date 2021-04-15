@@ -1,8 +1,16 @@
 package com.ideas2it.employeemanagement.project.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
@@ -12,8 +20,25 @@ import com.ideas2it.employeemanagement.project.service.ProjectService;
  * @author Sharon V
  * @created 27-03-2021
  */
-public class ProjectController {
+public class ProjectController extends HttpServlet{
     private ProjectService projectService = new ProjectServiceImpl();
+    
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    	PrintWriter out = response.getWriter();
+    	String option = request.getServletPath();
+        switch (option) {
+   	    	case "/create_project":
+   	    		createProject(request, response);
+   	    	case "/delete_project":
+   	    		deleteProject(Integer.parseInt(request.getParameter("id")),request, response);
+   	    	case "/restore_project":
+   	    		recoverProject(Integer.parseInt(request.getParameter("id")),request, response);
+   	    	case "/display_project":
+   	    		getProjectDetails(Integer.parseInt(request.getParameter("id")),request, response);
+   	    	case "/display_all_projects":
+   	    		getAllProjectDetails(request, response);
+   	    }  
+    } 
 
     /**
      * Method to validate date
@@ -25,24 +50,42 @@ public class ProjectController {
     }
   
     /**
-     * Methode to create new project
-     * @param name name of project
-     * @param managerName name of project manager
-     * @param startDate project start date
-     * @param endDate project end date
-     * @return true for succeessfull project creation else false.
+     * Method to create new project
+     * @param request
+     * @param response
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public boolean createProject(String name, String managerName, Date startDate, Date endDate) {
-        return projectService.createProject(name, managerName, startDate, endDate);
+    public void createProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  	
+        if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
+                Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
+        	request.setAttribute("message", "Project Created Successfully...!!!");
+    	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+        } else {
+        	request.setAttribute("message", "Project creation failed...!!!");
+    	    request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }     
 
     /**
-     * Methode to get project details based on project id
-     * @param projectId id of project which need to display
-     * @return project details as a string
+     * Method to get project details based on project id
+     * @param projectId project id to display project
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public String getProjectDetails(int projectId) {
-        return projectService.getProjectDetails(projectId);
+    public void getProjectDetails(int projectId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Map<String, String> projectDetails = projectService.getProjectDetails(projectId);
+        if (0 != projectDetails.size()) {
+        	List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();
+        	projectsDetails.add(projectDetails);
+        	request.setAttribute("projectsDetails", projectsDetails);
+        	request.getRequestDispatcher("/display_project.jsp").forward(request, response);
+        } else {
+        	request.setAttribute("message", "No Project exist with given id");
+        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -56,29 +99,56 @@ public class ProjectController {
 
     /**
      * Method to display all project present in database
-     * @param isDeleted indicating the project is deleted or not
-     * @return list of employee details in string format
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public List<String> getAllProjectDetails(boolean isDeleted) {
-        return projectService.getAllProjectDetails(isDeleted);
+    public void getAllProjectDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         List<Map<String, String>> projectsDetails = projectService.getAllProjectDetails(false);
+         if (0 != projectsDetails.size()) {
+        	 request.setAttribute("projectsDetails", projectsDetails);
+         	 request.getRequestDispatcher("/display_project.jsp").forward(request, response);
+         } else {
+         	request.setAttribute("message", "No Projects exist");
+         	request.getRequestDispatcher("/error.jsp").forward(request, response);
+         }
     }
 
     /**
      * Method to delete project based on projectId
-     * @param projectId project id for deletion of project
-     * @return true for succeessfull deletion else false
+     * @param projectId project id to delete project
+     * @param request http request object
+     * @param response http response object
+     * @throws ServletException
+     * @throws IOException
      */
-    public boolean deleteProject(int projectId) {
-        return projectService.deleteProject(projectId);
+    public void deleteProject(int projectId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (projectService.deleteProject(projectId)) {
+        	request.setAttribute("message", "Project deleted Successfully...!!!");
+    	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+        } else {
+        	request.setAttribute("message", "Project deletion failed...!!!");
+    	    request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
      * Method to recover deleted project
-     * @param projectId project id for recover project
-     * @return true for successfull recovery else false
+     * @param projectId project id to recover project
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public boolean recoverProject(int projectId) {
-        return projectService.recoverProject(projectId);
+    public void recoverProject(int projectId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       if (projectService.recoverProject(projectId)) {
+    	   request.setAttribute("message", "Project recovered Successfully...!!!");
+   	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+       } else {
+       	request.setAttribute("message", "Project recovery failed...!!!");
+   	    request.getRequestDispatcher("/error.jsp").forward(request, response);
+       } 
     }
 
     /**

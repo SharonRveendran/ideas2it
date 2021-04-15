@@ -87,7 +87,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {
             session = sessionFactory.openSession();
             employee = session.get(Employee.class, id);
-            for (Address address : employee.getAddresses()){}    
+            if (null != employee) {
+                for (Address address : employee.getAddresses()){}
+            }   
         } catch (HibernateException e1) {
             e1.printStackTrace();
         } finally {

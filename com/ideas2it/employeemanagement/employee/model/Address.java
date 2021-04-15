@@ -105,10 +105,10 @@ public class Address {
 	this.employee = employee;
     }
     public String toString() {
-    	return  "\nDoor number   = " + doorNumber
-                + "\nStreet        = " + street
-                + "\nDistrict      = " + district
-                + "\nState         = " + state
-                + "\nCountry       = " + country + "\n";
+    	return  doorNumber
+                + " , " + street
+                + " , " + district
+                + " , " + state
+                + " , " + country + "\n";
     }
 }

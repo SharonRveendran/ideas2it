@@ -28,6 +28,18 @@ public class Employee {
     public Employee() {
     	
     }
+    public Employee(int id, String name, String designation, double salary,long mobile,
+            Date dob, List<Address> addresses, boolean isDeleted) {
+    	this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.mobile = mobile; 
+    	this.designation = designation;
+    	this.salary = salary; 
+        this.addresses = addresses;
+        this.isDeleted = isDeleted;	
+    }
+    
     public Employee(String name, String designation, double salary,long mobile,
             Date dob, List<Address> addresses, boolean isDeleted) {
         this.name = name;

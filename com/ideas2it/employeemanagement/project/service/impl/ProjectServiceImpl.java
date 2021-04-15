@@ -38,16 +38,18 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritdoc}
      */
     @Override
-    public String getProjectDetails(int projectId) {
+    public Map<String, String> getProjectDetails(int projectId) {
         EmployeeService employeeService = new EmployeeServiceImpl();
-        String projectDetails = "";
+        Map<String, String> projectDetails = new HashMap<String, String>();
         Project project = projectDao.getProject(projectId);  
-        if (null == project||project.getIsDeleted()) {
-            return null;
-        } else {
-            projectDetails = project.toString() + "\n";   
-            return projectDetails;
+        if (null != project&&!project.getIsDeleted()) {
+            projectDetails.put("id", "" + project.getId());   
+            projectDetails.put("name", "" + project.getName());
+            projectDetails.put("managerName", "" + project.getManagerName());
+            projectDetails.put("startDate", "" + project.getStartDate());
+            projectDetails.put("endDate", "" + project.getEndDate());
         }
+        return projectDetails;  
     }  
 
     /**
@@ -68,35 +70,22 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getAllProjectDetails(boolean isDeleted) {
+    public List<Map<String,String>> getAllProjectDetails(boolean isDeleted) {
         EmployeeService employeeService = new EmployeeServiceImpl();
         List<Project> projects = projectDao.getAllProject(isDeleted);
-        List<String> projectDetailsList = new ArrayList<String>();
-        String projectDetails = "";
-        if (0 == projects.size()) {
-            return null;
-        } else {
+        List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();      
+        if (0 != projects.size()) {
             for (Project project : projects) {
-                /*List<Employee> employees = new ArrayList<Employee>();
-                List<Integer> employeeIdList = projectDao.getEmployeesId(project.getId());
-                for (int employeeId : employeeIdList) {
-                    employees.add(employeeService.getEmployeeObject(employeeId));
-                }*/
-                projectDetails = project.toString() + "\n";
-                /*if (0 != employees.size()) {
-                    projectDetails = projectDetails + "\n........... LIST OF ASSIGNED "
-                        + "EMPLOYEES DETAILS ............\n";
-                    for (Employee employee : employees) {if (null != employee){
-                        projectDetails = projectDetails + "\nEmployee Id       : " + 
-                            employee.getId() + "\nEmployee Name"
-                            + "     : " + employee.getName() + "\nEmployee Mobile   : " 
-                            + employee.getMobile() + "\n";}
-                    }
-                }*/   
-                projectDetailsList.add(projectDetails);
+            	Map<String,String> projectDetails = new HashMap<String, String>();
+            	projectDetails.put("id", "" + project.getId());
+            	projectDetails.put("name", "" + project.getName());
+            	projectDetails.put("managerName", "" + project.getManagerName());
+            	projectDetails.put("startDate", "" + project.getStartDate());
+            	projectDetails.put("endDate", "" + project.getEndDate());
+            	projectsDetails.add(projectDetails);
             }
-        } 
-        return projectDetailsList;   
+        }
+        return projectsDetails;
     }
 
     /**

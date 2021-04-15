@@ -27,26 +27,40 @@ public class EmployeeController extends HttpServlet {
     
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     	PrintWriter out = response.getWriter();
-    	String option = "display_employee";//req.getParameter("action");
+    	String option = request.getServletPath();
         switch (option) {
-   	    case "create_employee":
+   	    case "/employeeController/create_employee":
    	    	createEmployee(request, response);
-   	    	out.println("Employee created Successfully....!!!");
    	        break;
-        case "display_employee":
-   	        getEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+        case "/employeeController/display_employee":
+   	        getEmployeeDetails(Integer.parseInt(request.getParameter("id")), request, response);
    	        break;
-   	    default:
-   	        System.out.println(Constants.INVALID_DETAILS);
+        case "/employeeController/display_all_employee":
+        	out.println("ffffffffffffffffffffffff");
+        	getAllEmployeesDetails(request, response);
+   	        break;
+        case "/employeeController/delete_employee":
+   	        deleteEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+   	        break;
+        case "/employeeController/restore_employee":
+   	        recoverEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+   	        break;
+        case "/employeeController/update_employee":
+   	        updateEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+   	        out.println("Employee updates Successfully....!!!");
+   	        break;
    	    } 
     } 
     
     /**
-     * Method to create employee
-     * @param request HttpServletRequest request
-     * @param response HttpServletResponse response
+     * Method to update Employee details
+     * @param id employee id
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public void createEmployee(HttpServletRequest request, HttpServletResponse response) {
+    private void updateEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String name = request.getParameter("name");
     	String designation = request.getParameter("designation");
     	Double salary = Double.parseDouble(request.getParameter("salary"));
@@ -69,8 +83,44 @@ public class EmployeeController extends HttpServlet {
     	TemporaryAddress[4] = request.getParameter("temporaryCountry");
     	TemporaryAddress[5] = "Temporary";
     	addresses.add(TemporaryAddress);
+        employeeService.updateEmployee(id, name, designation, salary, dob, mobile, null);		
+	}
+
+	/**
+     * Method to create employee
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse
+	 * @throws IOException 
+	 * @throws ServletException 
+	 * @throws NumberFormatException 
+     */
+    public void createEmployee(HttpServletRequest request, HttpServletResponse response) throws NumberFormatException, ServletException, IOException {
+    	String name = request.getParameter("name");
+    	String designation = request.getParameter("designation");
+    	double salary = Double.parseDouble(request.getParameter("salary"));
+    	long mobile = Long.parseLong(request.getParameter("mobile"));
+    	Date dob = Date.valueOf(request.getParameter("dob"));
+    	List<String[]> addresses = new ArrayList<String[]>();
+    	String permanentAddress[] = new String[6];
+    	permanentAddress[0] = request.getParameter("doorNumber");
+    	permanentAddress[1] = request.getParameter("street");   		
+    	permanentAddress[2] = request.getParameter("district");
+    	permanentAddress[3] = request.getParameter("state");
+    	permanentAddress[4] = request.getParameter("country");
+    	permanentAddress[5] = "Permanent";
+    	addresses.add(permanentAddress);
+    	String TemporaryAddress[] = new String[6];
+    	TemporaryAddress[0] = request.getParameter("temporaryDoorNumber");
+    	TemporaryAddress[1] = request.getParameter("temporaryStreet");   		
+    	TemporaryAddress[2] = request.getParameter("temporaryDistrict");
+    	TemporaryAddress[3] = request.getParameter("temporaryState");
+    	TemporaryAddress[4] = request.getParameter("temporaryCountry");
+    	TemporaryAddress[5] = "Temporary";
+    	addresses.add(TemporaryAddress);
         employeeService.createEmployee(name, designation, salary,
                 mobile, dob, addresses);
+        request.setAttribute("message", "Employee Created Successfully...!!!");
+	    request.getRequestDispatcher("/success.jsp").forward(request, response);
     }
        
     /**
@@ -85,27 +135,34 @@ public class EmployeeController extends HttpServlet {
     /**
      * Method to get the employee details based on employee id
      * @param id Employee id
-     * @param request HttpServletRequest request
-     * @param response HttpServletResponse response
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse 
      * @throws IOException 
      * @throws ServletException 
      */
-    public void getEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void getEmployeeDetails(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	List<Map<String,String>> employeesDetails = new ArrayList<Map<String,String>>();
         Map<String, String> employeeDetails = employeeService.getEmployee(id);	
-        String permanentAddress = employeeDetails.remove("permanentDoorNumber")
-        		+ "<br>" + employeeDetails.remove("permanentStreet") + "<br>" + employeeDetails.remove("permanentDistrict")
-        		+ "<br>" + employeeDetails.remove("permanentState") + "<br>" + employeeDetails.remove("permanentCountry");
-        employeeDetails.put("permanentAddress", permanentAddress);
-        if(11 < employeeDetails.size()) {
-        	String temporaryAddress = employeeDetails.remove("temporaryDoorNumber")
-        			+ "<br>" + employeeDetails.remove("temporaryStreet") + "<br>" + employeeDetails.remove("temporaryDistrict")
-        			+ "<br>" + employeeDetails.remove("temporaryState") + "<br>" + employeeDetails.remove("temporaryCountry");
-        	employeeDetails.put("temporaryAddress", temporaryAddress);
+        if (0 != employeeDetails.size()) {
+        	String permanentAddress = employeeDetails.remove("permanentDoorNumber")
+        			+ "," + employeeDetails.remove("permanentStreet") + "," + employeeDetails.remove("permanentDistrict")
+        			+ "," + employeeDetails.remove("permanentState") + "," + employeeDetails.remove("permanentCountry");
+        	employeeDetails.put("permanentAddress", permanentAddress);
+        	if(11 < employeeDetails.size()) {
+        		String temporaryAddress = employeeDetails.remove("temporaryDoorNumber")
+        				+ "," + employeeDetails.remove("temporaryStreet") + "," + employeeDetails.remove("temporaryDistrict")
+        				+ "," + employeeDetails.remove("temporaryState") + "," + employeeDetails.remove("temporaryCountry");
+        		employeeDetails.put("temporaryAddress", temporaryAddress);
+        	} else {
+        		employeeDetails.put("temporaryAddress", "---------------");
+        	}
+        	employeesDetails.add(employeeDetails);
+        	request.setAttribute("employeesDetails", employeesDetails);
+        	request.getRequestDispatcher("employeeController/display_employee.jsp").forward(request, response);
         } else {
-        	employeeDetails.put("temporaryAddress", "---------------");
+        	request.setAttribute("message", "No Employee exist with given id");
+        	request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        request.setAttribute("employeeDetails", employeeDetails);
-    	request.getRequestDispatcher("/display_employee.jsp").forward(request, response);
     }
 
     /**
@@ -146,28 +203,48 @@ public class EmployeeController extends HttpServlet {
 
     /**
      * Method to return all employee details present in collection
-     * @return list of all employee delails
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse 
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public List<String> getAllEmployeesDetails() {
-    	return employeeService.getAllEmployeesDetails();
+    public void getAllEmployeesDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	List<Map<String,String>> employeesDetails = employeeService.getAllEmployeesDetails();
+    	if (0 != employeesDetails.size()) {
+    	    request.setAttribute("employeesDetails", employeesDetails);
+     	    request.getRequestDispatcher("employeeController/display_employee.jsp").forward(request, response);
+    	} else {
+    		request.setAttribute("message", "No employee present");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}   	 
     }
 
     /**
      * Method to delete the Employee based on employee id
      * @param id Employee id
-     * @return true for successfull deletion else false
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse 
+     * @throws IOException 
      */
-    public boolean deleteEmployee(int id) {
-    	return employeeService.deleteEmployee(id);
+    public void deleteEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	PrintWriter out = response.getWriter();
+    	employeeService.deleteEmployee(id);
+    	out.println("Deletion Successfull...!!!");
+    	
     }
 
     /**
      * Methode to recover deleted employee
      * @param id employee id
-     * @return recovery status string
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse 
+     * @throws IOException 
      */
-    public String recoverEmployee(int id) {
-        return employeeService.recoverEmployee(id);
+    public void recoverEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	PrintWriter out = response.getWriter();
+    	employeeService.deleteEmployee(id);
+        employeeService.recoverEmployee(id);
+        out.println("Recovery Successfull....!!!");
     }
 
     /**

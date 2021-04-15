@@ -120,25 +120,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Map<String, String> getEmployee(int id) {    
         Employee employee = employeeDao.getEmployee(id);
         Map<String, String> employeeDetails = new HashMap<String, String>();
-        employeeDetails.put("id", "" + employee.getId());
-        employeeDetails.put("name", "" + employee.getName());
-        employeeDetails.put("dob", "" + employee.getDob());
-        employeeDetails.put("mobile", "" + employee.getMobile());
-        employeeDetails.put("designation", "" + employee.getDesignation());
-        employeeDetails.put("salary", "" + employee.getSalary());
-        Address address1 = employee.getAddresses().get(0);
-        employeeDetails.put("permanentDoorNumber", "" + address1.getDoorNumber());
-        employeeDetails.put("permanentStreet", "" + address1.getStreet());
-        employeeDetails.put("permanentDistrict", "" + address1.getDistrict());
-        employeeDetails.put("permanentState", "" + address1.getState());
-        employeeDetails.put("permanentCountry", "" + address1.getCountry());
-        if (0 < employee.getAddresses().size()) {
-        	Address address = employee.getAddresses().get(1);
-        	employeeDetails.put("temporaryDoorNumber", "" + address.getDoorNumber());
-            employeeDetails.put("temporaryStreet", "" + address.getStreet());
-            employeeDetails.put("temporaryDistrict", "" + address.getDistrict());
-            employeeDetails.put("temporaryState", "" + address.getState());
-            employeeDetails.put("temporaryCountry", "" + address.getCountry());
+        if (null != employee) {
+        	employeeDetails.put("id", "" + employee.getId());
+        	employeeDetails.put("name", "" + employee.getName());
+        	employeeDetails.put("dob", "" + employee.getDob());
+        	employeeDetails.put("mobile", "" + employee.getMobile());
+        	employeeDetails.put("designation", "" + employee.getDesignation());
+        	employeeDetails.put("salary", "" + employee.getSalary());
+        	Address address1 = employee.getAddresses().get(0);
+        	employeeDetails.put("permanentDoorNumber", "" + address1.getDoorNumber());
+        	employeeDetails.put("permanentStreet", "" + address1.getStreet());
+      	 	employeeDetails.put("permanentDistrict", "" + address1.getDistrict());
+      	 	employeeDetails.put("permanentState", "" + address1.getState());
+      	 	employeeDetails.put("permanentCountry", "" + address1.getCountry());
+      	 	if (0 < employee.getAddresses().size()) {
+      	 		Address address = employee.getAddresses().get(1);
+      	 		employeeDetails.put("temporaryDoorNumber", "" + address.getDoorNumber());
+      	 		employeeDetails.put("temporaryStreet", "" + address.getStreet());
+      	 		employeeDetails.put("temporaryDistrict", "" + address.getDistrict());
+      	 		employeeDetails.put("temporaryState", "" + address.getState());
+      	 		employeeDetails.put("temporaryCountry", "" + address.getCountry());
+      	 	}
         }
         return employeeDetails;
        
@@ -186,14 +188,22 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getAllEmployeesDetails() {
-        List<String> employeesDetails = new ArrayList<String>();
-        List<Employee> employees = new ArrayList<Employee>();
-        employees = employeeDao.getAllEmployee();
-        for(int index = 0; index < employees.size(); index++) {
-            employeesDetails.add(getEmployeeDetails(employees.get(index)));
+    public List<Map<String, String>> getAllEmployeesDetails() {
+        List<Map<String, String>> employeesDetails = new ArrayList<Map<String, String>>();
+        List<Employee> employees = employeeDao.getAllEmployee();
+        for(Employee employee : employees) {
+        	Map<String, String> employeeDetails = new HashMap<String, String>();
+            employeeDetails.put("id", "" + employee.getId());
+            employeeDetails.put("name", "" + employee.getName());
+            employeeDetails.put("dob", "" + employee.getDob());
+            employeeDetails.put("mobile", "" + employee.getMobile());
+            employeeDetails.put("designation", "" + employee.getDesignation());
+            employeeDetails.put("salary", "" + employee.getSalary());
+            employeeDetails.put("permanentAddress", "" + employee.getAddresses().get(0).toString());
+            employeeDetails.put("temporaryAddress", "" + employee.getAddresses().get(1).toString()); 	
+            employeesDetails.add(employeeDetails);
         }
-        return employeesDetails;
+        return  employeesDetails;
     }
 
     /**
@@ -260,22 +270,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployee(int id, String name, String designation,
             double salary, Date dob, long mobile, String option) {
-        Employee employee = employeeDao.getEmployee(id);
-        if ("name".equals(option)) {
-            employee.setName(name);           
-    	}
-    	if ("designation".equals(option)) {
-    	    employee.setDesignation(designation);   
-    	}
-    	if ("salary".equals(option)) {
-    	    employee.setSalary(salary);
-    	}
-    	if ("dob".equals(option)) {
-    	    employee.setDob(dob);   
-    	}
-    	if ("mobile".equals(option)) {
-    	   employee.setMobile(mobile);
-    	}
+        Employee employee = new Employee(id, name, designation, salary, mobile,dob, null, false);
     	employeeDao.updateEmployee(employee);
     }
 
