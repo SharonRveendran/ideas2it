@@ -313,7 +313,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map<Integer, String> getAllProjectsBasicDetails() {
+    public  List<List<String>> getAllProjectsBasicDetails() {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.getAllProjectBasicDetails();
     }
@@ -322,15 +322,16 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public Map<Integer, String> getAllEmployeeBasicDetails() {
+    public List<List<String>> getAllEmployeeBasicDetails() {
         List<Employee> employees = employeeDao.getAllEmployee();
-        Map<Integer, String> allEmployeeBasicDetails = new HashMap<Integer, String>();
+        List<List<String>> employeesDetails = new ArrayList<List<String>>();
         for (Employee employee : employees) {
-            allEmployeeBasicDetails.put(employee.getId(), "\nEmployee Id     : "
-                    + employee.getId() + "\nEmployee Name   : " + employee.getName() 
-                    + "\nEmployee Mobile : " + employee.getMobile() + "\n");  
+        	List<String> employeeDetails = new ArrayList<String>();
+        	employeeDetails.add("" + employee.getId());
+        	employeeDetails.add("" + employee.getName());
+        	employeesDetails.add(employeeDetails);
         } 
-        return allEmployeeBasicDetails;            
+        return employeesDetails;            
     } 
 
     /**
@@ -350,16 +351,16 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritdoc}
      */
     @Override
-    public List<String> getProjectsBasicDetails(int employeeId) {
-        ProjectService projectService = new ProjectServiceImpl();
+    public List<Map<String, String>> getProjectsBasicDetails(int employeeId) {
         Employee employee = employeeDao.getEmployeeWithProject(employeeId);
-        List<String> projectsBasicDetails = new ArrayList<String>();
-        List<Project> projects = new ArrayList<Project>();
+        List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();
         for (Project project : employee.getProjects()) {     
-            projectsBasicDetails.add("\nProject id   : " 
-                    + project.getId() + "\nProject Name : " + project.getName());
+           Map<String, String> projectDetails = new HashMap<String, String>();
+           projectDetails.put("id", "" + project.getId());
+           projectDetails.put("name", "" + project.getName());
+           projectsDetails.add(projectDetails);
         }
-        return projectsBasicDetails;
+        return projectsDetails;
     }
 
     /**

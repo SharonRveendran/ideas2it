@@ -37,6 +37,15 @@ public class ProjectController extends HttpServlet{
    	    		getProjectDetails(Integer.parseInt(request.getParameter("id")),request, response);
    	    	case "/display_all_projects":
    	    		getAllProjectDetails(request, response);
+   	    	case "/display_available_employees":
+   	    		getAllEmployeesDetails(request, response);
+   	    	case "/assign_employee":
+   	    		assignEmployee(request, response);
+   	    	case "/unassign_employee":
+   	    		removeEmployee(Integer.parseInt(request.getParameter("projectId")),
+   	    				Integer.parseInt(request.getParameter("employeeId")), request, response);
+   	    	case "/display_assigned_employees":
+   	    		getEmployeesBasicDetails(Integer.parseInt(request.getParameter("projectId")), request, response);
    	    }  
     } 
 
@@ -169,44 +178,77 @@ public class ProjectController extends HttpServlet{
 
     /**
      * Methode to get basic details of employees 
-     * @return List of employee's basic details
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public Map<Integer, String> getAllEmployeesDetails() {
-        return projectService.getAllEmployeesDetails();
+    public void getAllEmployeesDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<List<String>> employeesDetails = projectService.getAllEmployeesDetails();
+        request.setAttribute("employeesDetails", employeesDetails);
+ 	    request.getRequestDispatcher("display_available_employees.jsp").forward(request, response);
     }
    
     /**
      * Method to assign employees to project
-     * @param employeeIdList list of employee ids
-     * @param projectId project id in which we need to assign employees
-     * @return true for successfull assignment else false
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
-        return projectService.assignEmployee(employeeIdList, projectId);
+    public void assignEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String[] employeesIdStrings = request.getParameterValues("employee_assignment");
+    	List<Integer> employeesIdList = new ArrayList<Integer>();
+    	for (String employeeId : employeesIdStrings) {
+    		employeesIdList.add(Integer.parseInt(employeeId));
+    	}
+        if(projectService.assignEmployee(employeesIdList, Integer.parseInt(request.getParameter("id")))) {
+        	request.setAttribute("message", "Employee Assigned Successfully...!!!");
+        	request.getRequestDispatcher("/success.jsp").forward(request, response);
+        } else {
+        	request.setAttribute("message", "Employee Assignment Failed...!!!");
+        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
      * Method to get all projects basics details
      * @return map of project id as key and project details as value
      */
-    public Map<Integer, String> getAllProjectBasicDetails() {
-        return projectService.getAllProjectBasicDetails();
-    }
+   // public Map<Integer, String> getAllProjectBasicDetails() {
+       // return projectService.getAllProjectBasicDetails();
+   // }
 
     /**
      * Method to remove assigned employee from project
-     * @return true for successfull remove else false
+     * @param projectId project id
+     * @param employeeId employee id
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public boolean removeEmployee(int projectId, int employeeId) {
-        return projectService.removeEmployee(projectId, employeeId);
+    public void removeEmployee(int projectId, int employeeId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (projectService.removeEmployee(projectId, employeeId)) {
+        	request.setAttribute("message", "Employee Removed Successfully...!!!");
+        	request.getRequestDispatcher("/success.jsp").forward(request, response);
+        } else {
+        	request.setAttribute("message", "Employee unassign Failed...!!!");
+        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
      * Method to get details of employees assigned for given project
      * @param projectId project id  
-     * @return list of employee details
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public List<String> getEmployeesBasicDetails(int projectId) {
-        return projectService.getEmployeesBasicDetails(projectId);
+    public void getEmployeesBasicDetails(int projectId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Map<String, String>> employeesDetails =  projectService.getEmployeesBasicDetails(projectId);
+        request.setAttribute("employeesDetails", employeesDetails);
+    	request.getRequestDispatcher("/display_assigned_employees.jsp").forward(request, response);
     }
 }

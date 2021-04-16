@@ -131,15 +131,15 @@ public interface EmployeeService {
 
     /**
      * Method to get projects basic details
-     * @return map of Project id as key and project basic details as value
+     * @return list of Project  basic details
      */
-    public Map<Integer, String> getAllProjectsBasicDetails();
+    public List<List<String>> getAllProjectsBasicDetails();
 
     /**
      * Method to get all employee basic details
      * @return map of employee id as key and basic details as value
      */
-    public Map<Integer, String> getAllEmployeeBasicDetails();
+    public List<List<String>> getAllEmployeeBasicDetails();
 
     /**
      * Method to assign projects to employee
@@ -151,9 +151,9 @@ public interface EmployeeService {
     /**
      * Method to get assigned projects details of specified employee
      * @param employeeId employee id to get the assigned projects details
-     * @ return list of project basic details
+     * @ return list of project basic details as map
      */
-    public List<String> getProjectsBasicDetails(int employeeId);
+    public List<Map<String, String>> getProjectsBasicDetails(int employeeId);
 
     /**
      * Method to remove assigned project of employee

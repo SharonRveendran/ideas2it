@@ -80,9 +80,9 @@ public interface ProjectService {
 
     /**
      * Methode to get basic details of employees 
-     * @return Map of employee id as key and employee's basic details as value
+     * @return list of employee  basic details as list
      */
-    public Map<Integer, String> getAllEmployeesDetails();
+    public List<List<String>> getAllEmployeesDetails();
 
     /**
      * Method to assign employees to project
@@ -94,9 +94,9 @@ public interface ProjectService {
 
     /**
      * Method to get all projects basics details
-     * @return map of project id as key and project details as value
+     * @return list project details as list
      */
-    public Map<Integer, String> getAllProjectBasicDetails();
+    public List<List<String>> getAllProjectBasicDetails();
 
     /**
      * Method to get project object
@@ -121,7 +121,7 @@ public interface ProjectService {
     /**
      * Method to get details of employees assigned for given project
      * @param projectId project id  
-     * @return list of employee details
+     * @return list of employee details as map
      */
-    public List<String> getEmployeesBasicDetails(int projectId);
+    public List<Map<String, String>> getEmployeesBasicDetails(int projectId);
 }
