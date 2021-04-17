@@ -72,11 +72,10 @@ public interface ProjectService {
      * @param managerName name of projectManager
      * @param startDate project starting date
      * @param endDate project ending date
-     * @param option indicating which project details need to update
      * @return true for successfull updation else false
      */
     public boolean updateProject(int projectId, String name, String managerName,
-            Date startDate, Date endDate, String option);
+            Date startDate, Date endDate);
 
     /**
      * Methode to get basic details of employees 

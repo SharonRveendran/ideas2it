@@ -43,9 +43,8 @@ public class EmployeeController extends HttpServlet {
         case "/restore_employee":
    	        recoverEmployee(Integer.parseInt(request.getParameter("id")), request, response);
    	        break;
-        case "update_employee":
+        case "/update_employee":
    	        updateEmployee(Integer.parseInt(request.getParameter("id")), request, response);
-   	        out.println("Employee updates Successfully....!!!");
    	        break;
         case "/display_available_project":
         	getAllProjectsBasicDetails(request, response);  
@@ -59,14 +58,28 @@ public class EmployeeController extends HttpServlet {
     } 
     
     /**
-     * Method to update Employee details
-     * @param id employee id
-     * @param request HttpServletRequest 
-     * @param response HttpServletResponse
+     * 
+     * @param employeeId
+     * @param request HttpServletRequest object
+     * @param response HttpServletResponse object
      * @throws IOException 
      * @throws ServletException 
      */
-    private void updateEmployee(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void updateEmployee(int employeeId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+    	List<String> employeeDetails = new ArrayList<String>(employeeService.getEmployee(Integer.parseInt(request.getParameter("id"))).values());
+    	request.setAttribute("employeeDetails", employeeDetails);
+	    request.getRequestDispatcher("/employee_form.jsp").forward(request, response);
+	}
+
+	/**
+     * Method to update Employee details
+     * @param request HttpServletRequest object
+     * @param response HttpServletResponse object
+     * @throws IOException 
+     * @throws ServletException 
+     */
+    private void updateEmployeeDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	int id = Integer.parseInt(request.getParameter("id"));
     	String name = request.getParameter("name");
     	String designation = request.getParameter("designation");
     	Double salary = Double.parseDouble(request.getParameter("salary"));
@@ -89,7 +102,7 @@ public class EmployeeController extends HttpServlet {
     	TemporaryAddress[4] = request.getParameter("temporaryCountry");
     	TemporaryAddress[5] = "Temporary";
     	addresses.add(TemporaryAddress);
-        employeeService.updateEmployee(id, name, designation, salary, dob, mobile, null);		
+        employeeService.updateEmployee(id, name, designation, salary, dob, mobile, addresses);		
 	}
 
 	/**
@@ -101,32 +114,36 @@ public class EmployeeController extends HttpServlet {
 	 * @throws NumberFormatException 
      */
     public void createEmployee(HttpServletRequest request, HttpServletResponse response) throws NumberFormatException, ServletException, IOException {
-    	String name = request.getParameter("name");
-    	String designation = request.getParameter("designation");
-    	double salary = Double.parseDouble(request.getParameter("salary"));
-    	long mobile = Long.parseLong(request.getParameter("mobile"));
-    	Date dob = Date.valueOf(request.getParameter("dob"));
-    	List<String[]> addresses = new ArrayList<String[]>();
-    	String permanentAddress[] = new String[6];
-    	permanentAddress[0] = request.getParameter("doorNumber");
-    	permanentAddress[1] = request.getParameter("street");   		
-    	permanentAddress[2] = request.getParameter("district");
-    	permanentAddress[3] = request.getParameter("state");
-    	permanentAddress[4] = request.getParameter("country");
-    	permanentAddress[5] = "Permanent";
-    	addresses.add(permanentAddress);
-    	String TemporaryAddress[] = new String[6];
-    	TemporaryAddress[0] = request.getParameter("temporaryDoorNumber");
-    	TemporaryAddress[1] = request.getParameter("temporaryStreet");   		
-    	TemporaryAddress[2] = request.getParameter("temporaryDistrict");
-    	TemporaryAddress[3] = request.getParameter("temporaryState");
-    	TemporaryAddress[4] = request.getParameter("temporaryCountry");
-    	TemporaryAddress[5] = "Temporary";
-    	addresses.add(TemporaryAddress);
-        employeeService.createEmployee(name, designation, salary,
-                mobile, dob, addresses);
-        request.setAttribute("message", "Employee Created Successfully...!!!");
-	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+    	if ("".equals(request.getParameter("id"))) { 
+    		String name = request.getParameter("name");
+    	    String designation = request.getParameter("designation");
+    	    double salary = Double.parseDouble(request.getParameter("salary"));
+    	    long mobile = Long.parseLong(request.getParameter("mobile"));
+    	    Date dob = Date.valueOf(request.getParameter("dob"));
+    	    List<String[]> addresses = new ArrayList<String[]>();
+    	    String permanentAddress[] = new String[6];
+    	    permanentAddress[0] = request.getParameter("doorNumber");
+    	    permanentAddress[1] = request.getParameter("street");   		
+    	    permanentAddress[2] = request.getParameter("district");
+    	    permanentAddress[3] = request.getParameter("state");
+    	    permanentAddress[4] = request.getParameter("country");
+    	    permanentAddress[5] = "Permanent";
+    	    addresses.add(permanentAddress);
+    	    String TemporaryAddress[] = new String[6];
+    	    TemporaryAddress[0] = request.getParameter("temporaryDoorNumber");
+    	    TemporaryAddress[1] = request.getParameter("temporaryStreet");   		
+    	    TemporaryAddress[2] = request.getParameter("temporaryDistrict");
+    	    TemporaryAddress[3] = request.getParameter("temporaryState");
+    	    TemporaryAddress[4] = request.getParameter("temporaryCountry");
+    	    TemporaryAddress[5] = "Temporary";
+    	    addresses.add(TemporaryAddress);
+    	    employeeService.createEmployee(name, designation, salary,
+    	    		mobile, dob, addresses);
+    	    request.setAttribute("message", "Employee Created Successfully...!!!");
+    	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+    	} else {
+    		updateEmployeeDetails(request, response);
+    	}
     }
        
     /**
@@ -267,49 +284,49 @@ public class EmployeeController extends HttpServlet {
      * @param employeeName Name of employee
      * @return true for successful updation of name else return false
      */
-    public void updateName(int id, String employeeName) {
-    	employeeService.updateEmployee(id, employeeName,
-                null, 0l, null, 0l, "name");
-    }
-    
-    /**
-     * Method to update Employee designation
-     * @param id Employee id
-     * @param designation Employee Designation   
-     */
-    public void updateDesignation(int id, String designation) {
-    	employeeService.updateEmployee(id, null, designation,
-                0l, null, 0l, "designation");
-    }
-    
-    /**
-     * Method to update Employee salary
-     * @param id Employee id
-     * @param employeeSalary Salary of Employee
-     */
-    public void updateSalary(int id, double employeeSalary) {
-    	employeeService.updateEmployee(id, null, null,
-                employeeSalary, null, 0l, "salary");
-    }
-    
-    /**
-     * Method to update Employee date of birth
-     * @param id Employee id
-     * @param dob Employee date of birth
-     */
-    public void updateDob(int id, Date dob) {
-    	employeeService.updateEmployee(id, null, null, 0l, dob, 0l, "dob");
-    }
-    
-    /**
-     * Method to update employee mobile number
-     * @param id Employee id
-     * @param mobile Employee mobile number
-     */
-    public void updateMobile(int id, long mobile) {
-    	employeeService.updateEmployee(id, null, null,
-                0l, null, mobile, "mobile");
-    }
+//    public void updateName(int id, String employeeName) {
+//    	employeeService.updateEmployee(id, employeeName,
+//                null, 0l, null, 0l, "name");
+//    }
+//    
+//    /**
+//     * Method to update Employee designation
+//     * @param id Employee id
+//     * @param designation Employee Designation   
+//     */
+//    public void updateDesignation(int id, String designation) {
+//    	employeeService.updateEmployee(id, null, designation,
+//                0l, null, 0l, "designation");
+//    }
+//    
+//    /**
+//     * Method to update Employee salary
+//     * @param id Employee id
+//     * @param employeeSalary Salary of Employee
+//     */
+//    public void updateSalary(int id, double employeeSalary) {
+//    	employeeService.updateEmployee(id, null, null,
+//                employeeSalary, null, 0l, "salary");
+//    }
+//    
+//    /**
+//     * Method to update Employee date of birth
+//     * @param id Employee id
+//     * @param dob Employee date of birth
+//     */
+//    public void updateDob(int id, Date dob) {
+//    	employeeService.updateEmployee(id, null, null, 0l, dob, 0l, "dob");
+//    }
+//    
+//    /**
+//     * Method to update employee mobile number
+//     * @param id Employee id
+//     * @param mobile Employee mobile number
+//     */
+//    public void updateMobile(int id, long mobile) {
+//    	employeeService.updateEmployee(id, null, null,
+//                0l, null, mobile, "mobile");
+//    }
 
     /**
      * Methode to update address

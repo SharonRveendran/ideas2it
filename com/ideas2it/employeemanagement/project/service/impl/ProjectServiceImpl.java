@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Map<String, String> getProjectDetails(int projectId) {
         EmployeeService employeeService = new EmployeeServiceImpl();
-        Map<String, String> projectDetails = new HashMap<String, String>();
+        Map<String, String> projectDetails = new LinkedHashMap<String, String>();
         Project project = projectDao.getProject(projectId);  
         if (null != project&&!project.getIsDeleted()) {
             projectDetails.put("id", "" + project.getId());   
@@ -131,25 +132,13 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean updateProject(int projectId, String name, String managerName,
-            Date startDate, Date endDate, String option) {
-        Project project = projectDao.getProject(projectId);
-        if (null == project) {
-            return false;
-        } else {
-            switch (option) {
-                case "name":
-                    project.setName(name);
-                    break;
-                case "manager name":
-                    project.setManagerName(managerName);
-                    break;
-                case "start date":
-                    project.setStartDate(startDate);
-                    break;
-                case "end date":
-                    project.setEndDate(endDate);
-            }
-        }
+            Date startDate, Date endDate) {
+        Project project = projectDao.getProjectWithEmployee(projectId);
+        project.setId(projectId);
+        project.setName(name);
+        project.setManagerName(managerName);
+        project.setStartDate(startDate);
+        project.setEndDate(endDate);    
         return projectDao.updateProject(project);
     }
 

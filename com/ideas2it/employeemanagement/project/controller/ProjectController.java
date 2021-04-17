@@ -46,10 +46,30 @@ public class ProjectController extends HttpServlet{
    	    				Integer.parseInt(request.getParameter("employeeId")), request, response);
    	    	case "/display_assigned_employees":
    	    		getEmployeesBasicDetails(Integer.parseInt(request.getParameter("projectId")), request, response);
+   	    	case "/update_project":
+   	    		updateProject(Integer.parseInt(request.getParameter("id")), request, response);
    	    }  
     } 
 
     /**
+     * Method to update Project
+     * @param projectId project id to get and update project details
+     * @param request http request object
+     * @param response http response object
+     * @throws IOException 
+     * @throws ServletException 
+     */
+    private void updateProject(int projectId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	List<String> projectDetails = new ArrayList<String>(projectService.getProjectDetails(projectId).values());
+    	//List<Object> projectDetails = new ArrayList<Object>(projectService.getProjectDetails(projectId).values());
+    	//projectDetails.set(3, (Object) Date.valueOf((String) projectDetails.get(3)));
+    	//projectDetails.set(4, (Object) Date.valueOf((String) projectDetails.get(4)));
+    	request.setAttribute("projectDetails", projectDetails);
+    	System.out.println(projectDetails);
+	    request.getRequestDispatcher("/project_form.jsp").forward(request, response);
+	}
+
+	/**
      * Method to validate date
      * @param date User given date string
      * @return valid date
@@ -60,23 +80,34 @@ public class ProjectController extends HttpServlet{
   
     /**
      * Method to create new project
-     * @param request
-     * @param response
+     * @param request http request object
+     * @param response http response object
      * @throws IOException 
      * @throws ServletException 
      */
-    public void createProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {  	
-        if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
-                Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
-        	request.setAttribute("message", "Project Created Successfully...!!!");
-    	    request.getRequestDispatcher("/success.jsp").forward(request, response);
-        } else {
-        	request.setAttribute("message", "Project creation failed...!!!");
-    	    request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
+    public void createProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	PrintWriter out = response.getWriter();
+    	out.println(request.getParameter("id"));
+    	if("".equals(request.getParameter("id"))) {
+    		if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
+    				Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
+    			request.setAttribute("message", "Project Created Successfully...!!!");
+    			request.getRequestDispatcher("/success.jsp").forward(request, response);
+    		} else {
+    			request.setAttribute("message", "Project creation failed...!!!");
+    			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		}
+    	} else {
+    		updateProjectDetails(Integer.parseInt(request.getParameter("id")),
+    				request.getParameter("name"),
+    				request.getParameter("managerName"),
+    				Date.valueOf(request.getParameter("startDate")),
+    				Date.valueOf(request.getParameter("endDate")), 
+    				request, response);
+    	}
     }     
 
-    /**
+	/**
      * Method to get project details based on project id
      * @param projectId project id to display project
      * @param request http request object
@@ -167,13 +198,19 @@ public class ProjectController extends HttpServlet{
      * @param managerName name of projectManager
      * @param startDate project starting date
      * @param endDate project ending date
-     * @param option indicating which project details need to update
-     * @return true for successfull updation else false
+     * @throws IOException 
+     * @throws ServletException 
      */
-    public boolean updateProject(int projectId, String name, String managerName,
-            Date startDate, Date endDate, String option) {
-        return projectService.updateProject(projectId, name,
-                managerName, startDate, endDate, option);
+    public void updateProjectDetails(int projectId, String name, String managerName,
+            Date startDate, Date endDate, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       if (projectService.updateProject(projectId, name,
+                managerName, startDate, endDate)) {
+    	   request.setAttribute("message", "Project updated Successfully...!!!");
+       	   request.getRequestDispatcher("/success.jsp").forward(request, response);
+       } else {
+       	request.setAttribute("message", "Project Updation Failed...!!!");
+       	request.getRequestDispatcher("/error.jsp").forward(request, response);
+       }
     }
 
     /**

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -119,7 +120,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Map<String, String> getEmployee(int id) {    
         Employee employee = employeeDao.getEmployee(id);
-        Map<String, String> employeeDetails = new HashMap<String, String>();
+        Map<String, String> employeeDetails = new LinkedHashMap<String, String>();
         if (null != employee) {
         	employeeDetails.put("id", "" + employee.getId());
         	employeeDetails.put("name", "" + employee.getName());
@@ -269,8 +270,19 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, String option) {
-        Employee employee = new Employee(id, name, designation, salary, mobile,dob, null, false);
+            double salary, Date dob, long mobile, List<String[]> addresses) {
+    	Employee oldEmployee = employeeDao.getEmployeeWithProject(id);
+    	List<Address> addressList = new ArrayList<Address>();
+    	int index = 0;
+    	for (String[] addressString : addresses) {
+    		Address address = new Address(addressString[0], addressString[1], addressString[2], addressString[3], addressString[4], addressString[5],false);
+    		//address.setEmployee(oldEmployee);
+    		address.setAddressId(oldEmployee.getAddresses().get(index).getAddressId());
+    		index++;
+    		addressList.add(address);
+    	}
+        Employee employee = new Employee(id, name, designation, salary, mobile,dob, addressList, false);
+        employee.setProjects(employeeDao.getEmployeeWithProject(id).getProjects());
     	employeeDao.updateEmployee(employee);
     }
 

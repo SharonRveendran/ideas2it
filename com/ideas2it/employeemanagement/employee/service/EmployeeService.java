@@ -109,10 +109,10 @@ public interface EmployeeService {
      * @param salary employee salary
      * @param dob employee date of birth
      * @param mobile employee mobile number
-     * @param option option to specify the attribute that need to update
+     * @param addresses list of employee addresses
      */
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, String option);
+            double salary, Date dob, long mobile, List<String[]> addresses);
 
     /**
      * Methode to update address
