@@ -27,13 +27,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDao employeeDao = new EmployeeDaoImpl();
 	
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public void createEmployee(String name, String designation, double salary,
             long mobile, Date dob, List<String[]> employeeAddressList) {
         Address employeeAddress;
-        String addressType;
         List<Address> employeeAddresses = new ArrayList<Address>();
         for (String employeeAddressArray[] : employeeAddressList) {
             employeeAddress = new Address(employeeAddressArray[0],
@@ -47,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean isIdExist(int id) {
@@ -55,138 +54,41 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
         
     /**
-     * {@inheritdoc}
-     */
-    @Override
-    public Date isValidDate(String date) {
-    	Date dob = null;
-        try {
-	    dob = Date.valueOf(date);
-        } catch (Exception e) {
-            return null;
-        }
-        return dob;
-    }
- 
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public long isValidMobile(String input) {
-        long mobile;
-        if (Pattern.matches("[7-9][0-9]{9}", input)) {
-       	    try {
-                mobile = Long.parseLong(input); 
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-      	} else {
-      	   return 0;
-      	}
-        return mobile;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public double isValidSalary(String input) {
-        double employeeSalary;
-        try {
-            employeeSalary = Double.parseDouble(input);          
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-        return employeeSalary;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public int isValidId(String id) {
-        int employeeId;
-        try {
- 	    employeeId = Integer.parseInt(id); 
-    	} catch (NumberFormatException e) {
-            return 0;
- 	}
-        return employeeId;
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Map<String, String> getEmployee(int id) {    
         Employee employee = employeeDao.getEmployee(id);
         Map<String, String> employeeDetails = new LinkedHashMap<String, String>();
         if (null != employee) {
-        	employeeDetails.put("id", "" + employee.getId());
-        	employeeDetails.put("name", "" + employee.getName());
-        	employeeDetails.put("dob", "" + employee.getDob());
-        	employeeDetails.put("mobile", "" + employee.getMobile());
-        	employeeDetails.put("designation", "" + employee.getDesignation());
-        	employeeDetails.put("salary", "" + employee.getSalary());
-        	Address address1 = employee.getAddresses().get(0);
-        	employeeDetails.put("permanentDoorNumber", "" + address1.getDoorNumber());
-        	employeeDetails.put("permanentStreet", "" + address1.getStreet());
-      	 	employeeDetails.put("permanentDistrict", "" + address1.getDistrict());
-      	 	employeeDetails.put("permanentState", "" + address1.getState());
-      	 	employeeDetails.put("permanentCountry", "" + address1.getCountry());
-      	 	if (0 < employee.getAddresses().size()) {
-      	 		Address address = employee.getAddresses().get(1);
-      	 		employeeDetails.put("temporaryDoorNumber", "" + address.getDoorNumber());
-      	 		employeeDetails.put("temporaryStreet", "" + address.getStreet());
-      	 		employeeDetails.put("temporaryDistrict", "" + address.getDistrict());
-      	 		employeeDetails.put("temporaryState", "" + address.getState());
-      	 		employeeDetails.put("temporaryCountry", "" + address.getCountry());
+        	if (!employee.getIsDeleted()) {
+        		employeeDetails.put("id", "" + employee.getId());
+        		employeeDetails.put("name", "" + employee.getName());
+        		employeeDetails.put("dob", "" + employee.getDob());
+        		employeeDetails.put("mobile", "" + employee.getMobile());
+        		employeeDetails.put("designation", "" + employee.getDesignation());
+        		employeeDetails.put("salary", "" + employee.getSalary());
+        		Address address1 = employee.getAddresses().get(0);
+        		employeeDetails.put("permanentDoorNumber", "" + address1.getDoorNumber());
+        		employeeDetails.put("permanentStreet", "" + address1.getStreet());
+        		employeeDetails.put("permanentDistrict", "" + address1.getDistrict());
+        		employeeDetails.put("permanentState", "" + address1.getState());
+        		employeeDetails.put("permanentCountry", "" + address1.getCountry());
+      	 		if (0 < employee.getAddresses().size()) {
+      	 			Address address = employee.getAddresses().get(1);
+      	 			employeeDetails.put("temporaryDoorNumber", "" + address.getDoorNumber());
+      	 			employeeDetails.put("temporaryStreet", "" + address.getStreet());
+      	 			employeeDetails.put("temporaryDistrict", "" + address.getDistrict());
+      	 			employeeDetails.put("temporaryState", "" + address.getState());
+      	 			employeeDetails.put("temporaryCountry", "" + address.getCountry());
+      	 		}
       	 	}
         }
-        return employeeDetails;
-       
-    }
-   
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
-        return employeeDao.getSpecifiedEmployees(employeeIdList);
+        return employeeDetails;  
     }
 
     /**
-     * @param employee employee object
-     */
-    private String getEmployeeDetails(Employee employee) {
-        if (null != employee ) {
-            int temporaryAddressCount = 1;
-            String employeeDetails = employee.toString();
-            List<Address> employeeAddresses = employee.getAddresses();
-            
-                for (int index = 0; index < employeeAddresses.size(); index++) {
-                    if ("permanent".equals(employeeAddresses.get(index).getAddressType())) {
-                        employeeDetails = employeeDetails +
-                                "\nPermanent address\n-----------------\n\n";
-                    }
-                    if ("temporary".equals(employeeAddresses.get(index).getAddressType())) {
-                        employeeDetails = employeeDetails + "\nTemporary address " +
-                                temporaryAddressCount + "\n--------------------\n\n";
-                        temporaryAddressCount++;
-                    } 
-                    if (null != employeeAddresses.get(index).getDoorNumber()) { 
-                        employeeDetails = employeeDetails + (employeeAddresses.get(index)).toString();
-                    } 
-               }
-            
-        return employeeDetails;
-        } else {
-            return null;
-        }        
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Map<String, String>> getAllEmployeesDetails() {
@@ -208,34 +110,38 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean deleteEmployee(int id) {
+    	boolean deleteStatus = false;
         List<Address> addresses = new ArrayList<Address>();
         Employee employee = employeeDao.getEmployeeWithProject(id);
-        employee.setIsDeleted(true);
-        for (Address address : employee.getAddresses()) {
-            address.setIsDeleted(true);
-            addresses.add(address); 
+        if (null != employee) {
+        	if (false == employee.getIsDeleted()) {
+        		employee.setIsDeleted(true);
+        		for (Address address : employee.getAddresses()) {
+        			address.setIsDeleted(true);
+        			addresses.add(address); 
+        		}
+        		employee.setProjects(new ArrayList<Project>());
+        		employee.setAddresses(addresses);   
+        		deleteStatus = employeeDao.updateEmployee(employee);
+        	}
         }
-        employee.setProjects(new ArrayList<Project>());
-        employee.setAddresses(addresses);   
-    	return employeeDao.updateEmployee(employee);
+        return deleteStatus;
     }   
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
-    public String recoverEmployee(int id) {
+    public boolean recoverEmployee(int id) {
         List<Address> addresses = new ArrayList<Address>();
-        String recoveryStatus = null;
+        boolean recoveryStatus = false;
         Employee employee = employeeDao.getEmployee(id);
         if (null != employee) {
-            if (!employee.getIsDeleted()) {
-                recoveryStatus = "Employee already exist....!!!"; 
-            } else {    
+            if (employee.getIsDeleted()) {    
                 employee.setIsDeleted(false);
                 for (Address address : employee.getAddresses()) {
                     address.setIsDeleted(false);
@@ -243,9 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
                 employee.setAddresses(addresses);
                 if (employeeDao.updateEmployee(employee)) {
-                    recoveryStatus = "\nRecovery successfull...!!!";
-                } else {
-                    recoveryStatus = "\nInvalid details....!!!";
+                    recoveryStatus = true;
                 }
             }
         }
@@ -253,7 +157,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List <String> getDeletedEmployees() {
@@ -266,7 +170,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }  
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public void updateEmployee(int id, String name, String designation,
@@ -275,8 +179,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     	List<Address> addressList = new ArrayList<Address>();
     	int index = 0;
     	for (String[] addressString : addresses) {
-    		Address address = new Address(addressString[0], addressString[1], addressString[2], addressString[3], addressString[4], addressString[5],false);
-    		//address.setEmployee(oldEmployee);
+    		Address address = new Address(addressString[0], addressString[1], addressString[2],
+    				addressString[3], addressString[4], addressString[5],false);
     		address.setAddressId(oldEmployee.getAddresses().get(index).getAddressId());
     		index++;
     		addressList.add(address);
@@ -287,27 +191,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
-     */
-    @Override
-    public void updateAddress(int employeeId, int addressId, String[] addressDetails) {
-        Employee employee = employeeDao.getEmployee(employeeId);
-        List<Address> addresses = new ArrayList<Address>();
-        for (Address address : employee.getAddresses()) {
-            if (address.getAddressId() == addressId) {
-                address = new Address(addressDetails[0],
-                addressDetails[1], addressDetails[2], addressDetails[3],
-                addressDetails[4], addressDetails[5], false);
-                address.setAddressId(addressId);
-            }
-            addresses.add(address);
-        }
-        employee.setAddresses(addresses);
-        employeeDao.updateEmployee(employee);
-    }
-   
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Map <Integer, String> getAddressList(int employeeId) {
@@ -322,7 +206,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     } 
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public  List<List<String>> getAllProjectsBasicDetails() {
@@ -331,7 +215,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
  
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<List<String>> getAllEmployeeBasicDetails() {
@@ -347,7 +231,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     } 
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean assignProject(List<Integer> projectIdList, int employeeId) {
@@ -360,7 +244,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Map<String, String>> getProjectsBasicDetails(int employeeId) {
@@ -376,27 +260,42 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean removeProject(int employeeId, int projectId) {
-        ProjectService projectService = new ProjectServiceImpl();
-        Employee employee = employeeDao.getEmployeeWithProject(employeeId);
-        List<Project> projects = new ArrayList<Project>();
-        for (Project project : employee.getProjects()) {
-            if(project.getId() != projectId) {
-                projects.add(project);
-            }
-        }
-        employee.setProjects(projects);
-        return employeeDao.updateEmployee(employee); 
+    	boolean removeStatus = false;
+    	Employee employee = employeeDao.getEmployeeWithProject(employeeId);
+    	if (null != employee) {
+    		List<Project> projects = new ArrayList<Project>();
+    		for (Project project : employee.getProjects()) {
+    			if (project.getId() != projectId) {
+    				projects.add(project);
+    			} else {
+    				removeStatus = true;
+    			}
+    		}
+    		employee.setProjects(projects);
+    	}
+    	if (!employeeDao.updateEmployee(employee)) {
+    		removeStatus = false;
+    	}    	
+    	return removeStatus;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Employee getEmployeeObject(int id) {
         return employeeDao.getEmployee(id);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
+        return employeeDao.getSpecifiedEmployees(employeeIdList);
     }
 }

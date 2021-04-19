@@ -12,14 +12,14 @@ import com.ideas2it.employeemanagement.project.model.Project;
 public interface ProjectDao {
 
     /**
-     * Methode to insert project to database
+     * Method to insert project to database
      * @param project project object
-     * @return true for succeessfull project creation else false.
+     * @return true for successful project creation else false.
      */
     public boolean insertProject(Project project);  
     
     /**
-     * Methode to get project object based on project id
+     * Method to get project object based on project id
      * @param projectId id of project which need to display
      * @return project object
      */
@@ -33,7 +33,7 @@ public interface ProjectDao {
     public List<Project> getSpecifiedProjects(List<Integer> projectIdList);    
 
     /**
-     * Methode to get project object with employee object list based on project id
+     * Method to get project object with employee object list based on project id
      * @param projectId id of project which need to display
      * @return project object
      */
@@ -49,7 +49,7 @@ public interface ProjectDao {
      /**
      * Method to delete project based on projectId
      * @param project project object for delete project
-     * @return true for succeessfull deletion else false
+     * @return true for successful deletion else false
      */
     public boolean updateProject(Project project);
 
@@ -58,4 +58,11 @@ public interface ProjectDao {
      * @return list of project objects 
      */
     public List<Project> getAllProjectWithEmployee();
+
+    /**
+     * Method to check the id is present in database or not
+     * @param projectId project id
+     * @return true if id present in database else false
+     */
+	public boolean isIdExist(int projectId);
 }

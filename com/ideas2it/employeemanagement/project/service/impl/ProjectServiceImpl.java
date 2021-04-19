@@ -1,7 +1,6 @@
 package com.ideas2it.employeemanagement.project.service.impl;
   
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,7 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao = new ProjectDaoImpl();
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean createProject(String name, String managerName,
@@ -36,11 +35,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Map<String, String> getProjectDetails(int projectId) {
-        EmployeeService employeeService = new EmployeeServiceImpl();
         Map<String, String> projectDetails = new LinkedHashMap<String, String>();
         Project project = projectDao.getProject(projectId);  
         if (null != project&&!project.getIsDeleted()) {
@@ -54,25 +52,10 @@ public class ProjectServiceImpl implements ProjectService {
     }  
 
     /**
-     * {@inheritdoc}
-     */
-    @Override
-    public boolean isValidId(String input) {
-        int projectId;
-        try {
-            projectId = Integer.parseInt(input);
-        } catch (Exception e) {
-            return false;
-        }  
-        return true;   
-    }  
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Map<String,String>> getAllProjectDetails(boolean isDeleted) {
-        EmployeeService employeeService = new EmployeeServiceImpl();
         List<Project> projects = projectDao.getAllProject(isDeleted);
         List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();      
         if (0 != projects.size()) {
@@ -90,60 +73,62 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean deleteProject(int projectId) {
+    	boolean deleteStatus = false;
         Project project = projectDao.getProjectWithEmployee(projectId);
-        project.setIsDeleted(true);
-        project.setEmployees(new ArrayList<Employee>());
-        return projectDao.updateProject(project);
+        if (null != project) {
+        	if (false == project.getIsDeleted()) {
+                project.setIsDeleted(true);
+                project.setEmployees(new ArrayList<Employee>());
+                System.out.println(project.getIsDeleted()+"in service delete");
+                deleteStatus = projectDao.updateProject(project);
+            }
+        }
+        return deleteStatus;
     }
+    
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean updateProject(int projectId, String name, String managerName,
+            Date startDate, Date endDate) {
+    	boolean updateStatus = false;
+    	Project project = projectDao.getProjectWithEmployee(projectId);
+    	
+        if (null != project) {
+        	project.setId(projectId);
+        	project.setName(name);
+        	project.setManagerName(managerName);
+        	project.setStartDate(startDate);
+        	project.setEndDate(endDate); 
+        	System.out.println(project.getIsDeleted()+"in service update");
+        	updateStatus = projectDao.updateProject(project);
+        }
+        return updateStatus;
+    }
+    
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean recoverProject(int projectId) {
         boolean recoverStatus = false;
         Project project = projectDao.getProject(projectId);
         if (null != project) {
-            project.setIsDeleted(false);
-            recoverStatus = projectDao.updateProject(project);
+        	if (project.getIsDeleted()) {
+                project.setIsDeleted(false);
+                recoverStatus = projectDao.updateProject(project);
+        	}
         }
         return recoverStatus;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    @Override
-    public Date isValidDate(String date) {
-    	Date validDate = null;
-        try {
-	    validDate = Date.valueOf(date);
-        } catch (Exception e) {
-            return null;
-        }
-        return validDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    @Override
-    public boolean updateProject(int projectId, String name, String managerName,
-            Date startDate, Date endDate) {
-        Project project = projectDao.getProjectWithEmployee(projectId);
-        project.setId(projectId);
-        project.setName(name);
-        project.setManagerName(managerName);
-        project.setStartDate(startDate);
-        project.setEndDate(endDate);    
-        return projectDao.updateProject(project);
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<List<String>> getAllProjectBasicDetails() {
@@ -161,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Project getProject(int projectId) {
@@ -169,7 +154,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Project> getSpecifiedProjects(List<Integer> projectIdList) {
@@ -177,27 +162,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<List<String>> getAllEmployeesDetails() {
         EmployeeService employeeService = new EmployeeServiceImpl();
-        /*Map<Integer, String> employeesDetails = new HashMap<Integer, String>();
-
-        List<Project> projects = projectDao.getAllProjectWithEmployee();
-        List<Employee> employees = employeeService.getAllEmployee
-        for (Employee employee : employees) {
-            employeesDetails.put(employee.getId(), "\nEmployee Id       : " 
-                    + employee.getId() + "\nEmployee Name"
-                    + "     : " + employee.getName() + "\nEmployee Mobile   : " 
-                    + employee.getMobile());   
-        }
-        return employeesDetails;*/
         return employeeService.getAllEmployeeBasicDetails();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
@@ -210,28 +184,31 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEmployee(int projectId, int employeeId) {
-        EmployeeService employeeService = new EmployeeServiceImpl();
+    	boolean removeStatus = false;
         Project project = projectDao.getProjectWithEmployee(projectId);
-        if (null == project) {
-            return false;
-        } else {
+        if (null != project) {
            List<Employee> employees = new ArrayList<Employee>();  
            for (Employee employee : project.getEmployees()) {
                if (employee.getId() != employeeId) {
                    employees.add(employee);
+               } else {
+            	   removeStatus = true;
                }
            }
            project.setEmployees(employees);
         }
-        return projectDao.updateProject(project);
+        if (!projectDao.updateProject(project)) {
+        	removeStatus = false;
+        }
+        return removeStatus;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Map<String, String>> getEmployeesBasicDetails(int projectId) {
@@ -245,4 +222,12 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return employeesDetails;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean isIdExist(int projectId) {
+		return projectDao.isIdExist(projectId);
+	}
 }

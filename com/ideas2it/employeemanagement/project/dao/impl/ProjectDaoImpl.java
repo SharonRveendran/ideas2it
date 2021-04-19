@@ -1,13 +1,12 @@
 package com.ideas2it.employeemanagement.project.dao.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
-
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,11 +22,10 @@ import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
  * @created 24-03-2021
  */
 public class ProjectDaoImpl implements ProjectDao {
-    private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
     private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean insertProject(Project project) {
@@ -53,7 +51,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }	
   
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Project getProject(int projectId){
@@ -75,7 +73,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }  
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Project> getSpecifiedProjects(List<Integer> projectIdList) {
@@ -100,7 +98,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Project getProjectWithEmployee(int projectId){
@@ -109,7 +107,10 @@ public class ProjectDaoImpl implements ProjectDao {
         try {
             session = sessionFactory.openSession();
             project = session.get(Project.class, projectId);
-            for (Employee employee : project.getEmployees()) {}
+            if (null != project) {
+            	for (Employee employee : project.getEmployees()) {}
+            }
+            
         } catch (HibernateException e1) {
             e1.printStackTrace();
         } finally {
@@ -123,7 +124,7 @@ public class ProjectDaoImpl implements ProjectDao {
     } 
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Project> getAllProject(boolean isDeleted) {
@@ -149,7 +150,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Project> getAllProjectWithEmployee() {
@@ -177,11 +178,11 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean updateProject(Project project) {
-        boolean updateStatus = true;
+        boolean updateStatus = false;
         Session session = null; 
         Transaction transaction = null; 
         try {
@@ -189,6 +190,7 @@ public class ProjectDaoImpl implements ProjectDao {
             transaction = session.beginTransaction();
             session.update(project);
             transaction.commit();
+            updateStatus = true;
         } catch (Exception e1) {
             updateStatus = false;
             e1.printStackTrace();
@@ -200,5 +202,30 @@ public class ProjectDaoImpl implements ProjectDao {
             }
         }
         return updateStatus;
-    } 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean isIdExist(int projectId) {
+		 Session session = null; 
+	        Employee employee = null;
+	        boolean isIdExist = false;
+	        Query query;
+	        try {
+	            session = sessionFactory.openSession();
+	            query = session.createQuery("select id from Project where id = " + projectId);
+	            isIdExist = null != query.uniqueResult() ? true : false;
+	        } catch (HibernateException e1) {
+	            e1.printStackTrace();
+	        } finally {
+	            try {
+	                session.close();
+	            } catch (HibernateException e2) {
+	                e2.printStackTrace();
+	            }
+	        }
+	        return isIdExist;
+	} 
 }

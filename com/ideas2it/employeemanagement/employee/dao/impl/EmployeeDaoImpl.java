@@ -1,13 +1,11 @@
 package com.ideas2it.employeemanagement.employee.dao.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
-
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -30,7 +28,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();	
    
     /** 
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
      public void insertEmployee(Employee employee) {
@@ -53,7 +51,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public boolean isIdExist(int id) {
@@ -78,7 +76,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Employee getEmployee(int id) {
@@ -89,7 +87,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             employee = session.get(Employee.class, id);
             if (null != employee) {
                 for (Address address : employee.getAddresses()){}
-            }   
+            }
         } catch (HibernateException e1) {
             e1.printStackTrace();
         } finally {
@@ -103,7 +101,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
@@ -137,7 +135,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {
             session = sessionFactory.openSession();
             employee = session.get(Employee.class, employeeId);
-        for (Project project : employee.getProjects()){}   
+            if (null != employee) {
+                for (Project project : employee.getProjects()){} 
+            }
         } catch (HibernateException e1) {
             e1.printStackTrace();
         } finally {
@@ -151,7 +151,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public List<Employee> getAllEmployee() {
@@ -175,18 +175,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
     
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
      public boolean updateEmployee(Employee employee) {
-        boolean updateStatus = true;
+        boolean updateStatus = false;
         Session session = null; 
         Transaction transaction = null; 
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.update(employee);
-            transaction.commit();   
+            transaction.commit();  
+            updateStatus = true;
         } catch (Exception e1) {
             updateStatus = false;
             e1.printStackTrace();
@@ -199,9 +200,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
         return updateStatus;
      }
-   
+
     /**
-     * {@inheritdoc} 
+     * {@inheritDoc} 
      */
     @Override
     public List <Employee> getDeletedEmployees() { 
@@ -225,7 +226,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     @Override
     public Map <Integer, Address> getAddressList(int employeeId) {

@@ -1,6 +1,5 @@
 package com.ideas2it.employeemanagement.employee.dao;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public interface EmployeeDao {
      public void insertEmployee(Employee employee);
   
     /**
-     * Methode to check the id present in database or not
+     * Method to check the id present in database or not
      * @param id employee id
      * @return true if id present else false
      */
@@ -35,21 +34,21 @@ public interface EmployeeDao {
     public Employee getEmployee(int id);
 
     /**
-     * Method to return spesified employee list
+     * Method to return specified employee list
      * @param id Employee id
      * @return employee object if employee present else return null
      */
     public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList);
 
     /**
-     * Methode to get all employee object as a list
+     * Method to get all employee object as a list
      */
     public List<Employee> getAllEmployee(); 
 
     /**
-     * Methode to delete employee based on employee id
+     * Method to delete employee based on employee id
      * @param employee employee object  
-     * @return true for successfull deletion
+     * @return true for successful deletion
      */
     public boolean updateEmployee(Employee employee);
     
@@ -60,7 +59,7 @@ public interface EmployeeDao {
     public List <Employee> getDeletedEmployees();
 
     /**
-     * Methode to get addressList of employee
+     * Method to get addressList of employee
      * @param employeeId
      * @return employee address list.
      */

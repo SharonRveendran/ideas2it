@@ -33,13 +33,6 @@ public interface EmployeeService {
      * @return map of employee details
      */
     public Map<String, String> getEmployee(int id);
-
-    /**
-     * Method to return spesified employee list
-     * @param id Employee id
-     * @return employee object if employee present else return null
-     */
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList);
            
     /**
      * Method to check whether the id is present in collection or not 
@@ -47,34 +40,6 @@ public interface EmployeeService {
      * @return true if id present in collection else return false
      */
     public boolean isIdExist(int id);
-        
-    /**
-     * Method to validate date
-     * @param date input date as string
-     * @return valid date
-     */
-    public Date isValidDate(String date);
-    	
-    /**
-     * Methode to validate mobile number
-     * @param input user given input for mobile
-     * @return valid mobile number
-     */
-    public long isValidMobile(String input);
-        
-    /** 
-     * This methode will validate employee salary
-     * @param input user given input for salary
-     * @return valid employee salary
-     */
-    public double isValidSalary(String input);
-        
-    /**
-     * This method will validate employee id
-     * @param id employee id
-     * @return valid employee id
-     */
-    public int isValidId(String id);
     
     /**
      * Method to return all employee details present in collection
@@ -85,15 +50,16 @@ public interface EmployeeService {
     /**
      * Method to delete the Employee based on employee id
      * @param id Employee id
-     * @return true for successfull deletion else false
+     * @return true for successful deletion else false
      */
     public boolean deleteEmployee(int id);    
 
     /**
-     * Methode to recover deleted employee
+     * Method to recover deleted employee
      * @param id employee id
+     * @return recovery status
      */
-    public String recoverEmployee(int id);
+    public boolean recoverEmployee(int id);
 
     /**
      * Method to get all deleted employees
@@ -102,7 +68,7 @@ public interface EmployeeService {
     public List <String> getDeletedEmployees();
 
     /**
-     * Methode to update employee details
+     * Method to update employee details
      * @param id Employee id
      * @param name employee name
      * @param designation employee designation
@@ -112,15 +78,7 @@ public interface EmployeeService {
      * @param addresses list of employee addresses
      */
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, List<String[]> addresses);
-
-    /**
-     * Methode to update address
-     * @param addressId employee address id
-     * @param employeeId employee id
-     * @param addressDetails array of address details
-     */
-    public void updateAddress(int employeeId, int addressId, String[] addressDetails);   
+            double salary, Date dob, long mobile, List<String[]> addresses); 
   
     /**
      * Method to get addressList of a employee
@@ -143,7 +101,7 @@ public interface EmployeeService {
 
     /**
      * Method to assign projects to employee
-     * @param projectIdList list of project ids which need to assign
+     * @param projectIdList list of project id which need to assign
      * @param employeeId employee id 
      */
     public boolean assignProject(List<Integer> projectIdList, int employeeId);
@@ -159,13 +117,20 @@ public interface EmployeeService {
      * Method to remove assigned project of employee
      * @param employeeId
      * @param projectId
-     * @return true for successfull removing of project
+     * @return true for successful removing of project
      */
     public boolean removeProject(int employeeId, int projectId);
 
     /**
      * @param id employee id
-     * @return Emnployee object
+     * @return Employee object
      */
     public Employee getEmployeeObject(int id);
+    
+    /**
+     * Method to return specified employee list
+     * @param id Employee id
+     * @return employee object if employee present else return null
+     */
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList);
 }
