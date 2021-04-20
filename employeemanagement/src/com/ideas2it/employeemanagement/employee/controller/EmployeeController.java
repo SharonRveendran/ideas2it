@@ -94,7 +94,7 @@ public class EmployeeController extends HttpServlet {
 	        request.getRequestDispatcher("/employee_form.jsp").forward(request, response);
     	} else {
     		request.setAttribute("message", "No Employee exist with given id");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+        	request.getRequestDispatcher("/update_employee.jsp").forward(request, response);
     	}
 	}
     
@@ -139,7 +139,7 @@ public class EmployeeController extends HttpServlet {
     	    int id = Integer.parseInt(request.getParameter("id"));
             employeeService.updateEmployee(id, name, designation, salary, dob, mobile, addresses);		
     	    request.setAttribute("message", "Employee Updated Successfully...!!!");
-    		request.getRequestDispatcher("/success.jsp").forward(request, response);
+    		request.getRequestDispatcher("/update_employee.jsp").forward(request, response);
     	}
     } 
 
@@ -208,10 +208,10 @@ public class EmployeeController extends HttpServlet {
     		throws IOException, ServletException {
     	if (employeeService.deleteEmployee(id)) {
     	    request.setAttribute("message", "Employee Deleted sussessfully...!!!");
-     	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+     	    request.getRequestDispatcher("/delete_employee.jsp").forward(request, response);
     	} else {
     		request.setAttribute("message", "Deletion Failed.No employee exist with given id");
-    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		request.getRequestDispatcher("/delete_employee.jsp").forward(request, response);
     	}   	
     }
 
@@ -244,8 +244,13 @@ public class EmployeeController extends HttpServlet {
     private void getAllProjectsBasicDetails(HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
          List<List<String>> projectsDetails = employeeService.getAllProjectsBasicDetails();
-         request.setAttribute("projectsDetails", projectsDetails);
-  	     request.getRequestDispatcher("display_available_projects.jsp").forward(request, response);
+         if (!projectsDetails.isEmpty()) {
+             request.setAttribute("projectsDetails", projectsDetails);
+  	         request.getRequestDispatcher("/display_available_projects.jsp").forward(request, response);
+         } else {
+        	 request.setAttribute("message", "No projects available");
+  	         request.getRequestDispatcher("/error.jsp").forward(request, response);
+         }
     }
 
     /**

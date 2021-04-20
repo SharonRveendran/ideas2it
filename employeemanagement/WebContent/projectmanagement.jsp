@@ -9,23 +9,23 @@
 h1 {text-align: center;}
 </style>
 </head>
-<body>
+<body bgcolor="DarkSeaGreen">
+  <button type ="button" style="background-color:AliceBluestyle; height:30px; width:5%"><a href="welcome.jsp"><b>Home</b></a></button>
+  <h1 style="color:DarkSlateGray;font-size:40px">Welcome to Project Management</h1><br>
   <table class="center" border="4" style="width:60%;background-color:LightGray" align="center">
-    <h1 style="color:DarkSlateGray;font-size:40px">Welcome to Project Management</h1><br>
-     <tr>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="project_form.jsp">Create Project</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="display_project.jsp">Display Project</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="project?action=display_all_projects">Display All Project</a></button></td>
-    </tr>
     <tr>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="delete_project.jsp">Delete Project</a></button></td>
-  	  <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="restore_project.jsp">Restore Project</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="project?action=display_available_employees">Assign Employees</a></button></td>
-    </tr>
-    <tr>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="unassign_employee.jsp">Unassign Employee</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="display_assigned_employees.jsp">Display Assigned Employees</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="update_project.jsp">Update Project</a></button></td>
+     
+      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue ; height:35px; width:80%"><a href="project_form.jsp"><b>Create Project</b></a></button></td>
+     <td style="text-align:center"> <button type ="button" style="background-color:AliceBlue ; height:35px; width:80%"><a href="project?action=display_all_projects"><b>Display Projects</b></a></button></td>
+  
+ 
+  	  <td style="text-align:center"><button type ="button" style="background-color:AliceBlue ; height:35px; width:80%"><a href="restore_project.jsp"><b>Restore Project</b></a></button></td>
+      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue ; height:35px; width:80%""><a href="project?action=display_available_employees"><b>Assign Employees</b></a></button></td>
+
+  
+      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue ; height:35px; width:80%"><a href="unassign_employee.jsp"><b>Unassign Employee</b></a></button></td>
+      
+      
     </tr>
   </table>
 </body>

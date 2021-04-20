@@ -9,13 +9,11 @@
 h1 {text-align: center;}
 </style>
 </head>
-<body>
-  <h1 style="color:DarkSlateGray;font-size:40px;">Welcome to Employee Management System</h1><br>
-  <table class="center" border="1" style="width:60%;background-color:LightGray" align="center">
-    <tr>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="employeemanagement.jsp">Employee Management</a></button></td>
-      <td style="text-align:center"><button type ="button" style="background-color:AliceBlue"><a href="projectmanagement.jsp">Project Management</a></button></td>
-    </tr> 
-  </table>  
+<body bgcolor="DarkSeaGreen">
+  <h1 style="color:DarkSlateGray;font-size:40px;">Welcome to Employee Management System</h1>
+      <center>
+        <button type ="button" style="background-color:AliceBlue ; height:40px; width:20%"><a href="employeemanagement.jsp"><b>Employee Management</b></a></button>
+        <button type ="button" style="background-color:AliceBlue ; height:40px; width:20% ; margin:50px"><a href="projectmanagement.jsp"><b>Project Management</b></a></button>
+      </center>
 </body>
 </html>

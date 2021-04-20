@@ -75,7 +75,7 @@ public class ProjectController extends HttpServlet{
    	    		getEmployeesBasicDetails(Integer.parseInt(request.getParameter("projectId")), request, response);
    	    		break;
    	    	case "update_project":
-   	    		updateProject(Integer.parseInt(request.getParameter("id")), request, response);
+   	    		getUpdatePage(Integer.parseInt(request.getParameter("id")), request, response);
         }
     }
 
@@ -87,12 +87,16 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    private void updateProject(int projectId, HttpServletRequest request, HttpServletResponse response)
+    private void getUpdatePage(int projectId, HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-    	List<String> projectDetails = new ArrayList<String>(projectService.getProjectDetails(projectId).values());
-    	request.setAttribute("projectDetails", projectDetails);
-    	System.out.println(projectDetails);
-	    request.getRequestDispatcher("/project_form.jsp").forward(request, response);
+    	if (projectService.isIdExist(projectId)) {
+    		List<String> projectDetails = new ArrayList<String>(projectService.getProjectDetails(projectId).values());
+    		request.setAttribute("projectDetails", projectDetails);
+    		request.getRequestDispatcher("/project_form.jsp").forward(request, response);
+    	} else {
+    		request.setAttribute("message", "No employee exist with given id");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}
 	}
   
     /**

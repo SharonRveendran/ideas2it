@@ -8,20 +8,24 @@
 <meta charset="ISO-8859-1">
 <title>Display Assigned Employees</title>
 </head>
-<body>
+<body bgcolor="#afcfaf">
+  <button type ="button" style="background-color:AliceBluestyle; height:30px; width:5%"><a href="welcome.jsp"><b>Home</b></a></button>
+  <button type ="button" style="background-color:AliceBlue; height:30px; width:5%"><a href="project?action=display_all_projects"><b>Back</b></a></button>
   <form action="project?action=display_assigned_employees"method="post">
-    Enter Project Id :
+   <center>
+   <h2>Enter Project Id :</h2> 
     <input type = "number" name = "projectId">
     <input type = "submit" value = "Display Assigned Employees"/>
+    </center>
   </form><br>
-  <table border="1">
-    <thead>
+  <table align="center" border="3" style="width:40%;text-align:center">
+    <thead style="background-color:#609f60">
       <tr>
         <th> Employee Id</th>
         <th> Employee Name</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody style="background-color:Lavender">
       <c:forEach items="${employeesDetails}" var = "employeeDetails">
       <tr> 
         <td>${employeeDetails.get("id")}</td>
