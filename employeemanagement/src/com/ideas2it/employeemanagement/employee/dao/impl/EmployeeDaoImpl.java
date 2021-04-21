@@ -18,6 +18,8 @@ import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
+import com.ideas2it.exceptions.CreateFailException;
+import com.ideas2it.exceptions.FetchFailException;
 
 /**
  * Class to interact with database
@@ -29,9 +31,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
    
     /** 
      * {@inheritDoc}
+     * @throws CreateFailException 
      */
     @Override
-     public void insertEmployee(Employee employee) {
+     public void insertEmployee(Employee employee) throws CreateFailException {
         Session session = null; 
         Transaction transaction = null; 
         try {
@@ -40,7 +43,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             session.save(employee);
             transaction.commit();
         } catch (HibernateException e1) {
-            e1.printStackTrace();
+            throw new CreateFailException("Creation Failed...!!!");
         } finally {
             try {
                 session.close();
@@ -77,9 +80,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public Employee getEmployee(int id) {
+    public Employee getEmployee(int id) throws FetchFailException {
         Session session = null; 
         Employee employee = null;
         try {
@@ -89,12 +93,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 for (Address address : employee.getAddresses()){}
             }
         } catch (HibernateException e1) {
-            e1.printStackTrace();
+            throw new FetchFailException("Can't get Employee");
         } finally {
             try {
                 session.close();
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	e2.printStackTrace();
             }
         }
         return employee; 
@@ -102,9 +106,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws FetchFailException {
         Session session = null; 
         List<Employee> employees = new ArrayList<Employee>();
         try {
@@ -113,12 +118,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
             criteria.add(Restrictions.in("id", employeeIdList));
             employees = criteria.list();      
         } catch (HibernateException e1) {
-            e1.printStackTrace();
+        	throw new FetchFailException("Can't get Employees");
         } finally {
             try {
                 session.close();
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	e2.printStackTrace();
             }
         }
         return employees;
@@ -128,8 +133,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * Method to get employee with project from database
      * @param employeeId employee id
      * @return employee details as a string
+     * @throws FetchFailException 
      */
-     public Employee getEmployeeWithProject(int employeeId) {
+     public Employee getEmployeeWithProject(int employeeId) throws FetchFailException {
         Session session = null; 
         Employee employee = null;
         try {
@@ -139,12 +145,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 for (Project project : employee.getProjects()){} 
             }
         } catch (HibernateException e1) {
-            e1.printStackTrace();
+        	throw new FetchFailException("Can't get Employees");
         } finally {
             try {
                 session.close();
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	e2.printStackTrace();
             }
         }
         return employee; 
@@ -152,9 +158,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Employee> getAllEmployee() {
+    public List<Employee> getAllEmployee() throws FetchFailException {
         Session session = null; 
         List<Employee> employees = new ArrayList<Employee>();  
         try {
@@ -163,12 +170,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
             criteria.add(Restrictions.eq("isDeleted",false));
             employees = criteria.list();   
         } catch (HibernateException e1) {
-            e1.printStackTrace();
+        	throw new FetchFailException("Can't get Employees");
         } finally {
             try {
                 session.close();
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	e2.printStackTrace();
             }
         }
         return employees;

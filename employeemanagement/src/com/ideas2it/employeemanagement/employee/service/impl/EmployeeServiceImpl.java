@@ -16,6 +16,11 @@ import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
+import com.ideas2it.exceptions.CreateFailException;
+import com.ideas2it.exceptions.DeleteFailException;
+import com.ideas2it.exceptions.FetchFailException;
+import com.ideas2it.exceptions.NoIdException;
+import com.ideas2it.exceptions.UpdateFailException;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
 
 /**
@@ -28,10 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
     /**
      * {@inheritDoc}
+     * @throws CreateFailException 
      */
     @Override
     public void createEmployee(String name, String designation, double salary,
-            long mobile, Date dob, List<String[]> employeeAddressList) {
+            long mobile, Date dob, List<String[]> employeeAddressList) throws CreateFailException {
         Address employeeAddress;
         List<Address> employeeAddresses = new ArrayList<Address>();
         for (String employeeAddressArray[] : employeeAddressList) {
@@ -47,17 +53,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws NoIdException 
      */
     @Override
-    public boolean isIdExist(int id) {
-        return employeeDao.isIdExist(id);
+    public void isIdExist(int id) throws NoIdException {
+        if (!employeeDao.isIdExist(id)) {
+        	throw new NoIdException("Given id not exist in database");
+        }
     }
         
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<String, String> getEmployee(int id) {    
+    public Map<String, String> getEmployee(int id) throws FetchFailException {    
         Employee employee = employeeDao.getEmployee(id);
         Map<String, String> employeeDetails = new LinkedHashMap<String, String>();
         if (null != employee) {
@@ -89,9 +98,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Map<String, String>> getAllEmployeesDetails() {
+    public List<Map<String, String>> getAllEmployeesDetails() throws FetchFailException {
         List<Map<String, String>> employeesDetails = new ArrayList<Map<String, String>>();
         List<Employee> employees = employeeDao.getAllEmployee();
         for(Employee employee : employees) {
@@ -111,9 +121,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
+     * @throws DeleteFailException 
      */
     @Override
-    public boolean deleteEmployee(int id) {
+    public boolean deleteEmployee(int id) throws FetchFailException, DeleteFailException {
     	boolean deleteStatus = false;
         List<Address> addresses = new ArrayList<Address>();
         Employee employee = employeeDao.getEmployeeWithProject(id);
@@ -127,6 +139,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         		employee.setProjects(new ArrayList<Project>());
         		employee.setAddresses(addresses);   
         		deleteStatus = employeeDao.updateEmployee(employee);
+        		if (!deleteStatus) {
+        			throw new DeleteFailException("Deletion Failed...!!!");
+        		}
         	}
         }
         return deleteStatus;
@@ -134,9 +149,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean restoreEmployee(int id) {
+    public boolean restoreEmployee(int id) throws FetchFailException {
         List<Address> addresses = new ArrayList<Address>();
         boolean restoreStatus = false;
         Employee employee = employeeDao.getEmployee(id);
@@ -171,10 +187,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
+     * @throws UpdateFailException 
      */
     @Override
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, List<String[]> addresses) {
+            double salary, Date dob, long mobile, List<String[]> addresses) throws FetchFailException, UpdateFailException {
     	Employee oldEmployee = employeeDao.getEmployeeWithProject(id);
     	List<Address> addressList = new ArrayList<Address>();
     	int index = 0;
@@ -187,7 +205,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     	}
         Employee employee = new Employee(id, name, designation, salary, mobile,dob, addressList, false);
         employee.setProjects(employeeDao.getEmployeeWithProject(id).getProjects());
-    	employeeDao.updateEmployee(employee);
+    	if (!employeeDao.updateEmployee(employee)) {
+    		throw new UpdateFailException("Something went wrong while updating...!!!");
+    	}
     }
 
     /**
@@ -207,18 +227,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public  List<List<String>> getAllProjectsBasicDetails() {
+    public  List<List<String>> getAllProjectsBasicDetails() throws FetchFailException {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.getAllProjectBasicDetails();
     }
  
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<List<String>> getAllEmployeeBasicDetails() {
+    public List<List<String>> getAllEmployeeBasicDetails() throws FetchFailException {
         List<Employee> employees = employeeDao.getAllEmployee();
         List<List<String>> employeesDetails = new ArrayList<List<String>>();
         for (Employee employee : employees) {
@@ -232,9 +254,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean assignProject(List<Integer> projectIdList, int employeeId) {
+    public boolean assignProject(List<Integer> projectIdList, int employeeId) throws FetchFailException {
         Employee employee = employeeDao.getEmployeeWithProject(employeeId);
         ProjectService projectService = new ProjectServiceImpl();
         List<Project> projects = employee.getProjects();
@@ -245,9 +268,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Map<String, String>> getProjectsBasicDetails(int employeeId) {
+    public List<Map<String, String>> getProjectsBasicDetails(int employeeId) throws FetchFailException {
         Employee employee = employeeDao.getEmployeeWithProject(employeeId);
         List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();
         for (Project project : employee.getProjects()) {     
@@ -261,9 +285,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean removeProject(int employeeId, int projectId) {
+    public boolean removeProject(int employeeId, int projectId) throws FetchFailException {
     	boolean removeStatus = false;
     	Employee employee = employeeDao.getEmployeeWithProject(employeeId);
     	if (null != employee) {
@@ -285,17 +310,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public Employee getEmployeeObject(int id) {
+    public Employee getEmployeeObject(int id) throws FetchFailException {
         return employeeDao.getEmployee(id);
     }
     
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) {
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws FetchFailException {
         return employeeDao.getSpecifiedEmployees(employeeIdList);
     }
 }

@@ -14,6 +14,11 @@ import com.ideas2it.employeemanagement.project.dao.impl.ProjectDaoImpl;
 import com.ideas2it.employeemanagement.project.dao.ProjectDao;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
+import com.ideas2it.exceptions.CreateFailException;
+import com.ideas2it.exceptions.DeleteFailException;
+import com.ideas2it.exceptions.FetchFailException;
+import com.ideas2it.exceptions.NoIdException;
+import com.ideas2it.exceptions.UpdateFailException;
 
 /**
  * Implementation lass for Project service interface
@@ -25,10 +30,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws CreateFailException 
      */
     @Override
     public boolean createProject(String name, String managerName,
-            Date startDate, Date endDate) {
+            Date startDate, Date endDate) throws CreateFailException {
         Project project = new Project(name, managerName, startDate,
                endDate, false, new ArrayList<Employee>());
         return projectDao.insertProject(project);
@@ -36,9 +42,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public Map<String, String> getProjectDetails(int projectId) {
+    public Map<String, String> getProjectDetails(int projectId) throws FetchFailException {
         Map<String, String> projectDetails = new LinkedHashMap<String, String>();
         Project project = projectDao.getProject(projectId);  
         if (null != project&&!project.getIsDeleted()) {
@@ -53,9 +60,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Map<String,String>> getAllProjectDetails(boolean isDeleted) {
+    public List<Map<String,String>> getAllProjectDetails(boolean isDeleted) throws FetchFailException {
         List<Project> projects = projectDao.getAllProject(isDeleted);
         List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();      
         if (0 != projects.size()) {
@@ -74,9 +82,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
+     * @throws DeleteFailException 
      */
     @Override
-    public boolean deleteProject(int projectId) {
+    public boolean deleteProject(int projectId) throws FetchFailException, DeleteFailException {
     	boolean deleteStatus = false;
         Project project = projectDao.getProjectWithEmployee(projectId);
         if (null != project) {
@@ -85,6 +95,9 @@ public class ProjectServiceImpl implements ProjectService {
                 project.setEmployees(new ArrayList<Employee>());
                 System.out.println(project.getIsDeleted()+"in service delete");
                 deleteStatus = projectDao.updateProject(project);
+                if (!deleteStatus) {
+            		throw new DeleteFailException("Deletion failed...!!!");
+            	}
             }
         }
         return deleteStatus;
@@ -92,13 +105,15 @@ public class ProjectServiceImpl implements ProjectService {
     
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
+     * @throws UpdateFailException 
+     * @throws DeleteFailException 
      */
     @Override
     public boolean updateProject(int projectId, String name, String managerName,
-            Date startDate, Date endDate) {
+            Date startDate, Date endDate) throws FetchFailException, UpdateFailException {
     	boolean updateStatus = false;
-    	Project project = projectDao.getProjectWithEmployee(projectId);
-    	
+    	Project project = projectDao.getProjectWithEmployee(projectId);	
         if (null != project) {
         	project.setId(projectId);
         	project.setName(name);
@@ -107,15 +122,19 @@ public class ProjectServiceImpl implements ProjectService {
         	project.setEndDate(endDate); 
         	System.out.println(project.getIsDeleted()+"in service update");
         	updateStatus = projectDao.updateProject(project);
+        	if (!updateStatus) {
+        		throw new UpdateFailException("Updation failed...!!!");
+        	}
         }
         return updateStatus;
     }
     
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean restoreProject(int projectId) {
+    public boolean restoreProject(int projectId) throws FetchFailException {
         boolean restoreStatus = false;
         Project project = projectDao.getProject(projectId);
         if (null != project) {
@@ -129,9 +148,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<List<String>> getAllProjectBasicDetails() {
+    public List<List<String>> getAllProjectBasicDetails() throws FetchFailException {
         List<Project> projects = projectDao.getAllProject(false);         
         List<List<String>> projectDetailsList = new ArrayList<List<String>>();
         if (null != projects) {
@@ -147,34 +167,38 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public Project getProject(int projectId) {
+    public Project getProject(int projectId) throws FetchFailException {
         return projectDao.getProject(projectId);
     }
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) {
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws FetchFailException {
         return projectDao.getSpecifiedProjects(projectIdList);
     }
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<List<String>> getAllEmployeesDetails() {
+    public List<List<String>> getAllEmployeesDetails() throws FetchFailException {
         EmployeeService employeeService = new EmployeeServiceImpl();
         return employeeService.getAllEmployeeBasicDetails();
     }
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) {
+    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) throws FetchFailException {
         Project project = projectDao.getProjectWithEmployee(projectId);
         EmployeeService employeeService = new EmployeeServiceImpl();
         List<Employee> employeeList = project.getEmployees();
@@ -185,9 +209,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public boolean removeEmployee(int projectId, int employeeId) {
+    public boolean removeEmployee(int projectId, int employeeId) throws FetchFailException {
     	boolean removeStatus = false;
         Project project = projectDao.getProjectWithEmployee(projectId);
         if (null != project) {
@@ -209,9 +234,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws FetchFailException 
      */
     @Override
-    public List<Map<String, String>> getEmployeesBasicDetails(int projectId) {
+    public List<Map<String, String>> getEmployeesBasicDetails(int projectId) throws FetchFailException {
         List<Map<String, String>> employeesDetails = new ArrayList<Map<String, String>>();
         Project project = projectDao.getProjectWithEmployee(projectId);
         for (Employee employee : project.getEmployees()) {
@@ -225,9 +251,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * {@inheritDoc}
+     * @throws NoIdException 
      */
 	@Override
-	public boolean isIdExist(int projectId) {
-		return projectDao.isIdExist(projectId);
+	public void isIdExist(int projectId) throws NoIdException {
+		if (!projectDao.isIdExist(projectId)) {
+			throw new NoIdException("Given id is not present in Database");
+		}
 	}
 }

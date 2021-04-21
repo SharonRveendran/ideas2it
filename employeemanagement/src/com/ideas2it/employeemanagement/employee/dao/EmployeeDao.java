@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
+import com.ideas2it.exceptions.CreateFailException;
+import com.ideas2it.exceptions.FetchFailException;
 
 /**
  * Interface to interact with database
@@ -16,8 +18,9 @@ public interface EmployeeDao {
     /**
      * Method to insert employee to database  
      * @param employee
+     * @throws CreateFailException 
      */
-     public void insertEmployee(Employee employee);
+     public void insertEmployee(Employee employee) throws CreateFailException;
   
     /**
      * Method to check the id present in database or not
@@ -30,20 +33,23 @@ public interface EmployeeDao {
      * Method to get employee from database
      * @param id employee id
      * @return employee details as a string
+     * @throws FetchFailException 
      */
-    public Employee getEmployee(int id);
+    public Employee getEmployee(int id) throws FetchFailException;
 
     /**
      * Method to return specified employee list
      * @param id Employee id
      * @return employee object if employee present else return null
+     * @throws FetchFailException 
      */
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList);
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws FetchFailException;
 
     /**
      * Method to get all employee object as a list
+     * @throws FetchFailException 
      */
-    public List<Employee> getAllEmployee(); 
+    public List<Employee> getAllEmployee() throws FetchFailException; 
 
     /**
      * Method to delete employee based on employee id
@@ -69,6 +75,7 @@ public interface EmployeeDao {
      * Method to get employee with project from database
      * @param employeeId employee id
      * @return employee details as a string
+     * @throws FetchFailException 
      */
-    public Employee getEmployeeWithProject(int employeeId);
+    public Employee getEmployeeWithProject(int employeeId) throws FetchFailException;
 }

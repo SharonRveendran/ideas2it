@@ -43,7 +43,7 @@ h3 {text-align: center;}
         <td>${employeeDetails.get("designation")}</td>
         <td>${employeeDetails.get("salary")}</td>
         <td>${employeeDetails.get("permanentAddress")}</td>
-        <td>${employeeDetails.get("temporaryAddress")}</td>>             
+        <td>${employeeDetails.get("temporaryAddress")}</td>             
       </tr>
       </c:forEach>
     </tbody>

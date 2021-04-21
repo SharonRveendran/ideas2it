@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
+import com.ideas2it.exceptions.CreateFailException;
+import com.ideas2it.exceptions.DeleteFailException;
+import com.ideas2it.exceptions.FetchFailException;
+import com.ideas2it.exceptions.NoIdException;
+import com.ideas2it.exceptions.UpdateFailException;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
 
 /**
@@ -89,13 +94,17 @@ public class ProjectController extends HttpServlet{
      */
     private void getUpdatePage(int projectId, HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-    	if (projectService.isIdExist(projectId)) {
+    	try {
+    		projectService.isIdExist(projectId);
     		List<String> projectDetails = new ArrayList<String>(projectService.getProjectDetails(projectId).values());
     		request.setAttribute("projectDetails", projectDetails);
     		request.getRequestDispatcher("/project_form.jsp").forward(request, response);
-    	} else {
-    		request.setAttribute("message", "No employee exist with given id");
-    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	} catch (FetchFailException e) {
+    		request.setAttribute("message", "Something went wrong...!!!");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	} catch (NoIdException e) {
+    		request.setAttribute("message", e.getMessage());
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
     	}
 	}
   
@@ -110,13 +119,18 @@ public class ProjectController extends HttpServlet{
     		throws ServletException, IOException {
     	PrintWriter out = response.getWriter();
     	if("".equals(request.getParameter("id"))) {
-    		if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
-    				Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
-    			request.setAttribute("message", "Project Created Successfully...!!!");
-    			request.getRequestDispatcher("/success.jsp").forward(request, response);
-    		} else {
-    			request.setAttribute("message", "Project creation failed...!!!");
-    			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		try {
+    			if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
+    					Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
+    				request.setAttribute("message", "Project Created Successfully...!!!");
+    				request.getRequestDispatcher("/success.jsp").forward(request, response);
+    			} else {
+    				request.setAttribute("message", "Project creation failed...!!!");
+    				request.getRequestDispatcher("/error.jsp").forward(request, response);
+    			}
+    		} catch(CreateFailException e) {
+    			request.setAttribute("message", e.getMessage());
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
     		}
     	} else {
     		updateProjectDetails(Integer.parseInt(request.getParameter("id")),
@@ -138,16 +152,21 @@ public class ProjectController extends HttpServlet{
      */
     private void getProjectDetails(int projectId, HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-        Map<String, String> projectDetails = projectService.getProjectDetails(projectId);
-        if (0 != projectDetails.size()) {
-        	List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();
-        	projectsDetails.add(projectDetails);
-        	request.setAttribute("projectsDetails", projectsDetails);
-        	request.getRequestDispatcher("/display_project.jsp").forward(request, response);
-        } else {
-        	request.setAttribute("message", "No Project exist with given id");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
+    	try {
+    		Map<String, String> projectDetails = projectService.getProjectDetails(projectId);
+    		if (0 != projectDetails.size()) {
+    			List<Map<String, String>> projectsDetails = new ArrayList<Map<String, String>>();
+    			projectsDetails.add(projectDetails);
+    			request.setAttribute("projectsDetails", projectsDetails);
+    			request.getRequestDispatcher("/display_project.jsp").forward(request, response);
+    		} else {
+    			request.setAttribute("message", "No Project exist with given id");
+    			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		}
+    	} catch (FetchFailException e) {
+    		request.setAttribute("message", e.getMessage());
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}
     }
 
     /**
@@ -159,14 +178,19 @@ public class ProjectController extends HttpServlet{
      */
     private void getAllProjectDetails(HttpServletRequest request, HttpServletResponse response) 
     		throws ServletException, IOException {
-         List<Map<String, String>> projectsDetails = projectService.getAllProjectDetails(false);
-         if (0 != projectsDetails.size()) {
-        	 request.setAttribute("projectsDetails", projectsDetails);
-         	 request.getRequestDispatcher("/display_project.jsp").forward(request, response);
-         } else {
-         	request.setAttribute("message", "No Projects exist");
-         	request.getRequestDispatcher("/error.jsp").forward(request, response);
-         }
+    	try {
+            List<Map<String, String>> projectsDetails = projectService.getAllProjectDetails(false);
+            if (0 != projectsDetails.size()) {
+        	    request.setAttribute("projectsDetails", projectsDetails);
+         	    request.getRequestDispatcher("/display_project.jsp").forward(request, response);
+            } else {
+         	   request.setAttribute("message", "No Projects exist");
+         	   request.getRequestDispatcher("/error.jsp").forward(request, response);
+            }
+    	} catch (FetchFailException e) {
+    		request.setAttribute("message", e.getMessage());
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}   	
     }
 
     /**
@@ -179,13 +203,21 @@ public class ProjectController extends HttpServlet{
      */
     private void deleteProject(int projectId, HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-        if (projectService.deleteProject(projectId)) {
-        	request.setAttribute("message", "Project deleted Successfully...!!!");
-    	    request.getRequestDispatcher("/success.jsp").forward(request, response);
-        } else {
-        	request.setAttribute("message", "Project deletion failed...!!!");
-    	    request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
+    	try {
+    		if (projectService.deleteProject(projectId)) {
+    			request.setAttribute("message", "Project deleted Successfully...!!!");
+    			request.getRequestDispatcher("/success.jsp").forward(request, response);
+    		} else {
+    			request.setAttribute("message", "Project deletion failed...!!!");
+    			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		}
+    	} catch (FetchFailException e) {
+    		request.setAttribute("message", "Something went wrong...!!!");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	} catch (DeleteFailException e) {
+    		request.setAttribute("message", e.getMessage());
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}
     }
 
     /**
@@ -198,13 +230,18 @@ public class ProjectController extends HttpServlet{
      */
     private void restoreProject(int projectId, HttpServletRequest request, HttpServletResponse response) 
     		throws ServletException, IOException {
-       if (projectService.restoreProject(projectId)) {
-    	   request.setAttribute("message", "Project restored Successfully...!!!");
-   	    request.getRequestDispatcher("/success.jsp").forward(request, response);
-       } else {
-       	request.setAttribute("message", "Project restore failed...!!!");
-   	    request.getRequestDispatcher("/error.jsp").forward(request, response);
-       } 
+        try {
+        	if (projectService.restoreProject(projectId)) {
+        		request.setAttribute("message", "Project restored Successfully...!!!");
+        		request.getRequestDispatcher("/success.jsp").forward(request, response);
+        	} else {
+        		request.setAttribute("message", "Project restore failed...!!!");
+        		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        	} 
+        } catch(FetchFailException e) {
+        	request.setAttribute("message", "Something went wrong...!!!");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -220,14 +257,22 @@ public class ProjectController extends HttpServlet{
     private void updateProjectDetails(int projectId, String name, String managerName,
             Date startDate, Date endDate, HttpServletRequest request, HttpServletResponse response) 
             		throws ServletException, IOException {
-       if (projectService.updateProject(projectId, name,
-                managerName, startDate, endDate)) {
-    	   request.setAttribute("message", "Project updated Successfully...!!!");
-       	   request.getRequestDispatcher("/success.jsp").forward(request, response);
-       } else {
-       	request.setAttribute("message", "Project Updation Failed...!!!");
-       	request.getRequestDispatcher("/error.jsp").forward(request, response);
-       }
+    	try {
+    		if (projectService.updateProject(projectId, name,
+    				managerName, startDate, endDate)) {
+    			request.setAttribute("message", "Project updated Successfully...!!!");
+    			request.getRequestDispatcher("/success.jsp").forward(request, response);
+    		} else {
+    			request.setAttribute("message", "Project Updation Failed...!!!");
+    			request.getRequestDispatcher("/error.jsp").forward(request, response);
+    		}
+    	} catch(FetchFailException e) {
+        	request.setAttribute("message", "Something went wrong...!!!");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch(UpdateFailException e) {
+        	request.setAttribute("message", "Something went wrong...!!!");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -239,9 +284,14 @@ public class ProjectController extends HttpServlet{
      */
     private void getAllEmployeesDetails(HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-        List<List<String>> employeesDetails = projectService.getAllEmployeesDetails();
-        request.setAttribute("employeesDetails", employeesDetails);
- 	    request.getRequestDispatcher("/display_available_employees.jsp").forward(request, response);
+    	try {
+    		List<List<String>> employeesDetails = projectService.getAllEmployeesDetails();
+    		request.setAttribute("employeesDetails", employeesDetails);
+    		request.getRequestDispatcher("/display_available_employees.jsp").forward(request, response);
+    	} catch(FetchFailException e) {
+    		request.setAttribute("message", e.getMessage());
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	}
     }
    
     /**
@@ -251,31 +301,35 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    private void assignEmployee(HttpServletRequest request, HttpServletResponse response) 
-    		throws ServletException, IOException {
-    	String[] employeesIdStrings = request.getParameterValues("employee_assignment");
-    	List<Integer> employeesIdList = new ArrayList<Integer>();
-    	if (null == employeesIdStrings) {
-			request.setAttribute("message", "Select atleast 1 employee");
-    		request.getRequestDispatcher("/error.jsp").forward(request, response);
-		} else {
-			for (String employeeId : employeesIdStrings) {
-				employeesIdList.add(Integer.parseInt(employeeId));
-			}
-			if (projectService.isIdExist(Integer.parseInt(request.getParameter("id")))) {
-				if(projectService.assignEmployee(employeesIdList, Integer.parseInt(request.getParameter("id")))) {
+	private void assignEmployee(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			String[] employeesIdStrings = request.getParameterValues("employee_assignment");
+			List<Integer> employeesIdList = new ArrayList<Integer>();
+			if (null == employeesIdStrings) {
+				request.setAttribute("message", "Select atleast 1 employee");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			} else {
+				for (String employeeId : employeesIdStrings) {
+					employeesIdList.add(Integer.parseInt(employeeId));
+				}
+				projectService.isIdExist(Integer.parseInt(request.getParameter("id")));
+				if (projectService.assignEmployee(employeesIdList, Integer.parseInt(request.getParameter("id")))) {
 					request.setAttribute("message", "Employee Assigned Successfully...!!!");
 					request.getRequestDispatcher("/success.jsp").forward(request, response);
 				} else {
 					request.setAttribute("message", "Employee Assignment Failed...Some employee already assigned");
 					request.getRequestDispatcher("/error.jsp").forward(request, response);
 				}
-			} else {
-				request.setAttribute("message", "No project exist with given id");
-	        	request.getRequestDispatcher("/error.jsp").forward(request, response);
 			}
+		} catch (FetchFailException e) {
+			request.setAttribute("message", "Something went wrong...!!!");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+		} catch (NoIdException e) {
+			request.setAttribute("message", "No project exist with given id");
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
-    }
+	}
 
     /**
      * Method to remove assigned employee from project
@@ -288,7 +342,8 @@ public class ProjectController extends HttpServlet{
      */
     private void removeEmployee(int projectId, int employeeId, HttpServletRequest request, HttpServletResponse response) 
     		throws ServletException, IOException {
-    	if (projectService.isIdExist(projectId)) {
+    	try {
+    		projectService.isIdExist(projectId);
     		if (projectService.removeEmployee(projectId, employeeId)) {
     			request.setAttribute("message", "Employee Removed Successfully...!!!");
     			request.getRequestDispatcher("/success.jsp").forward(request, response);
@@ -296,10 +351,13 @@ public class ProjectController extends HttpServlet{
     			request.setAttribute("message", "Given Employee not assigned for given project");
     			request.getRequestDispatcher("/error.jsp").forward(request, response);
     		}
-    	} else {
-    		request.setAttribute("message", "No project exist with given id");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
-    	}
+    	} catch(FetchFailException e) {
+        	request.setAttribute("message", "Something went wrong...!!!");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch(NoIdException e) {
+        	request.setAttribute("message", e.getMessage());
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -312,18 +370,22 @@ public class ProjectController extends HttpServlet{
      */
     private void getEmployeesBasicDetails(int projectId, HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-    	if (projectService.isIdExist(projectId)) {
+    	try { 
+    		projectService.isIdExist(projectId);
     		List<Map<String, String>> employeesDetails =  projectService.getEmployeesBasicDetails(projectId);
     		if (0 != employeesDetails.size()) {
     			request.setAttribute("employeesDetails", employeesDetails);
     			request.getRequestDispatcher("/display_assigned_employees.jsp").forward(request, response);
     		} else {
     			request.setAttribute("message", "No employee assigned for given project");
-            	request.getRequestDispatcher("/error.jsp").forward(request, response);	
+    			request.getRequestDispatcher("/error.jsp").forward(request, response);	
     		}
-    	} else {
-    		request.setAttribute("message", "No project exist with given id");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
-    	}
+    	} catch(NoIdException e){
+    		request.setAttribute("message", e.getMessage());
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+    	} catch(FetchFailException e) {
+        	request.setAttribute("message", "Something went wrong...!!!");
+    		request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 }
