@@ -5,8 +5,7 @@ import java.util.Map;
 
 import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
-import com.ideas2it.exceptions.CreateFailException;
-import com.ideas2it.exceptions.FetchFailException;
+import com.ideas2it.exceptions.EmployeeManagementException;
 
 /**
  * Interface to interact with database
@@ -20,14 +19,15 @@ public interface EmployeeDao {
      * @param employee
      * @throws CreateFailException 
      */
-     public void insertEmployee(Employee employee) throws CreateFailException;
+     public void insertEmployee(Employee employee) throws EmployeeManagementException;
   
     /**
      * Method to check the id present in database or not
      * @param id employee id
      * @return true if id present else false
+     * @throws EmployeeManagementException 
      */
-    public boolean isIdExist(int id);
+    public boolean isIdExist(int id) throws EmployeeManagementException;
 
     /**
      * Method to get employee from database
@@ -35,7 +35,7 @@ public interface EmployeeDao {
      * @return employee details as a string
      * @throws FetchFailException 
      */
-    public Employee getEmployee(int id) throws FetchFailException;
+    public Employee getEmployee(int id) throws EmployeeManagementException;
 
     /**
      * Method to return specified employee list
@@ -43,13 +43,13 @@ public interface EmployeeDao {
      * @return employee object if employee present else return null
      * @throws FetchFailException 
      */
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws FetchFailException;
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws EmployeeManagementException;
 
     /**
      * Method to get all employee object as a list
      * @throws FetchFailException 
      */
-    public List<Employee> getAllEmployee() throws FetchFailException; 
+    public List<Employee> getAllEmployee() throws EmployeeManagementException; 
 
     /**
      * Method to delete employee based on employee id
@@ -57,19 +57,6 @@ public interface EmployeeDao {
      * @return true for successful deletion
      */
     public boolean updateEmployee(Employee employee);
-    
-    /**
-     * Method to get all deleted employees
-     * @return list of  deleted employees 
-     */
-    public List <Employee> getDeletedEmployees();
-
-    /**
-     * Method to get addressList of employee
-     * @param employeeId
-     * @return employee address list.
-     */
-    public Map <Integer, Address> getAddressList(int employeeId); 
 
     /**
      * Method to get employee with project from database
@@ -77,5 +64,5 @@ public interface EmployeeDao {
      * @return employee details as a string
      * @throws FetchFailException 
      */
-    public Employee getEmployeeWithProject(int employeeId) throws FetchFailException;
+    public Employee getEmployeeWithProject(int employeeId) throws EmployeeManagementException;
 }

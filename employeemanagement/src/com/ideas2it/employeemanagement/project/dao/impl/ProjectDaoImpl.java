@@ -15,8 +15,7 @@ import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.project.dao.ProjectDao;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
-import com.ideas2it.exceptions.CreateFailException;
-import com.ideas2it.exceptions.FetchFailException;
+import com.ideas2it.exceptions.EmployeeManagementException;
 
 /**
  * implementation class of projectDao interface
@@ -31,7 +30,7 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws CreateFailException 
      */
     @Override
-    public boolean insertProject(Project project) throws CreateFailException {
+    public boolean insertProject(Project project) throws EmployeeManagementException {
         boolean insertStatus = true;
         Session session = null; 
         Transaction transaction = null; 
@@ -42,7 +41,7 @@ public class ProjectDaoImpl implements ProjectDao {
             transaction.commit();    
         } catch (HibernateException e1) {
             insertStatus = false;
-            throw new CreateFailException("ProjectCreation failed...");
+            throw new EmployeeManagementException("ProjectCreation failed...");
         } finally {
             try {
                 session.close();
@@ -58,14 +57,14 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public Project getProject(int projectId) throws FetchFailException{
+    public Project getProject(int projectId) throws EmployeeManagementException{
         Session session = null; 
         Project project = null;
         try {
             session = sessionFactory.openSession();
             project = session.get(Project.class, projectId);      
         } catch (HibernateException e1) {
-            throw new FetchFailException ("can't fetch project...!!!");
+            throw new EmployeeManagementException ("Can't fetch project...!!!");
         } finally {
             try {
                 session.close();
@@ -81,7 +80,7 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws FetchFailException {
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws EmployeeManagementException {
         Session session = null; 
         Project project = null;
         List<Project> projects = new ArrayList<Project>();
@@ -91,7 +90,7 @@ public class ProjectDaoImpl implements ProjectDao {
             criteria.add(Restrictions.in("id", projectIdList));
             projects = criteria.list();      
         } catch (HibernateException e1) {
-        	throw new FetchFailException ("can't fetch project...!!!");
+        	throw new EmployeeManagementException("Can't fetch project...!!!");
         } finally {
             try {
                 session.close();
@@ -107,7 +106,7 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public Project getProjectWithEmployee(int projectId) throws FetchFailException{
+    public Project getProjectWithEmployee(int projectId) throws EmployeeManagementException {
         Project project = null;
         Session session = null; 
         try {
@@ -118,7 +117,7 @@ public class ProjectDaoImpl implements ProjectDao {
             }
             
         } catch (HibernateException e1) {
-        	throw new FetchFailException ("can't fetch project...!!!");
+        	throw new EmployeeManagementException ("Can't fetch project...!!!");
         } finally {
             try {
                 session.close();
@@ -134,7 +133,7 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public List<Project> getAllProject(boolean isDeleted) throws FetchFailException {
+    public List<Project> getAllProject(boolean isDeleted) throws EmployeeManagementException {
         List<Project> projects = new ArrayList<Project>();  
         Session session = null;  
         try {
@@ -145,7 +144,7 @@ public class ProjectDaoImpl implements ProjectDao {
                 projects.add((Project)object);
             }
         } catch (HibernateException e1) {
-        	throw new FetchFailException ("can't fetch projects...!!!");
+        	throw new EmployeeManagementException ("Can't fetch projects...!!!");
         } finally {
             try {
                 session.close();
@@ -161,7 +160,7 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public List<Project> getAllProjectWithEmployee() throws FetchFailException {
+    public List<Project> getAllProjectWithEmployee() throws EmployeeManagementException {
         List<Project> projects = new ArrayList<Project>();
         Session session = null; 
         try {
@@ -174,7 +173,7 @@ public class ProjectDaoImpl implements ProjectDao {
                 projects.add(project);
             }
         } catch (HibernateException e1) {
-        	throw new FetchFailException ("can't fetch projects...!!!");
+        	throw new EmployeeManagementException ("Can't fetch projects...!!!");
         } finally {
             try {
                 session.close();
@@ -214,9 +213,10 @@ public class ProjectDaoImpl implements ProjectDao {
 
     /**
      * {@inheritDoc}
+     * @throws EmployeeManagementException 
      */
 	@Override
-	public boolean isIdExist(int projectId) {
+	public boolean isIdExist(int projectId) throws EmployeeManagementException {
 		 Session session = null; 
 	        Employee employee = null;
 	        boolean isIdExist = false;
@@ -226,7 +226,7 @@ public class ProjectDaoImpl implements ProjectDao {
 	            query = session.createQuery("select id from Project where id = " + projectId);
 	            isIdExist = null != query.uniqueResult() ? true : false;
 	        } catch (HibernateException e1) {
-	            e1.printStackTrace();
+	            throw new EmployeeManagementException("Something went wrong...!!!");
 	        } finally {
 	            try {
 	                session.close();
