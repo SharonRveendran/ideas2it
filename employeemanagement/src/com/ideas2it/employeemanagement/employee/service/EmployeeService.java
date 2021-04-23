@@ -87,7 +87,8 @@ public interface EmployeeService {
      * @throws EmployeeManagementException 
      */
     public void updateEmployee(int id, String name, String designation,
-            double salary, Date dob, long mobile, List<String[]> addresses) throws EmployeeManagementException; 
+            double salary, Date dob, long mobile, List<String[]> addresses) 
+            		throws EmployeeManagementException; 
   
     /**
      * Method to get projects basic details
@@ -112,7 +113,8 @@ public interface EmployeeService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public boolean assignProject(List<Integer> projectIdList, int employeeId) throws EmployeeManagementException;
+    public boolean assignProject(List<Integer> projectIdList, int employeeId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to get assigned projects details of specified employee
@@ -121,7 +123,8 @@ public interface EmployeeService {
      * @throws EmployeeManagementException 
      * @ return list of project basic details as map
      */
-    public List<Map<String, String>> getProjectsBasicDetails(int employeeId) throws EmployeeManagementException;
+    public List<Map<String, String>> getProjectsBasicDetails(int employeeId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to remove assigned project of employee
@@ -131,7 +134,8 @@ public interface EmployeeService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public boolean removeProject(int employeeId, int projectId) throws EmployeeManagementException;
+    public boolean removeProject(int employeeId, int projectId) 
+    		throws EmployeeManagementException;
 
     /**
      * @param id employee id
@@ -148,5 +152,6 @@ public interface EmployeeService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws EmployeeManagementException;
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) 
+    		throws EmployeeManagementException;
 }

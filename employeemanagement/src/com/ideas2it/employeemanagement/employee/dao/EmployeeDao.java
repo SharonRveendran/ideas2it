@@ -1,9 +1,7 @@
 package com.ideas2it.employeemanagement.employee.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import com.ideas2it.employeemanagement.employee.model.Address;
 import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.exceptions.EmployeeManagementException;
 
@@ -43,7 +41,8 @@ public interface EmployeeDao {
      * @return employee object if employee present else return null
      * @throws FetchFailException 
      */
-    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) throws EmployeeManagementException;
+    public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to get all employee object as a list
@@ -64,5 +63,6 @@ public interface EmployeeDao {
      * @return employee details as a string
      * @throws FetchFailException 
      */
-    public Employee getEmployeeWithProject(int employeeId) throws EmployeeManagementException;
+    public Employee getEmployeeWithProject(int employeeId)
+    			throws EmployeeManagementException;
 }

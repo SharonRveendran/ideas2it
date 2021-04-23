@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ideas2it.employeemanagement.project.service.impl.ProjectServiceImpl;
 import com.ideas2it.employeemanagement.project.service.ProjectService;
 import com.ideas2it.exceptions.EmployeeManagementException;
+import com.ideas2it.loggers.EmployeeManagementLogger;
 
 /**
  * Project controller servlet
@@ -22,7 +23,8 @@ import com.ideas2it.exceptions.EmployeeManagementException;
  * @created 27-03-2021
  */
 public class ProjectController extends HttpServlet{
-    private ProjectService projectService = new ProjectServiceImpl(); 
+	private ProjectService projectService = new ProjectServiceImpl();
+    EmployeeManagementLogger logger = new EmployeeManagementLogger(ProjectController.class);
     
     /**
      * Method to accept get request from  user
@@ -31,16 +33,21 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String option = request.getParameter("action");
-        switch (option) {
-        	case "display_all_projects":
-        		getAllProjectDetails(request, response);
-        		break;
-        	case "display_available_employees":
-        		getAllEmployeesDetails(request, response);
-        		break;
-        }
+    public void doGet(HttpServletRequest request, HttpServletResponse response){
+    	try {
+    		String option = request.getParameter("action");
+    		switch (option) {
+        		case "display_all_projects":
+        			getAllProjectDetails(request, response);
+        			break;
+        		case "display_available_employees":
+        			getAllEmployeesDetails(request, response);
+        			break;
+    		}
+    	} catch (ServletException | IOException e) {
+            logger.logError(e);
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -50,34 +57,39 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String option = request.getParameter("action");
-        switch (option) {
-   	    	case "create_or_update_project":
-   	    		createOrUpdateProject(request, response);
-   	    		break;
-   	    	case "delete_project":
-   	    		deleteProject(Integer.parseInt(request.getParameter("id")),request, response);
-   	    		break;
-   	    	case "restore_project":
-   	    		restoreProject(Integer.parseInt(request.getParameter("id")),request, response);
-   	    		break;
-   	    	case "display_project":
-   	    		getProjectDetails(Integer.parseInt(request.getParameter("id")),request, response);
-   	    		break;
-   	    	case "assign_employee":
-   	    		assignEmployee(request, response);
-   	    		break;
-   	    	case "unassign_employee":
-   	    		removeEmployee(Integer.parseInt(request.getParameter("projectId")),
-   	    				Integer.parseInt(request.getParameter("employeeId")), request, response);
-   	    		break;
-   	    	case "display_assigned_employees":
-   	    		getEmployeesBasicDetails(Integer.parseInt(request.getParameter("projectId")), request, response);
-   	    		break;
-   	    	case "update_project":
-   	    		getUpdatePage(Integer.parseInt(request.getParameter("id")), request, response);
-        }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    	try {
+    		String option = request.getParameter("action");
+    		switch (option) {
+   	    		case "create_or_update_project":
+   	    			createOrUpdateProject(request, response);
+   	    			break;
+   	    		case "delete_project":
+   	    			deleteProject(Integer.parseInt(request.getParameter("id")),request, response);
+   	    			break;
+   	    		case "restore_project":
+   	    			restoreProject(Integer.parseInt(request.getParameter("id")),request, response);
+   	    			break;
+   	    		case "display_project":
+   	    			getProjectDetails(Integer.parseInt(request.getParameter("id")),request, response);
+   	    			break;
+   	    		case "assign_employee":
+   	    			assignEmployee(request, response);
+   	    			break;
+   	    		case "unassign_employee":
+   	    			removeEmployee(Integer.parseInt(request.getParameter("projectId")),
+   	    					Integer.parseInt(request.getParameter("employeeId")), request, response);
+   	    			break;
+   	    		case "display_assigned_employees":
+   	    			getEmployeesBasicDetails(Integer.parseInt(request.getParameter("projectId")), request, response);
+   	    			break;
+   	    		case "update_project":
+   	    			getUpdatePage(Integer.parseInt(request.getParameter("id")), request, response);
+    		}
+    	} catch (ServletException | IOException e) {
+            logger.logError(e);
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -92,7 +104,8 @@ public class ProjectController extends HttpServlet{
     		throws ServletException, IOException {
     	try {
     		if (projectService.isIdExist(projectId)) {
-    			List<String> projectDetails = new ArrayList<String>(projectService.getProjectDetails(projectId).values());
+    			List<String> projectDetails = new ArrayList<String>(projectService
+    					.getProjectDetails(projectId).values());
     			request.setAttribute("projectDetails", projectDetails);
     			request.getRequestDispatcher("/project_form.jsp").forward(request, response);
     		} else {
@@ -117,8 +130,10 @@ public class ProjectController extends HttpServlet{
     	PrintWriter out = response.getWriter();
     	try {
     		if("".equals(request.getParameter("id"))) {
-    			if (projectService.createProject(request.getParameter("name"), request.getParameter("managerName"),
-    			        Date.valueOf(request.getParameter("startDate")), Date.valueOf(request.getParameter("endDate")))) {
+    			if (projectService.createProject(request.getParameter("name"), 
+    					request.getParameter("managerName"),
+    			        Date.valueOf(request.getParameter("startDate")), 
+    			        Date.valueOf(request.getParameter("endDate")))) {
     				request.setAttribute("message", "Project Created Successfully...!!!");
     				request.getRequestDispatcher("/success.jsp").forward(request, response);
     			} else {
@@ -147,8 +162,8 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    private void getProjectDetails(int projectId, HttpServletRequest request, HttpServletResponse response)
-    		throws ServletException, IOException {
+    private void getProjectDetails(int projectId, HttpServletRequest request,
+    		HttpServletResponse response) throws ServletException, IOException {
     	try {
     		Map<String, String> projectDetails = projectService.getProjectDetails(projectId);
     		if (0 != projectDetails.size()) {
@@ -305,11 +320,14 @@ public class ProjectController extends HttpServlet{
 					employeesIdList.add(Integer.parseInt(employeeId));
 				}
 				projectService.isIdExist(Integer.parseInt(request.getParameter("id")));
-				if (projectService.assignEmployee(employeesIdList, Integer.parseInt(request.getParameter("id")))) {
+				if (projectService.assignEmployee(employeesIdList, 
+						Integer.parseInt(request.getParameter("id")))) {
 					request.setAttribute("message", "Employee Assigned Successfully...!!!");
-					request.getRequestDispatcher("/success.jsp").forward(request, response);
+					request.getRequestDispatcher("/success.jsp")
+					.forward(request, response);
 				} else {
-					request.setAttribute("message", "Employee Assignment Failed...Some employee already assigned");
+					request.setAttribute("message", 
+							"Employee Assignment Failed...Some employee already assigned");
 					request.getRequestDispatcher("/error.jsp").forward(request, response);
 				}
 			}
@@ -328,7 +346,8 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    private void removeEmployee(int projectId, int employeeId, HttpServletRequest request, HttpServletResponse response) 
+    private void removeEmployee(int projectId, int employeeId, HttpServletRequest request, 
+    		HttpServletResponse response) 
     		throws ServletException, IOException {
     	try {
     		projectService.isIdExist(projectId);
@@ -353,14 +372,16 @@ public class ProjectController extends HttpServlet{
      * @throws IOException 
      * @throws ServletException 
      */
-    private void getEmployeesBasicDetails(int projectId, HttpServletRequest request, HttpServletResponse response)
-    		throws ServletException, IOException {
+    private void getEmployeesBasicDetails(int projectId, HttpServletRequest request,
+    		HttpServletResponse response) throws ServletException, IOException {
     	try { 
     		if (projectService.isIdExist(projectId)) {
-    			List<Map<String, String>> employeesDetails =  projectService.getEmployeesBasicDetails(projectId);
+    			List<Map<String, String>> employeesDetails =  projectService
+    					.getEmployeesBasicDetails(projectId);
     			if (0 != employeesDetails.size()) {
     				request.setAttribute("employeesDetails", employeesDetails);
-    				request.getRequestDispatcher("/display_assigned_employees.jsp").forward(request, response);
+    				request.getRequestDispatcher("/display_assigned_employees.jsp")
+    				.forward(request, response);
     			} else {
     				request.setAttribute("message", "No employee assigned for given project");
     				request.getRequestDispatcher("/error.jsp").forward(request, response);	

@@ -16,6 +16,7 @@ import com.ideas2it.employeemanagement.project.dao.ProjectDao;
 import com.ideas2it.employeemanagement.project.model.Project;
 import com.ideas2it.employeemanagement.sessionfactory.DatabaseConnection;
 import com.ideas2it.exceptions.EmployeeManagementException;
+import com.ideas2it.loggers.EmployeeManagementLogger;
 
 /**
  * implementation class of projectDao interface
@@ -24,6 +25,7 @@ import com.ideas2it.exceptions.EmployeeManagementException;
  */
 public class ProjectDaoImpl implements ProjectDao {
     private SessionFactory sessionFactory = DatabaseConnection.getSessionFactoryInstance();
+    EmployeeManagementLogger logger = new EmployeeManagementLogger(ProjectDaoImpl.class); 
 
     /**
      * {@inheritDoc}
@@ -41,12 +43,15 @@ public class ProjectDaoImpl implements ProjectDao {
             transaction.commit();    
         } catch (HibernateException e1) {
             insertStatus = false;
+            logger.logError(e1);
             throw new EmployeeManagementException("ProjectCreation failed...");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return insertStatus;
@@ -64,12 +69,15 @@ public class ProjectDaoImpl implements ProjectDao {
             session = sessionFactory.openSession();
             project = session.get(Project.class, projectId);      
         } catch (HibernateException e1) {
+        	logger.logError(e1);
             throw new EmployeeManagementException ("Can't fetch project...!!!");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return project;
@@ -80,7 +88,8 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws EmployeeManagementException {
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) 
+    		throws EmployeeManagementException {
         Session session = null; 
         Project project = null;
         List<Project> projects = new ArrayList<Project>();
@@ -90,12 +99,15 @@ public class ProjectDaoImpl implements ProjectDao {
             criteria.add(Restrictions.in("id", projectIdList));
             projects = criteria.list();      
         } catch (HibernateException e1) {
+        	logger.logError(e1);
         	throw new EmployeeManagementException("Can't fetch project...!!!");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return projects;
@@ -106,7 +118,8 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public Project getProjectWithEmployee(int projectId) throws EmployeeManagementException {
+    public Project getProjectWithEmployee(int projectId) 
+    		throws EmployeeManagementException {
         Project project = null;
         Session session = null; 
         try {
@@ -114,15 +127,17 @@ public class ProjectDaoImpl implements ProjectDao {
             project = session.get(Project.class, projectId);
             if (null != project) {
             	for (Employee employee : project.getEmployees()) {}
-            }
-            
+            }         
         } catch (HibernateException e1) {
+        	logger.logError(e1);
         	throw new EmployeeManagementException ("Can't fetch project...!!!");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return project;
@@ -133,7 +148,8 @@ public class ProjectDaoImpl implements ProjectDao {
      * @throws FetchFailException 
      */
     @Override
-    public List<Project> getAllProject(boolean isDeleted) throws EmployeeManagementException {
+    public List<Project> getAllProject(boolean isDeleted) 
+    		throws EmployeeManagementException {
         List<Project> projects = new ArrayList<Project>();  
         Session session = null;  
         try {
@@ -144,12 +160,15 @@ public class ProjectDaoImpl implements ProjectDao {
                 projects.add((Project)object);
             }
         } catch (HibernateException e1) {
+        	logger.logError(e1);
         	throw new EmployeeManagementException ("Can't fetch projects...!!!");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return projects;   
@@ -173,12 +192,15 @@ public class ProjectDaoImpl implements ProjectDao {
                 projects.add(project);
             }
         } catch (HibernateException e1) {
+        	logger.logError(e1);
         	throw new EmployeeManagementException ("Can't fetch projects...!!!");
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return projects;   
@@ -199,13 +221,15 @@ public class ProjectDaoImpl implements ProjectDao {
             transaction.commit();
             updateStatus = true;
         } catch (Exception e1) {
+        	logger.logError(e1);
             updateStatus = false;
-            e1.printStackTrace();
         } finally {
             try {
-                session.close();
+            	if (null != session) {
+            		session.close();
+            	}
             } catch (HibernateException e2) {
-                e2.printStackTrace();
+            	logger.logError(e2);
             }
         }
         return updateStatus;
@@ -217,23 +241,26 @@ public class ProjectDaoImpl implements ProjectDao {
      */
 	@Override
 	public boolean isIdExist(int projectId) throws EmployeeManagementException {
-		 Session session = null; 
-	        Employee employee = null;
-	        boolean isIdExist = false;
-	        Query query;
-	        try {
-	            session = sessionFactory.openSession();
-	            query = session.createQuery("select id from Project where id = " + projectId);
-	            isIdExist = null != query.uniqueResult() ? true : false;
-	        } catch (HibernateException e1) {
-	            throw new EmployeeManagementException("Something went wrong...!!!");
-	        } finally {
-	            try {
-	                session.close();
-	            } catch (HibernateException e2) {
-	                e2.printStackTrace();
-	            }
-	        }
-	        return isIdExist;
-	} 
+		Session session = null;
+		Employee employee = null;
+		boolean isIdExist = false;
+		Query query;
+		try {
+			session = sessionFactory.openSession();
+			query = session.createQuery("select id from Project where id = " + projectId);
+			isIdExist = null != query.uniqueResult() ? true : false;
+		} catch (HibernateException e1) {
+			logger.logError(e1);
+			throw new EmployeeManagementException("Something went wrong...!!!");
+		} finally {
+			try {
+				if (null != session) {
+					session.close();
+				}
+			} catch (HibernateException e2) {
+				logger.logError(e2);
+			}
+		}
+		return isIdExist;
+	}
 }

@@ -24,7 +24,8 @@ public interface ProjectService {
      * @throws CreateFailException 
      * @throws EmployeeManagementException 
      */
-    public boolean createProject(String name, String managerName, Date startDate, Date endDate) throws EmployeeManagementException;
+    public boolean createProject(String name, String managerName, Date startDate, Date endDate) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to get project details based on project id
@@ -33,7 +34,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public Map<String, String> getProjectDetails(int projectId) throws EmployeeManagementException;
+    public Map<String, String> getProjectDetails(int projectId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to display all project present in database
@@ -42,7 +44,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public List<Map<String, String>> getAllProjectDetails(boolean isDeleted) throws EmployeeManagementException;
+    public List<Map<String, String>> getAllProjectDetails(boolean isDeleted) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to delete project based on projectId
@@ -95,7 +98,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) throws EmployeeManagementException;
+    public boolean assignEmployee(List<Integer> employeeIdList, int projectId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to get all projects basics details
@@ -121,7 +125,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws EmployeeManagementException;
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to remove assigned employee from project
@@ -129,7 +134,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public boolean removeEmployee(int projectId, int employeeId) throws EmployeeManagementException;
+    public boolean removeEmployee(int projectId, int employeeId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to get details of employees assigned for given project
@@ -138,7 +144,8 @@ public interface ProjectService {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public List<Map<String, String>> getEmployeesBasicDetails(int projectId) throws EmployeeManagementException;
+    public List<Map<String, String>> getEmployeesBasicDetails(int projectId) 
+    		throws EmployeeManagementException;
 
     /**
      * Method to check id is present in database or not

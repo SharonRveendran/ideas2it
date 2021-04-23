@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import javax.servlet.ServletException;
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
 import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl;
 import com.ideas2it.exceptions.EmployeeManagementException;
-import org.apache.log4j.Logger;
+import com.ideas2it.loggers.EmployeeManagementLogger;
 
 /**
  * Employee controller servlet class
@@ -22,9 +21,8 @@ import org.apache.log4j.Logger;
  * @created 21-04-2021
  */
 public class EmployeeController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	//final static Logger logger = Logger.getLogger(EmployeeController.class);
 	private EmployeeService employeeService = new EmployeeServiceImpl();
+	EmployeeManagementLogger logger = new EmployeeManagementLogger(EmployeeController.class);
     
     /**
      * Method to accept get request from  user
@@ -33,16 +31,21 @@ public class EmployeeController extends HttpServlet {
      * @throws IOException 
      * @throws ServletException 
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String option = request.getParameter("action");
-        switch (option) {
-            case "display_all_employee":
-            	 //logger.info("Successfull.....................!!!");
-    	        getAllEmployeesDetails(request, response);
-	            break;
-            case "display_available_project":
-            	getAllProjectsBasicDetails(request, response); 
-        }
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    	try {
+    		String option = request.getParameter("action");
+        	switch (option) {
+            	case "display_all_employee":
+            		logger.logError("Final done successfullyyy");
+            		getAllEmployeesDetails(request, response);
+            		break;
+            	case "display_available_project":
+            		getAllProjectsBasicDetails(request, response); 
+        	}
+    	} catch (ServletException | IOException e) {
+            logger.logError(e);
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -52,34 +55,41 @@ public class EmployeeController extends HttpServlet {
      * @throws IOException 
      * @throws ServletException 
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String option = request.getParameter("action");
-        switch (option) {
-   	        case "create_or_update_employee":
-   	    	    insertOrUpdateEmployee(request, response);
-   	            break;
-   	        case "display_employee":
-    	        getEmployeeDetails(Integer.parseInt(request.getParameter("id")), request, response);
-    	        break;
-   	        case "delete_employee":
-    	        deleteEmployee(Integer.parseInt(request.getParameter("id")), request, response);
-    	        break;
-            case "restore_employee":
-    	        restoreEmployee(Integer.parseInt(request.getParameter("id")), request, response);
-    	        break;
-            case "update_employee":
-    	        getUpdatePage(Integer.parseInt(request.getParameter("id")), request, response);
-          	    break;
-            case "assign_project":
-            	assignProject(request, response); 
-            	break;
-            case "unassign_project":
-            	removeProject(Integer.parseInt(request.getParameter("employeeId")),
-                        Integer.parseInt(request.getParameter("projectId")), request, response);
-            	break;
-            case "display_assigned_projects":
-            	getProjectsBasicDetails(Integer.parseInt(request.getParameter("employeeId")), request, response); 	    
-        }
+    public void doPost(HttpServletRequest request, HttpServletResponse response) 
+    		throws ServletException, IOException {
+    	try {
+    		String option = request.getParameter("action");
+    		switch (option) {
+   	        	case "create_or_update_employee":
+   	        		insertOrUpdateEmployee(request, response);
+   	        		break;
+   	        	case "display_employee":
+   	        		getEmployeeDetails(Integer.parseInt(request.getParameter("id")), request, response);
+   	        		break;
+   	        	case "delete_employee":
+   	        		deleteEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+   	        		break;
+   	        	case "restore_employee":
+   	        		restoreEmployee(Integer.parseInt(request.getParameter("id")), request, response);
+   	        		break;
+   	        	case "update_employee":
+   	        		getUpdatePage(Integer.parseInt(request.getParameter("id")), request, response);
+   	        		break;
+   	        	case "assign_project":
+   	        		assignProject(request, response); 
+   	        		break;
+   	        	case "unassign_project":
+   	        		removeProject(Integer.parseInt(request.getParameter("employeeId")),
+   	        				Integer.parseInt(request.getParameter("projectId")), request, response);
+   	        		break;
+   	        	case "display_assigned_projects":
+   	        		getProjectsBasicDetails(Integer.parseInt(request.getParameter("employeeId")),
+   	        				request, response); 	    
+    		}
+    	} catch (ServletException | IOException e) {
+            logger.logError(e);
+			e.printStackTrace();
+		}
     }
     
     /**

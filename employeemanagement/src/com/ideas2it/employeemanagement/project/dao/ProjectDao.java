@@ -37,7 +37,8 @@ public interface ProjectDao {
      * @throws FetchFailException 
      * @throws EmployeeManagementException 
      */
-    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) throws EmployeeManagementException;    
+    public List<Project> getSpecifiedProjects(List<Integer> projectIdList) 
+    		throws EmployeeManagementException;    
 
     /**
      * Method to get project object with employee object list based on project id

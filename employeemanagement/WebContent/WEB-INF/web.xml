@@ -3,10 +3,6 @@
   <servlet>
     <servlet-name>employeeController</servlet-name>
     <servlet-class>com.ideas2it.employeemanagement.employee.controller.EmployeeController</servlet-class>
-    <init-param>
-			<param-name>log4j-properties-location</param-name>
-			<param-value>WEB-INF/log4j.properties</param-value>
-	</init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>employeeController</servlet-name>
