@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -30,28 +29,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
    
     /** 
      * {@inheritDoc}
-     * @throws CreateFailException 
      */
     @Override
      public void insertEmployee(Employee employee) throws EmployeeManagementException {
-        Session session = null; 
         Transaction transaction = null; 
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.save(employee);
             transaction.commit();
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
             throw new EmployeeManagementException("Insertion failed...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
     }
 
@@ -60,27 +48,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public boolean isIdExist(int id) throws EmployeeManagementException {
-        Session session = null; 
-        Employee employee = null;
-        boolean isIdExist = false;
-        Query query;
-        try {
-            session = sessionFactory.openSession();
-            query = session.createQuery("select id from Employee where id = " + id);
-            isIdExist = null != query.uniqueResult() ? true : false;
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
-        	throw new EmployeeManagementException("Something went wrong...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
-        }
-        return isIdExist;
+    	boolean isIdExist = false;
+    	try (Session session = sessionFactory.openSession()) {
+			isIdExist = session.get(Employee.class, id) != null;
+		} catch (HibernateException | NullPointerException e) {
+			logger.logError(e);
+			throw new EmployeeManagementException("Something went wrong...!!!");
+		}
+		return isIdExist;
     }
 
     /**
@@ -88,25 +63,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public Employee getEmployee(int id) throws EmployeeManagementException {
-        Session session = null; 
         Employee employee = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             employee = session.get(Employee.class, id);
             if (null != employee) {
                 for (Address address : employee.getAddresses()){}
             }
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
             throw new EmployeeManagementException("Can't fetch employee...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
         return employee; 
     }
@@ -116,55 +81,33 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getSpecifiedEmployees(List<Integer> employeeIdList) 
-    		throws EmployeeManagementException {
-        Session session = null; 
+    		throws EmployeeManagementException { 
         List<Employee> employees = new ArrayList<Employee>();
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             Criteria criteria = session.createCriteria(Employee.class);
             criteria.add(Restrictions.in("id", employeeIdList));
             employees = criteria.list();      
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
         	throw new EmployeeManagementException("Can't fetch employee...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
         return employees;
     }
 
     /**
-     * Method to get employee with project from database
-     * @param employeeId employee id
-     * @return employee details as a string
-     * @throws FetchFailException 
+     * {@inheritDoc}
      */
+    @Override
      public Employee getEmployeeWithProject(int employeeId) throws EmployeeManagementException {
-        Session session = null; 
         Employee employee = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             employee = session.get(Employee.class, employeeId);
             if (null != employee) {
                 for (Project project : employee.getProjects()){} 
             }
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
         	throw new EmployeeManagementException("Can't fetch employee...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
         return employee; 
      }
@@ -174,24 +117,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getAllEmployee() throws EmployeeManagementException {
-        Session session = null; 
         List<Employee> employees = new ArrayList<Employee>();  
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             Criteria criteria = session.createCriteria(Employee.class);
             criteria.add(Restrictions.eq("isDeleted", false));
             employees = criteria.list();   
-        } catch (HibernateException e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
         	throw new EmployeeManagementException("Can't fetch employees...!!!");
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
         return employees;
     }
@@ -200,27 +133,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritDoc}
      */
     @Override
-     public boolean updateEmployee(Employee employee) {
+     public boolean updateEmployee(Employee employee) throws EmployeeManagementException {
         boolean updateStatus = false;
-        Session session = null; 
         Transaction transaction = null; 
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.update(employee);
             transaction.commit();  
             updateStatus = true;
-        } catch (Exception e1) {
-        	logger.logError(e1);
+        } catch (HibernateException | NullPointerException e) {
+        	logger.logError(e);
             updateStatus = false;
-        } finally {
-            try {
-            	if (null != session) {
-            		session.close();
-            	}
-            } catch (HibernateException e2) {
-            	logger.logError(e2);
-            }
         }
         return updateStatus;
      }

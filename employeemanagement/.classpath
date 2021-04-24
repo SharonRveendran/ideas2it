@@ -10,9 +10,9 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api.jar/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/properties"/>
-	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api.jar/log4j-api-2.14.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api.jar/log4j-core-2.14.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api, hibernate,jstl,log4j2.jar/log4j-api-2.14.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api, hibernate,jstl,log4j2.jar/log4j-core-2.14.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User024/Desktop/servlet-api, hibernate,jstl,log4j2.jar/servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -54,8 +54,9 @@ public interface EmployeeDao {
      * Method to delete employee based on employee id
      * @param employee employee object  
      * @return true for successful deletion
+     * @throws EmployeeManagementException 
      */
-    public boolean updateEmployee(Employee employee);
+    public boolean updateEmployee(Employee employee) throws EmployeeManagementException;
 
     /**
      * Method to get employee with project from database

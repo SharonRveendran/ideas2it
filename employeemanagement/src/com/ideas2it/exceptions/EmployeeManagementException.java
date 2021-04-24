@@ -1,7 +1,7 @@
 package com.ideas2it.exceptions;
 
 /**
- * Custom Exception class for id check
+ * Custom Exception class
  * @author Sharon v
  * @created 22/04/2021
  */
