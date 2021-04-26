@@ -36,7 +36,7 @@ public class EmployeeController extends HttpServlet {
     		String option = request.getParameter("action");
         	switch (option) {
             	case "display_all_employee":
-            		logger.logError("...........Rollong done sussessfully............");
+            		logger.logError("...........maven done...........");
             		getAllEmployeesDetails(request, response);
             		break;
             	case "display_available_project":
