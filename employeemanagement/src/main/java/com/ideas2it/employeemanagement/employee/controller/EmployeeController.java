@@ -1,6 +1,7 @@
 package com.ideas2it.employeemanagement.employee.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.ServletException;
 
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
@@ -20,6 +25,7 @@ import com.ideas2it.loggers.EmployeeManagementLogger;
  * @author Sharon V
  * @created 21-04-2021
  */
+@Controller
 public class EmployeeController extends HttpServlet {
 	private EmployeeService employeeService = new EmployeeServiceImpl();
 	EmployeeManagementLogger logger = new EmployeeManagementLogger(EmployeeController.class);
@@ -401,5 +407,21 @@ public class EmployeeController extends HttpServlet {
     		request.setAttribute("message", e.getMessage());
     		request.getRequestDispatcher("/error.jsp").forward(request, response);
     	}
+    }
+    @RequestMapping("/")
+    public String hai2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	PrintWriter out = response.getWriter();
+    	out.println("Home page");
+    	return "index";
+    }
+    @RequestMapping("/employee_management")
+    public String getEmployeeManagementPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	PrintWriter out = response.getWriter();
+    	out.println("Welcome to employee management");
+		return "employeemanagement";
+    }
+    @RequestMapping("/employee_form")
+    public String getEmployeeForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return "employee_form";
     }
 }
