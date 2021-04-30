@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +10,7 @@
 <body bgcolor="DarkSeaGreen">
 <button type ="button" style="background-color:AliceBluestyle; height:30px; width:5%"><a href="welcome.jsp"><b>Home</b></a></button>
   <button type ="button" style="background-color:AliceBlue; height:30px; width:5%"><a href="employeemanagement.jsp"><b>Back</b></a></button>
-  <form action="employee?action=create_or_update_employee" method="post">
+  <!--<form action="employee?action=create_or_update_employee" method="post">
   <center>
    <h2> Enter Employee Details</h2>
     <input type = "hidden" value="${employeeDetails.get(0)}" name = "id" /><br>
@@ -32,6 +33,14 @@
     <label></label>Country        : <input type = "text" name = "temporaryCountry" value="${employeeDetails.get(15)}" /><br></pre></b></h3>
     <input type = "submit" value = "Submit"/>
   </center>
-  </form>
+  </form>  -->
+  <form:form action="create_employee" method="post" modelAttribute="employee">
+    <p>Name : <form:input path="name"/></p>
+    <p>Designation : <form:input path="designation"/></p>
+    <p>salary : <form:input path="salary" type = "number"/></p>
+    <p>Mobile : <form:input path="mobile" type = "number"/></p>
+    <p>Date   : <form:input path="dob" type ="date"/>
+    <input type="submit" value="add ">
+  </form:form>
 </body>
 </html>

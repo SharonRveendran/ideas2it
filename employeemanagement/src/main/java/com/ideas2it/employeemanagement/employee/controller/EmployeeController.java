@@ -11,10 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletException;
 
+import com.ideas2it.employeemanagement.employee.model.Employee;
 import com.ideas2it.employeemanagement.employee.service.EmployeeService;
 import com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl;
 import com.ideas2it.exceptions.EmployeeManagementException;
@@ -409,19 +412,24 @@ public class EmployeeController extends HttpServlet {
     	}
     }
     @RequestMapping("/")
-    public String hai2(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	PrintWriter out = response.getWriter();
-    	out.println("Home page");
+    public String getIndexPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	return "index";
     }
     @RequestMapping("/employee_management")
     public String getEmployeeManagementPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	PrintWriter out = response.getWriter();
-    	out.println("Welcome to employee management");
 		return "employeemanagement";
     }
     @RequestMapping("/employee_form")
-    public String getEmployeeForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String getEmployeeForm(@ModelAttribute("employee") Employee employee) throws IOException {
 		return "employee_form";
+    }
+    @RequestMapping("/create_employee")
+    public void createEmployee(Employee employee, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		try
+		{employee.setIsDeleted(false);
+			employeeService.createEmployee(employee);
+		} catch(EmployeeManagementException e) {
+			
+		}
     }
 }

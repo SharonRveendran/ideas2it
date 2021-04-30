@@ -326,4 +326,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		return logMessage;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createEmployee(Employee employee) throws EmployeeManagementException{
+    	employeeDao.insertEmployee(employee);
+    }
 }

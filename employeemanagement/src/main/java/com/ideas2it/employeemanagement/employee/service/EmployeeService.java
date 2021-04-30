@@ -161,4 +161,5 @@ public interface EmployeeService {
 	 * @return stack trace of exception as string 
 	 */
 	public String getStackTrace(Exception e);
+	public void createEmployee(Employee employee) throws EmployeeManagementException;
 }
