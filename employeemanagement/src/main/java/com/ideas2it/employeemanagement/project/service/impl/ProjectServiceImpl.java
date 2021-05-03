@@ -178,8 +178,9 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public List<List<String>> getAllEmployeesDetails() throws EmployeeManagementException {
-        EmployeeService employeeService = new EmployeeServiceImpl();
-        return employeeService.getAllEmployeeBasicDetails();
+//        EmployeeService employeeService = new EmployeeServiceImpl();
+//        return employeeService.getAllEmployeeBasicDetails();
+    	return null;
     }
 
     /**
@@ -187,14 +188,15 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
 	public boolean assignEmployee(List<Integer> employeeIdList, int projectId) throws EmployeeManagementException {
-		Project project = projectDao.getProjectWithEmployee(projectId);
-		EmployeeService employeeService = new EmployeeServiceImpl();
-		if (null != project) {
-			List<Employee> employeeList = project.getEmployees();
-			employeeList.addAll(employeeService.getSpecifiedEmployees(employeeIdList));
-			project.setEmployees(employeeList);
-		}
-		return projectDao.updateProject(project);
+//		Project project = projectDao.getProjectWithEmployee(projectId);
+//		EmployeeService employeeService = new EmployeeServiceImpl();
+//		if (null != project) {
+//			List<Employee> employeeList = project.getEmployees();
+//			employeeList.addAll(employeeService.getSpecifiedEmployees(employeeIdList));
+//			project.setEmployees(employeeList);
+//		}
+//		return projectDao.updateProject(project);
+    	return false;
 	}
 
     /**
@@ -249,7 +251,7 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectDao.isIdExist(projectId);
 	}
 	
-	 /**
+	/**
      * {@inheritDoc}
      */
     @Override
@@ -260,5 +262,13 @@ public class ProjectServiceImpl implements ProjectService {
 			logMessage = logMessage + "\n" + stackTraceElement.toString();
 		}
 		return logMessage;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Project> getAllProjects() throws EmployeeManagementException {
+    	return projectDao.getAllProject(false);
     }
 }

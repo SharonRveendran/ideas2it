@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,39 +10,103 @@
 <title>Employee Creation</title>
 </head>
 <body bgcolor="DarkSeaGreen">
-<button type ="button" style="background-color:AliceBluestyle; height:30px; width:5%"><a href="welcome.jsp"><b>Home</b></a></button>
-  <button type ="button" style="background-color:AliceBlue; height:30px; width:5%"><a href="employeemanagement.jsp"><b>Back</b></a></button>
-  <!--<form action="employee?action=create_or_update_employee" method="post">
-  <center>
-   <h2> Enter Employee Details</h2>
-    <input type = "hidden" value="${employeeDetails.get(0)}" name = "id" /><br>
-    <label><pre><b><h3>    Name          :</label><input type = "text" name = "name" value="${employeeDetails.get(1)}" required = "" /><br>
-    <label>  Date of Birth :</label><input type = "date" name = "dob" value="${employeeDetails.get(2)}" required = "" /><br>
-    <label>Mobile Number :</label><input type = "tel" pattern="[7-9][0-9]{9}" name = "mobile" value="${employeeDetails.get(3)}" required=""/><br>
-    <label>Designation   :</label><input type = "text" name = "designation" value="${employeeDetails.get(4)}" required = "" /><br>
-    <label>Salary        :</label><input type = "number" name = "salary" value="${employeeDetails.get(5)}" required = "" /><br>
-    <h2>Enter Permanent Address Details</h2>
-    <label></label>Door Number    : <input type = "text" name = "doorNumber" value="${employeeDetails.get(6)}" required = "" /><br>
-    <label></label>Street         : <input type = "text" name = "street" value="${employeeDetails.get(7)}" required = "" /><br>
-    <label></label>District       : <input type = "text" name = "district" value="${employeeDetails.get(8)}" required = "" /><br>
-    <label></label>State          : <input type = "text" name = "state" value="${employeeDetails.get(9)}" required = "" /><br>
-    <label></label>Country        : <input type = "text" name = "country" value="${employeeDetails.get(10)}" required = "" /><br>
-    <h2>Enter Temporary Address Details</h2>
-    <label></label>Door Number    : <input type = "text" name = "temporaryDoorNumber" value="${employeeDetails.get(11)}"/><br>
-    <label></label>Street         : <input type = "text" name = "temporaryStreet" value="${employeeDetails.get(12)}"/><br>
-    <label></label>District       : <input type = "text" name = "temporaryDistrict" value="${employeeDetails.get(13)}"/><br>
-    <label></label>State          : <input type = "text" name = "temporaryState" value="${employeeDetails.get(14)}"/><br>
-    <label></label>Country        : <input type = "text" name = "temporaryCountry" value="${employeeDetails.get(15)}" /><br></pre></b></h3>
-    <input type = "submit" value = "Submit"/>
-  </center>
-  </form>  -->
-  <form:form action="create_employee" method="post" modelAttribute="employee">
-    <p>Name : <form:input path="name"/></p>
-    <p>Designation : <form:input path="designation"/></p>
-    <p>salary : <form:input path="salary" type = "number"/></p>
-    <p>Mobile : <form:input path="mobile" type = "number"/></p>
-    <p>Date   : <form:input path="dob" type ="date"/>
-    <input type="submit" value="add ">
-  </form:form>
+	<button type="button"
+		style="background-color: AliceBluestyle; height: 30px; width: 5%">
+		<a href="/"><b>Home</b></a>
+	</button>
+	<button type="button"
+		style="background-color: AliceBlue; height: 30px; width: 5%">
+		<a href="/employee_management"><b>Back</b></a>
+	</button>
+	<form:form action="/create_employee" method="post"
+		modelAttribute="employee">
+		<div style="text-align: center">
+			<br>
+			<br>
+			<h2>Enter Employee Details</h2>
+			<br>
+			<form:hidden path="id" value="${employee.id}" />
+			<p>
+				Name:
+				<form:input path="name" value="${employee.name}" required="true" />
+			</p>
+			<p>
+				Designation:
+				<form:input path="designation" value="${employee.designation}"
+					required="true" />
+			</p>
+			<p>
+				salary:
+				<form:input path="salary" type="number" value="${employee.salary}"
+					required="true" />
+			</p>
+			<p>
+				Mobile:
+				<form:input path="mobile" type="tel" pattern="[7-9][0-9]{9}"
+					value="${employee.mobile}" required="true" />
+			</p>
+			<p>
+				Dob:
+				<form:input path="dob" type="date" value="${employee.dob}"
+					required="true" />
+				<br><br>
+			<br><br><h3>Enter Permanent Address Details</h3>
+			<p>
+				Door No:
+				<form:input type="text" path="addresses[0].doorNumber"
+					value="${employee.addresses[0].doorNumber}" required="true" />
+				<br>
+			<p>
+				Street:
+				<form:input type="text" path="addresses[0].street"
+					value="${employee.addresses[0].street}" required="true" />
+				<br>
+			<p>
+				District:
+				<form:input type="text" path="addresses[0].district"
+					value="${employee.addresses[0].district}" required="true" />
+				<br>
+			<p>
+				State:
+				<form:input type="text" path="addresses[0].state"
+					value="${employee.addresses[0].state}" required="true" />
+				<br>
+			<p>
+				Country:
+				<form:input type="text" path="addresses[0].country"
+					value="${employee.addresses[0].country}" required="true" />
+				<br>
+				<form:hidden path="addresses[0].addressType" value="Permanent" />
+				<br>
+			<br><br><h3>Enter Temporary Address Details</h3>
+			<p>
+				Door No:
+				<form:input type="text" path="addresses[1].doorNumber"
+					value="${employee.addresses[1].doorNumber}" />
+				<br>
+			<p>
+				Street:
+				<form:input type="text" path="addresses[1].street"
+					value="${employee.addresses[1].street}" />
+				<br>
+			<p>
+				District:
+				<form:input type="text" path="addresses[1].district"
+					value="${employee.addresses[1].district}" />
+				<br>
+			<p>
+				State:
+				<form:input type="text" path="addresses[1].state"
+					value="${employee.addresses[1].state}" />
+				<br>
+			<p>
+				Country:
+				<form:input type="text" path="addresses[1].country"
+					value="${employee.addresses[1].country}" />
+				<br>
+				<form:hidden path="addresses[1].addressType" value="Temporary" />
+				<input type="submit" value="Submit">
+		</div>
+	</form:form>
 </body>
 </html>

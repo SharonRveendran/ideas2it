@@ -1,58 +1,83 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Display Employee</title>
 <style>
-h3 {text-align: center;}
+h3 {
+	text-align: center;
+}
 </style>
 </head>
 <body bgcolor="#afcfaf">
-  <button type ="button" style="background-color:AliceBluestyle; height:30px; width:5%"><a href="welcome.jsp"><b>Home</b></a></button>
-  <button type ="button" style="background-color:AliceBlue; height:30px; width:5%"><a href="employeemanagement.jsp"><b>Back</b></a></button>
-  <form action="employee?action=display_employee" method="post">
-    <h3>Enter employee Id :</h3>
-    <center><input type = "number" name = "id"r">
-    <input type = "submit" value = "Search Employee"/>
-    </center>
-  </form><br><br>
-  <table align="center" border="3" style="width:80%;text-align:center">
-    <thead style="background-color:#609f60">
-      <tr style="height: 50px">
-        <th>Id</th>
-        <th>Name</th>
-        <th>Date of Birth</th>
-        <th>Mobile Number</th>
-        <th>Designation</th>
-        <th>Salary</th>
-        <th>Permanent Address</th>
-        <th>Temporary Address</th>
-      </tr>
-    </thead>
-    <tbody style="background-color:Lavender">
-      <c:forEach items="${employeesDetails}" var = "employeeDetails">
-      <tr style="height: 40px"> 
-        <td>${employeeDetails.get("id")}</td>
-        <td>${employeeDetails.get("name")}</td>
-        <td>${employeeDetails.get("dob")}</td>
-        <td>${employeeDetails.get("mobile")}</td>
-        <td>${employeeDetails.get("designation")}</td>
-        <td>${employeeDetails.get("salary")}</td>
-        <td>${employeeDetails.get("permanentAddress")}</td>
-        <td>${employeeDetails.get("temporaryAddress")}</td>             
-      </tr>
-      </c:forEach>
-    </tbody>
-  </table>
-  <br>
-      <center>
-      <button type ="button" style="height:30px; width:15% "><a href="delete_employee.jsp"><b>Delete Employee</b></a></button></td>
-      <button type ="button" style="height:30px; width:15%"><a href="update_employee.jsp"><b>Update Employee</b></a></button></tr></td>
-      <button type ="button" style="height:30px; width:15%"><a href="display_assigned_projects.jsp"><b>Display Assigned Projects</b></a></button>
-      </center>
-      </body>
+	<button type="button"
+		style="background-color: AliceBluestyle; height: 30px; width: 5%">
+		<a href="/"><b>Home</b></a>
+	</button>
+	<button type="button"
+		style="background-color: AliceBlue; height: 30px; width: 5%">
+		<a href="/employee_management"><b>Back</b></a>
+	</button>
+	<div style="text-align: center">
+		<h2>${message}</h2>
+		<form:form action="/display_employee" method="post">
+			<h3>Enter employee Id :</h3>
+			<input type="number" name="id" />
+			<input type="submit" value="Search Employee" />
+		</form:form>
+		<br>
+		<br>
+	</div>
+	<table align="center" border="3" style="width: 90%; text-align: center ; height: 60px">
+		<thead style="background-color: #609f60">
+			<tr style="height: 50px">
+				<th>Id</th>
+				<th style="width:7%">Name</th>
+				<th>Date of Birth</th>
+				<th>Mobile Number</th>
+				<th style="width:10%">Designation</th>
+				<th style="width:6%">Salary</th>
+				<th style="width:12%">Permanent Address</th>
+				<th style="width:12%">Temporary Address</th>
+				<th style="width:12%">Assign/Unassign</th>
+				<th>Delete</th>
+				<th>Update</th>
+				<th style="width:12%">Show Projects</th>
+			</tr>
+		</thead>
+		<tbody style="background-color: Lavender">
+			<c:forEach items="${employees}" var="employee">
+				<tr style="height: 60px">
+					<td>${employee.id}</td>
+					<td>${employee.name}</td>
+					<td>${employee.dob}</td>
+					<td>${employee.mobile}</td>
+					<td>${employee.designation}</td>
+					<td>${employee.salary}</td>
+					<td>${employee.addresses[0]}</td>
+					<td>${employee.addresses[1]}</td>
+					<td>
+						<button style="background-color: yellowgreen ; height: 30px ; font-weight:bold"
+							onclick="document.location.href='/display_available_projects/${employee.getId()}'">Assign</button>
+						/
+						<button style="background-color: yellowgreen ; height: 30px ; font-weight:bold"
+							onclick="document.location.href='/get_assigned_projects/${employee.getId()}'">UnAssign</button>
+					</td>
+					<td><button style="background-color: red; color: white ; height: 30px ; font-weight:bold"
+							onclick="document.location.href='/delete_employee/${employee.getId()}'">Delete</button></td>
+					<td><button style="background-color: yellow ; height: 30px ; font-weight:bold"
+							onclick="document.location.href='/update_employee/${employee.getId()}'">Update</button></td>
+					<td ><button style="background-color: yellowgreen ; height: 30px ; font-weight:bold"
+							onclick="document.location.href='/display_assigned_projects/${employee.getId()}'">Assigned
+							Projects</button></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</body>
 </html>

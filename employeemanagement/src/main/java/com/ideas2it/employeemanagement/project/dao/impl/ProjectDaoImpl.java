@@ -70,8 +70,8 @@ public class ProjectDaoImpl implements ProjectDao {
     		throws EmployeeManagementException {
         List<Project> projects = new ArrayList<Project>();
         try (Session session = sessionFactory.openSession()) {
-        	Query query = session.createQuery("from Employee where id IN :employeeIdList")
-        			.setParameter("employeeIdList", projectIdList);
+        	Query query = session.createQuery("from Project where id IN :projectIdList")
+        			.setParameter("projectIdList", projectIdList);
         	projects = query.getResultList();     
         } catch (HibernateException e) {
         	logger.logError(getStackTrace(e));

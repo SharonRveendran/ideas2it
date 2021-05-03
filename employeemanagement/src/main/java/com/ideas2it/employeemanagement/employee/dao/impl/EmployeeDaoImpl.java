@@ -40,7 +40,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             transaction.commit();
         } catch (HibernateException e) {
         	logger.logError(getStackTrace(e));
-            throw new EmployeeManagementException("Insertion failed...!!!");
+            throw new EmployeeManagementException("Employee Creation failed...!!!");
         }
     }
 
@@ -51,7 +51,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public boolean isIdExist(int id) throws EmployeeManagementException {
     	boolean isIdExist = false;
     	try (Session session = sessionFactory.openSession()) {
-			isIdExist = session.get(Employee.class, id) != null;
+    		Employee employee = session.get(Employee.class, id);
+			if (null != employee) {
+				isIdExist = !employee.getIsDeleted();
+			}
 		} catch (HibernateException e) {
 			logger.logError(getStackTrace(e));
 			throw new EmployeeManagementException("Something went wrong...!!!");
@@ -105,6 +108,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             employee = session.get(Employee.class, employeeId);
             if (null != employee) {
                 for (Project project : employee.getProjects()){} 
+                for (Address address : employee.getAddresses()){}
             }
         } catch (HibernateException e) {
         	logger.logError(getStackTrace(e));
@@ -134,19 +138,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * {@inheritDoc}
      */
     @Override
-     public boolean updateEmployee(Employee employee) throws EmployeeManagementException {
-        boolean updateStatus = false;
+     public void updateEmployee(Employee employee) throws EmployeeManagementException {
         Transaction transaction = null; 
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.update(employee);
             transaction.commit();  
-            updateStatus = true;
         } catch (HibernateException e) {
         	logger.logError(getStackTrace(e));
-            updateStatus = false;
+        	throw new EmployeeManagementException("Something went wrong...!!!");
         }
-        return updateStatus;
      }
    
     /**

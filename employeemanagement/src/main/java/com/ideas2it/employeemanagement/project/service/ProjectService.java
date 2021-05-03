@@ -161,4 +161,11 @@ public interface ProjectService {
 	 * @return stack trace of exception as string 
 	 */
 	public String getStackTrace(Exception e);
+
+	/**
+	 * Method to get all project exist in database
+	 * @return list of all projects
+	 * @throws EmployeeManagementException 
+	 */
+	List<Project> getAllProjects() throws EmployeeManagementException;
 }
