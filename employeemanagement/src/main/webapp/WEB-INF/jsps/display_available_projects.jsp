@@ -24,7 +24,7 @@
 		</div>
 		<c:forEach items="${projects}" var="project">
 			<p style="margin-left: 47%">
-				<input type="checkbox" name="projects" value="${project.id}" />${project.name}</p>
+				<input type="checkbox" name="projects" value="${project.id}" />${project.id}:${project.name}</p>
 		</c:forEach>
 		<div style="text-align: center">
 			<br>

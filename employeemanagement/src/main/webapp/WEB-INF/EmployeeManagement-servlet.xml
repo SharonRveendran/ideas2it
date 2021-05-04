@@ -14,7 +14,4 @@
 		<property name="prefix" value="/WEB-INF/jsps/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	 <bean id="employeeService"
-		class="com.ideas2it.employeemanagement.employee.service.impl.EmployeeServiceImpl">
-	</bean> 
 </beans>

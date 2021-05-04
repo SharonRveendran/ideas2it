@@ -14,7 +14,7 @@
   <form action="/unassign_project/${employeeId}" method="post">
       <div style="text-align:center"><h2>Select  projects</h2></div>
   <c:forEach items="${projects}" var = "project">
-      <p style="margin-left:47%"><input type="checkbox" name="projects" value="${project.id}"/>${project.name}</p>
+      <p style="margin-left:47%"><input type="checkbox" name="projects" value="${project.id}"/>${project.id}:${project.name}</p>
   </c:forEach>
   <div style="text-align:center"><br><br><input type="submit" value="submit"/></div>
 </form>

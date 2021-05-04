@@ -10,13 +10,20 @@ import org.apache.logging.log4j.Logger;
  */
 public class EmployeeManagementLogger {
 	private Logger logger;
-	
-	public EmployeeManagementLogger(Class<?> userClass) {
-		logger = LogManager.getLogger(userClass);
+
+	public EmployeeManagementLogger() {
+	}
+
+	public EmployeeManagementLogger(Class<?> className) {
 	}
 	
+	public void createLogger(Class<?> className) {
+		logger = LogManager.getLogger(className);
+	}
+
 	/**
 	 * Method to call info method in logger class
+	 * 
 	 * @param log logging object
 	 */
 	public void logInfo(Object log) {
