@@ -1,0 +1,85 @@
+body{
+    background-color: lightgrey;
+}
+.container{
+    margin-left: 30%;
+    width: 50%;
+}
+.left-container{
+    display:inline-block;
+    width: 25%;
+    background-color: #72b4e4;
+}
+.right-container{
+    margin-left: 3px;
+    vertical-align: top;
+    display:inline-block;
+    width: 55%;
+}
+img{
+    width:100%;
+}
+.work-experience{
+    background-color: white;
+}
+.right-side-icons{ 
+    color:#808080;
+    vertical-align: top;
+    display:inline-block;
+    width:10%;
+    padding-left: 20px;
+    padding-top: 17px;
+
+}
+.right-side-info{
+    padding-top: 4%;
+    padding-bottom: 2%;
+    display:inline-block;
+    width:83%;
+}
+.right-side-heading{
+    color: #808080;
+    font-size: 13px;
+    padding-bottom: 8px;
+}
+.right-side-sub-heading{
+    color: #808080;
+    padding-top: 5px;
+    font-size: 8px;
+    padding-bottom: 2px;
+}
+.right-side-date{
+    font-size: 7px;
+    margin-bottom: -7px;
+    color: rgb(72, 183, 235);
+}
+p{
+    color: rgb(180, 177, 177);
+    font-size: 7px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+.education{
+    background-color: white;
+    margin-top:8px;
+}
+.icon-list{
+    padding-top: 5px;
+    font-size: 20px;
+    color: rgb(99, 160, 230);
+    margin-right: 40px;
+}
+.interest{
+    padding-bottom: 8px;
+    background-color: white;
+    margin-top:8px;
+}
+.links{
+    background-color: white;
+    margin-top:8px;
+    color: rgb(72, 183, 235);
+    font-size: 9px;
+    padding-left: 17%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
