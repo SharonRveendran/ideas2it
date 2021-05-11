@@ -4,13 +4,14 @@
 }
 
 body {
-  background-color: lightgrey;
+  background-color: #eae8e7;
 }
 
 .container {
   padding-left: 30%;
   padding-top: 10px;
-  width: 50%;
+  width: 700px;
+  font-family: roboto;
 }
 
 .container .left-container {
@@ -21,50 +22,65 @@ body {
 
 .container .left-container img {
   width: 100%;
-  padding-bottom: 6px;
 }
 
 .container .left-container .name {
-  font-family: roboto;
-  position: absolute;
+  position: relative;
   font-size: 14px;
-  color: white;
-  top: 134px;
-  left: 484px;
+  color: #ffffff;
+  top: -51px;
+  left: 44px;
 }
 
 .container .left-container .name .sub-name {
-  font-family: roboto;
   position: absolute;
   font-size: 6px;
-  color: #f7f4f4af;
+  color: #f7f4f4f5;
   top: 20px;
   left: 0px;
 }
 
 .container .left-container .contact-details {
+  margin-top: -17px;
   padding-left: 20px;
 }
 
 .container .left-container .contact-details .left-side-icons {
   padding-top: 5px;
   vertical-align: top;
-  color: rgba(255, 255, 255, 0.795);
+  color: #ffffff;
   font-size: 12px;
   display: inline-block;
   width: 20%;
 }
 
 .container .left-container .contact-details .left-side-info {
-  font-family: roboto;
   vertical-align: top;
   display: inline-block;
   width: 77%;
   line-height: 10px;
 }
 
+.container .left-container .contact-details .left-side-info span {
+  color: rgba(235, 232, 232, 0.76);
+  font-size: 6px;
+  padding-top: 0px;
+  padding-bottom: 2 px;
+}
+
+.container .left-container .contact-details .left-side-info .left-side-sub-heading {
+  color: rgba(255, 255, 255, 0.712);
+  font-size: 8px;
+}
+
+.container .left-container .contact-details .left-side-info .skill-title, .container .left-container .contact-details .left-side-info .address {
+  color: rgba(255, 255, 255, 0.788);
+  font-size: 7px;
+  padding-bottom: 3px;
+}
+
 .container .left-container .contact-details .left-side-info .professional-skill {
-  color: rgba(255, 255, 255, 0.842);
+  color: rgba(255, 255, 255, 0.788);
   font-size: 10px;
 }
 
@@ -82,7 +98,7 @@ body {
   margin-bottom: 10px;
 }
 
-.container .left-container .contact-details .left-side-info .skill-bar .skill_progress span {
+.container .left-container .contact-details .left-side-info .skill-bar .skill_progress div {
   height: 100%;
   background: #fff;
   position: absolute;
@@ -98,7 +114,7 @@ body {
 }
 
 .container .left-container .contact-details .left-side-info p {
-  color: rgba(248, 246, 246, 0.582);
+  color: rgba(248, 246, 246, 0.918);
   font-size: 5px;
   line-height: 10px;
 }
@@ -111,7 +127,7 @@ body {
 }
 
 .container .right-container .work-experience {
-  background-color: white;
+  background-color: #ffffff;
   padding-bottom: 5px;
 }
 
@@ -134,13 +150,11 @@ body {
 .container .right-container .right-side-info .right-side-heading {
   color: #808080;
   font-size: 14px;
-  font-family: roboto;
   padding-bottom: 8px;
   font-weight: bolder;
 }
 
 .container .right-container .right-side-info .right-side-sub-heading {
-  font-family: roboto;
   color: #999797;
   padding-top: 5px;
   font-size: 8px;
@@ -149,19 +163,17 @@ body {
 }
 
 .container .right-container .right-side-info .right-side-sub-heading span {
-  font-size: 6px;
+  font-size: 5px;
   font-weight: 10px;
 }
 
 .container .right-container .right-side-info .right-side-date {
-  font-family: roboto;
-  font-size: 7px;
+  font-size: 5px;
   color: #48b7eb;
 }
 
 .container .right-container .right-side-info p {
   line-height: 10px;
-  font-family: roboto;
   margin: 0;
   color: #b4b1b1;
   font-size: 7px;
@@ -171,7 +183,7 @@ body {
 
 .container .right-container .right-side-info hr {
   width: 100%;
-  background-color: lightgrey;
+  background-color: rgba(211, 211, 211, 0.911);
   border: none;
   height: 1px;
   margin-top: 9px;
@@ -179,14 +191,14 @@ body {
 }
 
 .container .right-container .education {
-  background-color: white;
+  background-color: #ffffff;
   margin-top: 8px;
   padding-bottom: 5px;
 }
 
 .container .right-container .interest {
   padding-bottom: 8px;
-  background-color: white;
+  background-color: #ffffff;
   margin-top: 8px;
 }
 
@@ -194,12 +206,11 @@ body {
   padding-top: 5px;
   font-size: 20px;
   color: #72aef1;
-  margin-right: 35px;
+  margin-right: 30px;
 }
 
 .container .right-container .links {
-  font-family: roboto;
-  background-color: white;
+  background-color: #ffffff;
   margin-top: 8px;
   color: #48b7eb;
   font-size: 9px;
@@ -217,25 +228,5 @@ body {
   text-align: center;
   display: inline-block;
   margin-left: 65px;
-}
-
-.font1 {
-  font-family: roboto;
-  color: rgba(255, 255, 255, 0.788);
-  font-size: 7px;
-  padding-bottom: 1px;
-}
-
-.font2 {
-  font-family: roboto;
-  color: rgba(255, 255, 255, 0.466);
-  font-size: 6px;
-  padding-bottom: 5px;
-}
-
-.font3 {
-  font-family: roboto;
-  color: rgba(255, 255, 255, 0.712);
-  font-size: 8px;
 }
 /*# sourceMappingURL=try.css.map */

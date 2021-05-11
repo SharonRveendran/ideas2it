@@ -1,56 +1,92 @@
+$main-bg-color : #eae8e7;
+$left-bg-color : #72b4e4;
+$name-color : #ffffff;
+$sub-name-color : #f7f4f4f5;
+$left-icons-color : #ffffff;
+$left-span-color :rgba(235, 232, 232, 0.76);
+$left-sub-heading-color : rgba(255, 255, 255, 0.712);
+$skill-title-color : rgba(255, 255, 255, 0.788);
+$progress-bar-color :  #d6dadb;
+$progress-color : #fff;
+$left-line-color : #7897db;
+$left-para-color : rgba(248, 246, 246, 0.918);
+$right-bg-color : #ffffff;
+$right-icons-color : #808080;
+$right-heading-color : #808080;
+$right-sub-heading-color : #999797;
+$right-side-date-color : #48b7eb;
+$right-para-color : #b4b1b1;
+$right-line-color : rgba(211, 211, 211, 0.911);
+$intrest-icons-color : #72aef1;
+$links-color : #48b7eb;
+
 @font-face {
 	src: url(fonts/Roboto-Regular.ttf);
 	font-family: 'roboto';
 }
 body {
-	background-color: lightgrey;
+	background-color: $main-bg-color;
 }
 .container {
 	padding-left: 30%;
 	padding-top: 10px;
-	width: 50%;
+	width: 700px;
+    font-family: roboto;
 	.left-container {
 		display: inline-block;
 		width: 25%;
-		background-color: #72b4e4;
+		background-color: $left-bg-color;
         img {
             width: 100%;
-            padding-bottom: 6px;
         }
         .name {
-            font-family: roboto;
-            position: absolute;
+            position:relative;
             font-size: 14px;
-            color: white;
-            top: 134px;
-            left: 484px;
+            color: $name-color;
+            top: -51px;
+            left: 44px;
             .sub-name {
-                font-family: roboto;
                 position: absolute;
                 font-size: 6px;
-                color: #f7f4f4af;
+                color: $sub-name-color;
                 top: 20px;
                 left: 0px;
             }
         }
         .contact-details {
+            margin-top: -17px;
             padding-left: 20px;
             .left-side-icons {
                 padding-top: 5px;
                 vertical-align: top;
-                color: rgba(255, 255, 255, 0.795);
+                color: $left-icons-color;
                 font-size: 12px;
                 display: inline-block;
                 width: 20%;
             }
             .left-side-info {
-                font-family: roboto;
                 vertical-align: top;
                 display: inline-block;
                 width: 77%;
                 line-height: 10px;
+                span {
+                    color:$left-span-color;
+	                font-size: 6px;
+                    padding-top: 0px;
+	                padding-bottom: 2
+                    px;
+                }
+                .left-side-sub-heading {
+                    color: $left-sub-heading-color;
+	                font-size: 8px;
+                }
+                .skill-title , .address {
+                    color: $skill-title-color;
+                    font-size: 7px;
+                    padding-bottom: 3px;
+                }
                 .professional-skill {
-                    color: rgba(255, 255, 255, 0.842);
+                    color: $skill-title-color;
                     font-size: 10px;
                 }
                 .skill-bar {
@@ -60,12 +96,12 @@ body {
                     .skill_progress {
                         width: 85%;
                         height: 2px;
-                        background: #d6dadb;
+                        background: $progress-bar-color;
                         position: relative;
                         margin-bottom: 10px;
-                        span {
+                       div {
                             height: 100%;
-                            background: #fff;
+                            background: $progress-color;
                             position: absolute;
                         }
                     }
@@ -73,13 +109,13 @@ body {
                 hr {
                     height: 1px;
                     width: 99%;
-                    background-color: #7897db;
+                    background-color: $left-line-color;
                     border: none;
                     margin-top: 13px;
                     margin-bottom: 13px;
                 }
                 p {
-                    color: rgba(248, 246, 246, 0.582);
+                    color: $left-para-color;
                     font-size: 5px;
                     line-height: 10px;
                 }
@@ -92,12 +128,12 @@ body {
 		display: inline-block;
 		width: 50%;
         .work-experience {
-            background-color: white;
+            background-color: $right-bg-color;
             padding-bottom: 5px;
             
         }
         .right-side-icons {
-            color: #808080;
+            color: $right-icons-color;
             vertical-align: top;
             display: inline-block;
             width: 10%;
@@ -110,41 +146,37 @@ body {
             display: inline-block;
             width: 83%;
             .right-side-heading {
-                color: #808080;
+                color: $right-heading-color;
                 font-size: 14px;
-                font-family: roboto;
                 padding-bottom: 8px;
                 font-weight: bolder;
             }
             .right-side-sub-heading {
-                font-family: roboto;
-                color: #999797;
+                color: $right-sub-heading-color;
                 padding-top: 5px;
                 font-size: 8px;
                 padding-bottom: 2px;
                 font-weight: bold;
                 span {
-                    font-size: 6px;
+                    font-size: 5px;
                     font-weight: 10px;
                 }
             }
             .right-side-date {
-                font-family: roboto;
-                font-size: 7px;
-                color: #48b7eb;
+                font-size: 5px;
+                color: $right-side-date-color;
             }
             p {
                 line-height: 10px;
-                font-family: roboto;
                 margin: 0;
-                color: #b4b1b1;
+                color: $right-para-color;
                 font-size: 7px;
                 padding-right: 15px;
                 padding-bottom: 5px;
             }
             hr {
                 width: 100%;
-                background-color: lightgrey;
+                background-color: $right-line-color;
                 border: none;
                 height: 1px;
                 margin-top: 9px;
@@ -152,26 +184,25 @@ body {
             }
         }
         .education {
-            background-color: white;
+            background-color: $right-bg-color;
             margin-top: 8px;
             padding-bottom: 5px;
         }
         .interest {
             padding-bottom: 8px;
-            background-color: white;
+            background-color: $right-bg-color;
             margin-top: 8px;
             .icon-list {
                 padding-top: 5px;
                 font-size: 20px;
-                color: #72aef1;
-                margin-right: 35px;
+                color: $intrest-icons-color;
+                margin-right: 30px;
             }
         }
         .links {
-            font-family: roboto;
-            background-color: white;
+            background-color: $right-bg-color;
             margin-top: 8px;
-            color: #48b7eb;
+            color: $links-color;
             font-size: 9px;
             padding-left: 17%;
             padding-top: 6%;
@@ -187,21 +218,4 @@ body {
             }
         }
 	}
-}
-.font1 {
-	font-family: roboto;
-	color: rgba(255, 255, 255, 0.788);
-	font-size: 7px;
-	padding-bottom: 1px;
-}
-.font2 {
-	font-family: roboto;
-	color: rgba(255, 255, 255, 0.466);
-	font-size: 6px;
-	padding-bottom: 5px;
-}
-.font3 {
-	font-family: roboto;
-	color: rgba(255, 255, 255, 0.712);
-	font-size: 8px;
 }
