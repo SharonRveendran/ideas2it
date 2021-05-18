@@ -14,8 +14,14 @@
     <link rel="stylesheet" href="todo.css"></head>
 <body>
     <div class="top-container">
-        <i class="fa fa-braille"><span>To Do</span></i>
-        <div class="search-bar"></div>
+        <i class="fas fa-th"><span>To Do</span></i>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+        </div>
+        <i class="fa fa-cog i1"></i>
+        <i class="fa fa-question i2"></i>
+        </i><i class="fas fa-volume-down i3"></i>
+        <span class="i4">S</span>
     </div>
     <div class="left-container">
         <div id="back-button">
@@ -26,16 +32,23 @@
             </ul>
         </div>  
         <div id="category-input">
+            <div class="add-catogory-button">
+                <i class="fas fa-plus"></i>
+            </div>
             <input id="add-category" type="text" placeholder="New List">
         </div>
     </div>
     <div class="center-container">
-        <h3 class="title">
-            
+        <h3 class="title">   
         </h3>
-        <div class="task">
+        <div class="task-block">
             <i class="fa fa-plus"></i>
-            <input type="text" class="task-input" placeholder="add a task">
+            <input type="text" class="task-input" placeholder="Add a task">
+        </div>
+        <div class="tasks">
+            <ul class ="task-ul">
+
+            </ul>
         </div>
     </div>
     <script src="todo.js"></script>

@@ -1,4 +1,5 @@
 body {
+  font-family: "Segoe", "Segoe UI", "Arial", "sans-serif";
   margin: 0;
 }
 
@@ -10,15 +11,17 @@ body .top-container {
 
 body .top-container i {
   margin-left: 6px;
-  padding: 0px;
-  font-size: 30px;
+  padding-top: 7px;
+  margin-left: 13px;
+  vertical-align: top;
+  font-size: 17px;
   color: white;
   display: inline-block;
 }
 
 body .top-container i span {
   text-align: center;
-  font-size: 20px;
+  font-size: 17px;
   padding-left: 25px;
 }
 
@@ -32,14 +35,34 @@ body .top-container .search-bar {
 
 body .top-container .search-bar i {
   color: #3c4ef0;
-  font-size: 10px;
+  font-size: 20px;
+}
+
+body .top-container .i1 {
+  margin-left: 460px;
+}
+
+body .top-container .i2 {
+  margin-left: 30px;
+}
+
+body .top-container .i3 {
+  margin-left: 30px;
+}
+
+body .top-container .i4 {
+  color: white;
+  padding: 12px;
+  margin-left: 20px;
+  border: 1px solid #fff;
+  border-radius: 50%;
 }
 
 body .left-container {
   display: inline-block;
   min-height: 737px;
   padding-left: 5px;
-  width: 287px;
+  width: 18%;
   background-color: #f5f4f3;
 }
 
@@ -68,14 +91,25 @@ body .left-container #category ul i {
   color: grey;
 }
 
-body .left-container input {
+body .left-container #category-input .add-catogory-button {
+  display: inline-block;
+}
+
+body .left-container #category-input .add-catogory-button i {
+  padding-left: 10px;
+}
+
+body .left-container #category-input input {
+  display: inline-block;
+  background-color: #f5f4f3;
   height: 10px;
-  width: 251px;
   display: inline-block;
   font-size: 12px;
   border: none;
+  outline: none;
   height: 31px;
-  margin-left: 15px;
+  margin-left: 12px;
+  width: 100px;
 }
 
 body .left-container .create-folder {
@@ -91,10 +125,12 @@ body .left-container .create-folder i {
 }
 
 body .center-container {
-  width: 60%;
+  width: 80%;
   height: 738px;
   vertical-align: top;
   display: inline-block;
+  padding-right: 0px;
+  margin-right: 5px;
 }
 
 body .center-container .title {
@@ -106,19 +142,45 @@ body .center-container .title {
   width: 131px;
 }
 
-body .center-container .task {
+body .center-container .task-block {
   padding-left: 23px;
   padding-top: 1px;
   font-size: 18px;
   margin-left: 5px;
-  height: 691px;
 }
 
-body .center-container .task i {
+body .center-container .task-block i {
+  padding-right: 10px;
   font-size: 15px;
 }
 
-body .center-container .task .task-input {
+body .center-container .task-block .task-input {
+  outline: none;
   border: none;
+}
+
+body .center-container .tasks {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+}
+
+body .center-container .tasks .task-ul {
+  line-height: 31px;
+  list-style-type: none;
+  padding-top: 0px;
+  padding-left: 25px;
+}
+
+body .center-container .tasks .task-ul li span {
+  margin-left: 13px;
+}
+
+body .center-container .tasks .task-ul li i {
+  float: right;
+}
+
+input[type="checkbox"]:checked + span {
+  text-decoration: line-through;
 }
 /*# sourceMappingURL=todo.css.map */
