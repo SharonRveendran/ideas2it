@@ -1,6 +1,7 @@
 body {
   font-family: "Segoe", "Segoe UI", "Arial", "sans-serif";
   margin: 0;
+  padding: 0px;
 }
 
 body .top-container {
@@ -43,27 +44,28 @@ body .top-container .i1 {
 }
 
 body .top-container .i2 {
-  margin-left: 30px;
+  margin-left: 25px;
 }
 
 body .top-container .i3 {
-  margin-left: 30px;
+  margin-left: 22px;
 }
 
 body .top-container .i4 {
   color: white;
   padding: 12px;
-  margin-left: 20px;
+  margin-left: 22px;
   border: 1px solid #fff;
-  border-radius: 50%;
+  border-radius: 80%;
 }
 
 body .left-container {
+  vertical-align: top;
   display: inline-block;
   min-height: 737px;
   padding-left: 5px;
   width: 18%;
-  background-color: #f5f4f3;
+  background-color: #f4f4f4;
 }
 
 body .left-container #back-button {
@@ -96,6 +98,7 @@ body .left-container #category-input .add-catogory-button {
 }
 
 body .left-container #category-input .add-catogory-button i {
+  color: grey;
   padding-left: 10px;
 }
 
@@ -133,6 +136,10 @@ body .center-container {
   margin-right: 5px;
 }
 
+body .center-container hr {
+  color: #6b6b6b;
+}
+
 body .center-container .title {
   font-size: 20px;
   text-align: left;
@@ -144,12 +151,12 @@ body .center-container .title {
 
 body .center-container .task-block {
   padding-left: 23px;
-  padding-top: 1px;
   font-size: 18px;
   margin-left: 5px;
 }
 
 body .center-container .task-block i {
+  color: grey;
   padding-right: 10px;
   font-size: 15px;
 }
@@ -157,6 +164,7 @@ body .center-container .task-block i {
 body .center-container .task-block .task-input {
   outline: none;
   border: none;
+  width: 60%;
 }
 
 body .center-container .tasks {
@@ -178,6 +186,147 @@ body .center-container .tasks .task-ul li span {
 
 body .center-container .tasks .task-ul li i {
   float: right;
+}
+
+body .right-container {
+  display: inline-block;
+  background-color: #f4f4f4;
+  width: 22.5%;
+  min-height: 739px;
+}
+
+body .right-container i {
+  padding-top: 2px;
+  color: grey;
+}
+
+body .right-container .right-part1 {
+  width: 88%;
+  margin-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-left: 15px;
+  margin-top: 10px;
+  display: inline-block;
+  background-color: white;
+}
+
+body .right-container .right-part1 .sub-task-header span {
+  padding-left: 5px;
+}
+
+body .right-container .right-part1 .sub-task-header i {
+  float: right;
+}
+
+body .right-container .right-part1 .step-input-block {
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+
+body .right-container .right-part1 .step-input-block i {
+  color: grey;
+  padding-left: 5px;
+  display: inline-block;
+}
+
+body .right-container .right-part1 .step-input-block input {
+  margin-left: 7px;
+  display: inline-block;
+  border: none;
+  outline: none;
+  width: 200px;
+}
+
+body .right-container .right-part1 .step-list {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+body .right-container .right-part1 .step-list li {
+  list-style-type: none;
+}
+
+body .right-container .right-part1 .step-list li span {
+  margin-left: 13px;
+}
+
+body .right-container .right-part1 .step-list li i {
+  padding-top: 9px;
+  color: grey;
+  float: right;
+  font-size: 13px;
+}
+
+body .right-container .right-part2 {
+  margin: 10px;
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 17px;
+}
+
+body .right-container .right-part2 span {
+  color: #0c6fe0;
+  margin-left: 8px;
+}
+
+body .right-container .right-part3 {
+  margin: 10px;
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 17px;
+}
+
+body .right-container .right-part3 .header i {
+  color: grey;
+}
+
+body .right-container .right-part3 .header span {
+  margin-left: 8px;
+}
+
+body .right-container .right-part3 .header span hr {
+  margin-left: 8.5%;
+  color: grey;
+  width: 91%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+body .right-container .right-part4 {
+  margin-right: 10px;
+  margin-left: 10px;
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 17px;
+}
+
+body .right-container .right-part4 span {
+  margin-left: 10px;
+}
+
+body .right-container .right-part5 {
+  margin: 10px;
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 17px;
+}
+
+body .right-container .right-part5 span {
+  margin-left: 10px;
+}
+
+body .right-container .right-part6 {
+  height: 78px;
+  margin: 10px;
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 17px;
 }
 
 input[type="checkbox"]:checked + span {
