@@ -1,11 +1,24 @@
 body {
-  font-family: "Segoe", "Segoe UI", "Arial", "sans-serif";
+  font-family: "Arial";
   margin: 0;
-  padding: 0px;
+  padding: 0;
+}
+
+body i {
+  color: #707070;
+}
+
+body span {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+body input[type="checkbox"]:checked + span {
+  text-decoration: line-through;
 }
 
 body .top-container {
-  background-color: #3f6ae0;
+  background-color: #0079d3;
   height: 40px;
   padding-top: 8px;
 }
@@ -16,7 +29,7 @@ body .top-container i {
   margin-left: 13px;
   vertical-align: top;
   font-size: 17px;
-  color: white;
+  color: #ffffff;
   display: inline-block;
 }
 
@@ -28,14 +41,14 @@ body .top-container i span {
 
 body .top-container .search-bar {
   display: inline-block;
-  background-color: #c0d5f7;
+  background-color: #b2d8f6;
   height: 31px;
   width: 400px;
   margin-left: 456px;
 }
 
 body .top-container .search-bar i {
-  color: #3c4ef0;
+  color: #0079d3;
   font-size: 20px;
 }
 
@@ -52,10 +65,9 @@ body .top-container .i3 {
 }
 
 body .top-container .i4 {
-  color: white;
   padding: 12px;
   margin-left: 22px;
-  border: 1px solid #fff;
+  border: 1px solid #ffffff;
   border-radius: 80%;
 }
 
@@ -70,9 +82,12 @@ body .left-container {
 
 body .left-container #back-button {
   padding-top: 29px;
-  color: #4e90e7;
   font-size: 21px;
   padding-left: 10px;
+}
+
+body .left-container #back-button i {
+  color: #0079d3;
 }
 
 body .left-container #category {
@@ -89,22 +104,17 @@ body .left-container #category ul span {
   padding-left: 15px;
 }
 
-body .left-container #category ul i {
-  color: grey;
-}
-
 body .left-container #category-input .add-catogory-button {
   display: inline-block;
 }
 
 body .left-container #category-input .add-catogory-button i {
-  color: grey;
   padding-left: 10px;
 }
 
 body .left-container #category-input input {
   display: inline-block;
-  background-color: #f5f4f3;
+  background-color: #f4f4f4;
   height: 10px;
   display: inline-block;
   font-size: 12px;
@@ -124,7 +134,6 @@ body .left-container .create-folder {
 body .left-container .create-folder i {
   padding-left: 5px;
   font-size: 10px;
-  color: grey;
 }
 
 body .center-container {
@@ -137,7 +146,7 @@ body .center-container {
 }
 
 body .center-container hr {
-  color: #6b6b6b;
+  color: #707070;
 }
 
 body .center-container .title {
@@ -156,7 +165,6 @@ body .center-container .task-block {
 }
 
 body .center-container .task-block i {
-  color: grey;
   padding-right: 10px;
   font-size: 15px;
 }
@@ -197,7 +205,6 @@ body .right-container {
 
 body .right-container i {
   padding-top: 2px;
-  color: grey;
 }
 
 body .right-container .right-part1 {
@@ -208,7 +215,7 @@ body .right-container .right-part1 {
   padding-left: 15px;
   margin-top: 10px;
   display: inline-block;
-  background-color: white;
+  background-color: #ffffff;
 }
 
 body .right-container .right-part1 .sub-task-header span {
@@ -225,7 +232,6 @@ body .right-container .right-part1 .step-input-block {
 }
 
 body .right-container .right-part1 .step-input-block i {
-  color: grey;
   padding-left: 5px;
   display: inline-block;
 }
@@ -253,34 +259,29 @@ body .right-container .right-part1 .step-list li span {
 
 body .right-container .right-part1 .step-list li i {
   padding-top: 9px;
-  color: grey;
   float: right;
   font-size: 13px;
 }
 
 body .right-container .right-part2 {
   margin: 10px;
-  background-color: white;
+  background-color: #ffffff;
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 17px;
 }
 
 body .right-container .right-part2 span {
-  color: #0c6fe0;
+  color: #0079d3;
   margin-left: 8px;
 }
 
 body .right-container .right-part3 {
   margin: 10px;
-  background-color: white;
+  background-color: #ffffff;
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 17px;
-}
-
-body .right-container .right-part3 .header i {
-  color: grey;
 }
 
 body .right-container .right-part3 .header span {
@@ -289,7 +290,7 @@ body .right-container .right-part3 .header span {
 
 body .right-container .right-part3 .header span hr {
   margin-left: 8.5%;
-  color: grey;
+  color: #707070;
   width: 91%;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -298,7 +299,7 @@ body .right-container .right-part3 .header span hr {
 body .right-container .right-part4 {
   margin-right: 10px;
   margin-left: 10px;
-  background-color: white;
+  background-color: #ffffff;
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 17px;
@@ -310,7 +311,7 @@ body .right-container .right-part4 span {
 
 body .right-container .right-part5 {
   margin: 10px;
-  background-color: white;
+  background-color: #ffffff;
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 17px;
@@ -323,13 +324,9 @@ body .right-container .right-part5 span {
 body .right-container .right-part6 {
   height: 78px;
   margin: 10px;
-  background-color: white;
+  background-color: #ffffff;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 17px;
-}
-
-input[type="checkbox"]:checked + span {
-  text-decoration: line-through;
 }
 /*# sourceMappingURL=todo.css.map */

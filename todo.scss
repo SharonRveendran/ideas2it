@@ -1,9 +1,25 @@
+$icon-color : #707070;
+$top-container-color : #0079d3;
+$white-color : #ffffff;
+$search-bar-color : #b2d8f6;
+$left-right-container-color : #f4f4f4;
+
 body {
-    font-family: "Segoe", "Segoe UI", "Arial", "sans-serif";
+    font-family: "Arial";
     margin: 0;
-    padding : 0px;
+    padding : 0;
+    i {
+        color: $icon-color;
+    }
+    span {
+        cursor: pointer;
+        font-size: 14px;
+    }
+    input[type="checkbox"]:checked + span {
+        text-decoration:line-through;
+    }
     .top-container{
-        background-color:rgb(63, 106, 224);
+        background-color:$top-container-color;
         height: 40px;
         padding-top: 8px;
         i {
@@ -12,7 +28,7 @@ body {
             margin-left: 13px;
             vertical-align: top;
             font-size: 17px;
-            color: white;
+            color: $white-color;
             display: inline-block;
             span {
                 text-align: center;
@@ -22,12 +38,12 @@ body {
         }
         .search-bar {
             display: inline-block;
-            background-color: rgb(192, 213, 247);
+            background-color: $search-bar-color;
             height: 31px;
             width: 400px;
             margin-left: 456px;
             i {
-                color: rgb(60, 78, 240);
+                color: $top-container-color;
                 font-size: 20px;
             }
         }
@@ -41,10 +57,9 @@ body {
             margin-left: 22px;
         }
         .i4 {
-            color: white;
             padding: 12px;
             margin-left: 22px;
-            border: 1px solid #fff;
+            border: 1px solid $white-color;
             border-radius: 80%;
         }
     }
@@ -54,12 +69,14 @@ body {
         min-height: 737px;
         padding-left: 5px;
         width: 18%;
-        background-color: #f4f4f4;
+        background-color: $left-right-container-color;
         #back-button {
             padding-top: 29px;
-            color: #4e90e7;
             font-size: 21px;
             padding-left: 10px;
+            i{
+                color : $top-container-color;
+            }
         }
         #category {
             font-size: 15px;
@@ -70,22 +87,18 @@ body {
                 span {
                     padding-left: 15px;
                 }
-                i {
-                    color:grey;
-                }
             }
         }
         #category-input {
             .add-catogory-button {
                 display: inline-block;
                 i {
-                    color: grey;
                     padding-left: 10px;
                 }
             }
             input {
                 display: inline-block;
-                background-color: #f5f4f3;
+                background-color: $left-right-container-color;
                 height: 10px;
                 display: inline-block;
                 font-size: 12px;
@@ -103,7 +116,6 @@ body {
             i { 
                 padding-left: 5px;
                 font-size: 10px;
-                color: grey;
             }
         }    
     }
@@ -115,7 +127,7 @@ body {
         padding-right: 0px;
         margin-right: 5px;
         hr {
-            color: rgb(107, 107, 107);
+            color: $icon-color;
         }
         .title {
             font-size: 20px;
@@ -130,7 +142,6 @@ body {
             font-size: 18px;
             margin-left: 5px;
             i {
-                color: grey;
                 padding-right: 10px;
                 font-size: 15px;
             }
@@ -162,12 +173,11 @@ body {
     }   
     .right-container {
         display: inline-block;
-        background-color: #f4f4f4;
+        background-color: $left-right-container-color;
         width:22.5%;
         min-height: 739px;
         i {
             padding-top: 2px;
-            color: grey;
         }
         .right-part1 {
             width: 88%;
@@ -177,7 +187,7 @@ body {
             padding-left: 15px;
             margin-top: 10px;
             display: inline-block;
-            background-color: white;
+            background-color:$white-color;
             .sub-task-header {
                 span {
                     padding-left: 5px;
@@ -190,7 +200,6 @@ body {
                 padding-top: 10px;
                 padding-bottom: 15px;
                 i {
-                    color: grey;
                     padding-left: 5px;
                     display: inline-block;
                 }
@@ -212,7 +221,6 @@ body {
                     }
                     i {
                         padding-top: 9px;
-                        color: grey;
                         float: right;
                         font-size: 13px;
                     }
@@ -221,30 +229,27 @@ body {
         }
         .right-part2 {
             margin: 10px;
-            background-color: white;
+            background-color: $white-color;
             padding-top: 15px;
             padding-bottom: 15px;
             padding-left: 17px;
             span {
-                color: rgb(12, 111, 224);
+                color: $top-container-color;
                 margin-left: 8px;
             }
         }
         .right-part3 {
             margin: 10px;
-            background-color: white;
+            background-color: $white-color;
             padding-top: 15px;
             padding-bottom: 15px;
             padding-left: 17px;
             .header {
-                i {
-                    color: grey;
-                }
                 span {
                     margin-left: 8px;
                     hr {
                         margin-left: 8.5%;
-                        color: grey;
+                        color: $icon-color;
                         width: 91%;
                         margin-top: 20px;
                         margin-bottom: 20px;
@@ -255,7 +260,7 @@ body {
         .right-part4 {
             margin-right: 10px;
             margin-left: 10px;
-            background-color: white;
+            background-color:$white-color;
             padding-top: 15px;
             padding-bottom: 15px;
             padding-left: 17px;
@@ -265,7 +270,7 @@ body {
         }
         .right-part5 {
             margin: 10px;
-            background-color: white;
+            background-color: $white-color;
             padding-top: 15px;
             padding-bottom: 15px;
             padding-left: 17px;
@@ -276,13 +281,10 @@ body {
         .right-part6 {
             height: 78px;
             margin: 10px;
-            background-color: white;
+            background-color: $white-color;
             padding-top: 10px;
             padding-bottom: 10px;
             padding-left: 17px;
         }
     }
-}
-input[type="checkbox"]:checked + span {
-    text-decoration:line-through;
 }
