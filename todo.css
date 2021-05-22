@@ -17,6 +17,10 @@ body input[type="checkbox"]:checked + span {
   text-decoration: line-through;
 }
 
+body hr {
+  border-block-color: #F8F8F8;
+}
+
 body .top-container {
   background-color: #0079d3;
   height: 40px;
@@ -34,6 +38,8 @@ body .top-container i {
 }
 
 body .top-container i span {
+  font-weight: bold;
+  font-family: "Arial";
   text-align: center;
   font-size: 17px;
   padding-left: 25px;
@@ -66,7 +72,7 @@ body .top-container .i3 {
 
 body .top-container .i4 {
   padding: 12px;
-  margin-left: 22px;
+  margin-left: 18px;
   border: 1px solid #ffffff;
   border-radius: 80%;
 }
@@ -138,15 +144,11 @@ body .left-container .create-folder i {
 
 body .center-container {
   width: 80%;
-  height: 738px;
+  min-height: 738px;
   vertical-align: top;
   display: inline-block;
   padding-right: 0px;
   margin-right: 5px;
-}
-
-body .center-container hr {
-  color: #707070;
 }
 
 body .center-container .title {
@@ -290,7 +292,6 @@ body .right-container .right-part3 .header span {
 
 body .right-container .right-part3 .header span hr {
   margin-left: 8.5%;
-  color: #707070;
   width: 91%;
   margin-top: 20px;
   margin-bottom: 20px;

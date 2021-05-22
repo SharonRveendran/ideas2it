@@ -3,6 +3,7 @@ $top-container-color : #0079d3;
 $white-color : #ffffff;
 $search-bar-color : #b2d8f6;
 $left-right-container-color : #f4f4f4;
+$line-color : #F8F8F8;
 
 body {
     font-family: "Arial";
@@ -18,6 +19,9 @@ body {
     input[type="checkbox"]:checked + span {
         text-decoration:line-through;
     }
+    hr {
+        border-block-color : $line-color;
+    }
     .top-container{
         background-color:$top-container-color;
         height: 40px;
@@ -31,6 +35,8 @@ body {
             color: $white-color;
             display: inline-block;
             span {
+                font-weight: bold;
+                font-family: "Arial";
                 text-align: center;
                 font-size: 17px;
                 padding-left: 25px;
@@ -58,7 +64,7 @@ body {
         }
         .i4 {
             padding: 12px;
-            margin-left: 22px;
+            margin-left: 18px;
             border: 1px solid $white-color;
             border-radius: 80%;
         }
@@ -121,14 +127,11 @@ body {
     }
     .center-container {
         width: 80%;
-        height:738px;
+        min-height: 738px;
         vertical-align: top;
         display: inline-block;
         padding-right: 0px;
         margin-right: 5px;
-        hr {
-            color: $icon-color;
-        }
         .title {
             font-size: 20px;
             text-align: left;
@@ -249,7 +252,6 @@ body {
                     margin-left: 8px;
                     hr {
                         margin-left: 8.5%;
-                        color: $icon-color;
                         width: 91%;
                         margin-top: 20px;
                         margin-bottom: 20px;
