@@ -34,27 +34,27 @@
     let currentCategoryId; 
     let subTaskTitle = document.getElementsByClassName('sub-task-title')[0];
     let centerContainer = document.getElementsByClassName('center-container')[0];
-    let categoryListBlock = document.getElementById('category-list');
-    let categoryInput = document.getElementById('add-category');
-    let categoryContainer = document.getElementById('category');
-    let taskTitleblock = document.getElementsByClassName('title')[0];
+    let categoryListBlock = $('#category-list');//document.getElementById('category-list');
+    let categoryInput = $('#add-category');//document.getElementById('add-category');
+    let categoryContainer = $('#category');//document.getElementById('category');
+    let taskTitleblock =  document.getElementsByClassName('title')[0];
     let taskInput = document.getElementsByClassName('task-input')[0];
-    let taskUl = document.getElementsByClassName("task-ul")[0];
-    let rightContainer = document.getElementsByClassName("right-container")[0];
+    let taskUl = $('.task-ul');//document.getElementsByClassName("task-ul")[0];
+    let rightContainer = $('.right-container');//document.getElementsByClassName("right-container")[0];
     let stepInput = document.getElementsByClassName('step-input')[0];
     let stepList = document.getElementsByClassName('step-list')[0];
     
     function init() { 
         document.getElementsByClassName("center-container")[0].style.visibility = 'hidden';
-        rightContainer.style.display = 'none';
+        rightContainer.hide();//style.display = 'none';
         renderinitialCategoryList();
-        categoryInput.addEventListener('keypress', addCategory);
-        categoryContainer.addEventListener("click", renderTaskContainer);
+        categoryInput.keypress(addCategory);
+        categoryContainer.click(renderTaskContainer);
         taskInput.addEventListener("keypress", addTask);
-        taskUl.addEventListener("click", renderSubTaskContainer);
+        taskUl.click(renderSubTaskContainer);//.addEventListener("click", renderSubTaskContainer);
         stepInput.addEventListener("keypress", addSubTask);
-        taskUl.addEventListener("click", addToImportant);
-        taskUl.addEventListener("click", strike);
+        taskUl.click(addToImportant);//addEventListener("click", addToImportant);
+        taskUl.click(strike);//addEventListener("click", strike);
     }
 
     /** 
@@ -72,17 +72,17 @@
      */
      function addCategory(event) {
         if (event.key == 'Enter') {
-            if (categoryInput.value == '') {
-                categoryInput.value = 'Untitled list';
+            if (categoryInput.val() == '') {
+                categoryInput.val('Untitled list');// = 'Untitled list';
             }
             let obj = {
                 id: "category" + categoryId++,
                 icon: 'fa fa-list',
-                name: categoryInput.value,
+                name: categoryInput.val(),
             }
             list.push(obj);
             renderCategoryList(obj);
-            categoryInput.value = '';
+            categoryInput.val('');//clear();//.val() = '';
         }  
     }
 
@@ -91,15 +91,15 @@
      * @param value category object
      */
      function renderCategoryList(value) {
-        const category = document.createElement('li');
-        const icon = document.createElement('i');
-        icon.setAttribute("class", value.icon);
-        const span = document.createElement("span");
-        span.setAttribute("id", value.id);
-        span.appendChild(document.createTextNode(value.name));
-        category.appendChild(icon);
-        category.appendChild(span);
-        categoryListBlock.appendChild(category);
+        const category = $('<li/>');//document.createElement('li');
+        const icon = $('<i/>');//document.createElement('i');
+        icon.addClass(value.icon);//setAttribute("class", value.icon);
+        const span = $('<span/>');//document.createElement("span");
+        span.attr('id', value.id);//setAttribute("id", value.id);
+        span.append(document.createTextNode(value.name));
+        category.append(icon);
+        category.append(span);
+        categoryListBlock.append(category);
     }
 
     /**
@@ -108,13 +108,12 @@
      */
      function renderTaskContainer(event) {
         if ("SPAN" === event.target.tagName) {
-            rightContainer.style.display = 'none';
-            //rightContainer.hide();
+            rightContainer.hide();//style.display = 'none';
             centerContainer.style.width = "80%";
             const taskUl = document.getElementsByClassName('task-ul')[0];
             currentCategoryId = event.target.id;
             document.getElementsByClassName("center-container")[0].style.visibility = 'visible';
-            taskTitleblock.innerHTML = document.getElementById(currentCategoryId).innerHTML;
+            taskTitleblock.innerHTML = document.getElementById(currentCategoryId).innerHTML;//val($("#"+currentCategoryId).val());//document.getElementById(currentCategoryId).innerHTML);
             while (taskUl.firstChild) {
                 taskUl.removeChild(taskUl.firstChild);
             }
@@ -178,7 +177,8 @@
      */
      function renderSubTaskContainer(event) {
         if (event.target.tagName === 'SPAN') {
-            rightContainer.style.display = 'inline-block';
+            rightContainer.show();
+            //rightContainer.style.display = 'inline-block';
             centerContainer.style.width = "58%";
             //centerContainer.className = "center-container-half";
             //centerContainer.classList.add("center-container-half");
@@ -258,14 +258,12 @@
     function strike(event) {
         if ("INPUT" === event.target.tagName) {
             if(event.target.checked == true) {
-            console.log(document.getElementsByClassName("step-input")[0]);
-            document.getElementsByClassName("steps-checkbox")[0].checked = true;
+                document.getElementsByClassName("steps-checkbox")[0].checked = true;
             } else {
                 document.getElementsByClassName("steps-checkbox")[0].checked = false;
             }
         }
     }
-
     init();
 })();
     
