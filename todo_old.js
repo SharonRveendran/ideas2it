@@ -26,12 +26,12 @@
             name : "Task",
         }
     ];
-    let cid = 6; //id for new catogery
-    let tid = 0;  //id for tsask
-    subTaskId = 0; //id for subtask
-    let taskList = []; //list for all tasks
-    let subTaskList = []; //list for all subtasks
-    let categoryId; //id for current category
+    let categoryId = 6; 
+    let taskId = 0; 
+    subTaskId = 0; 
+    let taskList = []; 
+    let subTaskList = []; 
+    let currentCategoryId; 
     let subTaskTitle = document.getElementsByClassName('sub-task-title')[0];
     let centerContainer = document.getElementsByClassName('center-container')[0];
     let categoryListBlock = document.getElementById('category-list');
@@ -47,19 +47,159 @@
     function init() { 
         document.getElementsByClassName("center-container")[0].style.visibility = 'hidden';
         rightContainer.style.display = 'none';
-        categoryList();
+        renderinitialCategoryList();
         categoryInput.addEventListener('keypress', addCategory);
         categoryContainer.addEventListener("click", renderTaskContainer);
         taskInput.addEventListener("keypress", addTask);
         taskUl.addEventListener("click", renderSubTaskContainer);
-        stepInput.addEventListener("keypress", addStep);
+        stepInput.addEventListener("keypress", addSubTask);
+        taskUl.addEventListener("click", addToImportant);
+        taskUl.addEventListener("click", strike);
+    }
+
+    /** 
+     * This function will render initial catogery list
+     */
+     function renderinitialCategoryList() {
+        for(let initialCategory of list) {
+            renderCategoryList(initialCategory);
+        }
+    }
+
+    /** 
+     * This function will add and render new category
+     * @param event category input event
+     */
+     function addCategory(event) {
+        if (event.key == 'Enter') {
+            if (categoryInput.value == '') {
+                categoryInput.value = 'Untitled list';
+            }
+            let obj = {
+                id: "category" + categoryId++,
+                icon: 'fa fa-list',
+                name: categoryInput.value,
+            }
+            list.push(obj);
+            renderCategoryList(obj);
+            categoryInput.value = '';
+        }  
+    }
+
+    /** 
+     * This function will render given category
+     * @param value category object
+     */
+     function renderCategoryList(value) {
+        const category = document.createElement('li');
+        const icon = document.createElement('i');
+        icon.setAttribute("class", value.icon);
+        const span = document.createElement("span");
+        span.setAttribute("id", value.id);
+        span.appendChild(document.createTextNode(value.name));
+        category.appendChild(icon);
+        category.appendChild(span);
+        categoryListBlock.appendChild(category);
+    }
+
+    /**
+     * This function will render center container
+     * @param event click event for category 
+     */
+     function renderTaskContainer(event) {
+        if ("SPAN" === event.target.tagName) {
+            rightContainer.style.display = 'none';
+            //rightContainer.hide();
+            centerContainer.style.width = "80%";
+            const taskUl = document.getElementsByClassName('task-ul')[0];
+            currentCategoryId = event.target.id;
+            document.getElementsByClassName("center-container")[0].style.visibility = 'visible';
+            taskTitleblock.innerHTML = document.getElementById(currentCategoryId).innerHTML;
+            while (taskUl.firstChild) {
+                taskUl.removeChild(taskUl.firstChild);
+            }
+            for (let taskElement of taskList) {
+                if ((taskElement.id).includes(currentCategoryId) || (taskElement.id).includes('importantTask')) {
+                    if (event.target.innerHTML == 'Important') {
+                        if((taskElement.id).includes('importantTask') || (taskElement.id).includes(currentCategoryId)) {
+                            renderTask(taskElement);
+                        }
+                    } else if (!(taskElement.id).includes('importantTask')) {
+                        renderTask(taskElement);
+                    }
+                }
+            }
+        }
+    }
+
+    /** 
+     * This function will add and render new task
+     *  @param event keypress event for task input 
+     */
+     function addTask(event) {
+        if (event.key === 'Enter' && taskInput.value != '') {
+            let newTask = {
+                id : currentCategoryId + "task" + taskId++ ,
+                name : taskInput.value
+            }
+            taskInput.value = '';
+            taskList.push(newTask);
+            renderTask(newTask);
+        } 
+    }
+
+    /** 
+     * This function will render given task
+     * @param newTask new task object
+     */
+     function renderTask(newTask) {
+        const taskUl = document.getElementsByClassName('task-ul')[0];
+        const taskLi = document.createElement("li");
+        const taskCheckBox = document.createElement("input");
+        const taskSpan = document.createElement("span");
+        const icon = document.createElement("i");
+        taskLi.id = newTask.id + "x";
+        icon.id = newTask.id + "y";
+        taskCheckBox.setAttribute("type", "checkbox");
+        taskLi.appendChild(taskCheckBox);
+        taskSpan.appendChild(document.createTextNode(newTask.name));
+        taskSpan.id = newTask.id;
+        taskLi.appendChild(taskSpan);
+        icon.className = "far fa-star";
+        taskLi.appendChild(icon);
+        taskLi.appendChild(document.createElement("hr"));
+        taskUl.appendChild(taskLi);
+        document.getElementsByClassName("tasks")[0].appendChild(taskUl);
+    }
+
+    /**
+     * This function will render right container 
+     * @param event click event for task list
+     */
+     function renderSubTaskContainer(event) {
+        if (event.target.tagName === 'SPAN') {
+            rightContainer.style.display = 'inline-block';
+            centerContainer.style.width = "58%";
+            //centerContainer.className = "center-container-half";
+            //centerContainer.classList.add("center-container-half");
+            //centerContainer.className += "center-container-half";
+            subTaskTitle.innerHTML = event.target.innerHTML;
+            while (stepList.firstChild) {
+                stepList.removeChild(stepList.firstChild);
+            }
+            for (let subtaskElement of subTaskList) {
+                if ((subtaskElement.id).includes(subTaskTitle.innerHTML)) {
+                    renderSubTask(subtaskElement);
+                }
+            }
+        }
     }
 
     /**
      * This function will add and render new steps for a task
      * @param event keypress event for step input
      */
-    function addStep(event) {
+    function addSubTask(event) {
         if (event.key === 'Enter' && stepInput.value != '') {
             let newStep = {
                 id : subTaskTitle.innerHTML + subTaskId++,
@@ -90,131 +230,42 @@
         stepList.appendChild(subTaskList);
     }
 
-    /** 
-     * This function will render initial catogery list
-     */
-    function categoryList() {
-        for (let i = 0; i < list.length; i++) {
-            renderCategoryList(list[i]);
-        }
-    }
-    
     /**
-     * This function will render right container
+     * function to add task to important 
      * @param event click event for task list
      */
-    function renderSubTaskContainer(event) {
-        if (event.target.tagName === 'SPAN') {
-            rightContainer.style.display = 'inline-block';
-            centerContainer.style.width = "58%";
-            subTaskTitle.innerHTML = event.target.innerHTML;
-            while (stepList.firstChild) {
-                stepList.removeChild(stepList.firstChild);
-            }
-            for (let i = 0; i < subTaskList.length; i++) {
-                if ((subTaskList[i].id).includes(subTaskTitle.innerHTML)) {
-                    renderSubTask(subTaskList[i]);
+     function addToImportant(event) {
+        if ("I" === event.target.tagName) {
+            for( let currentTask of taskList) {
+                if(currentTask.id === (event.target.id).substring(0,event.target.id.length-1)) {
+                    let obj = {
+                        id: "importantTask" + taskId++,
+                        icon: 'fa fa-list',
+                        name: document.getElementById((event.target.id).substring(0,event.target.id.length-1)).innerHTML,
+                    }
+                    taskList.push(obj); 
                 }
             }
-        }
-    }
-
-    /** 
-     * This function will render given category
-     * @param value category object
-     */
-    function renderCategoryList(value) {
-        const category = document.createElement('li');
-        const icon = document.createElement('i');
-        icon.setAttribute("class", value.icon);
-        const span = document.createElement("span");
-        span.setAttribute("id", value.id);
-        span.appendChild(document.createTextNode(value.name));
-        category.appendChild(icon);
-        category.appendChild(span);
-        categoryListBlock.appendChild(category);
-    }
-
-    /** 
-     * This function will add and render new category
-     * @param event category input event
-     */
-    function addCategory(event) {
-        if (event.key == 'Enter') {
-            if (categoryInput.value == '') {
-                categoryInput.value = 'Untitled list';
-            }
-            let obj = {
-                id: "category" + cid++,
-                icon: 'fa fa-list',
-                name: categoryInput.value,
-            }
-            list.push(obj);
-            renderCategoryList(obj);
-            categoryInput.value = '';
-        }  
+            event.target.className = 'fas fa-star';
+            event.target.style.color = 'grey';
+        }     
     }
 
     /**
-     * This function will render center container
-     * @param event click event for category 
+     * function to strike out the clicked task 
+     * @param event click event for task list
      */
-    function renderTaskContainer(event) {
-        if ("SPAN" === event.target.tagName) {
-            rightContainer.style.display = 'none';
-            centerContainer.style.width = "80%";
-            const taskUl = document.getElementsByClassName('task-ul')[0];
-            categoryId = event.target.id;
-            document.getElementsByClassName("center-container")[0].style.visibility = 'visible';
-            taskTitleblock.innerHTML = document.getElementById(categoryId).innerHTML;
-            while (taskUl.firstChild) {
-                taskUl.removeChild(taskUl.firstChild);
-            }
-            for (let i = 0; i < taskList.length; i++) {
-                if ((taskList[i].id).includes(categoryId)) {
-                    renderTask(taskList[i]);
-                }
+    function strike(event) {
+        if ("INPUT" === event.target.tagName) {
+            if(event.target.checked == true) {
+            console.log(document.getElementsByClassName("step-input")[0]);
+            document.getElementsByClassName("steps-checkbox")[0].checked = true;
+            } else {
+                document.getElementsByClassName("steps-checkbox")[0].checked = false;
             }
         }
     }
 
-    /** 
-     * This function will add and render new task
-     *  @param event keypress event for task input 
-     */
-    function addTask(event) {
-        if (event.key === 'Enter' && taskInput.value != '') {
-            let newTask = {
-                id : categoryId + "task" + tid++ ,
-                name : taskInput.value
-            }
-            taskInput.value = '';
-            taskList.push(newTask);
-            renderTask(newTask);
-        } 
-    }
-
-    /** 
-     * This function will render given task
-     * @param newTask new task object
-     */
-    function renderTask(newTask) {
-        const taskUl = document.getElementsByClassName('task-ul')[0];
-        const taskLi = document.createElement("li");
-        const taskCheckBox = document.createElement("input");
-        const taskSpan = document.createElement("span");
-        const icon = document.createElement("i");
-        taskCheckBox.setAttribute("type", "checkbox");
-        taskLi.appendChild(taskCheckBox);
-        taskSpan.appendChild(document.createTextNode(newTask.name));
-        taskSpan.id = newTask.id;
-        taskLi.appendChild(taskSpan);
-        icon.className = "far fa-star";
-        taskLi.appendChild(icon);
-        taskLi.appendChild(document.createElement("hr"));
-        taskUl.appendChild(taskLi);
-        document.getElementsByClassName("tasks")[0].appendChild(taskUl);
-    }
     init();
 })();
     

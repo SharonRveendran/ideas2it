@@ -1,10 +1,4 @@
-$icon-color : #707070;
-$top-container-color : #0079d3;
-$white-color : #ffffff;
-$search-bar-color : #b2d8f6;
-$left-right-container-color : #f4f4f4;
-$line-color : #F8F8F8;
-
+@import 'colouredVarriables';
 body {
     font-family: "Arial";
     margin: 0;
@@ -17,7 +11,7 @@ body {
         font-size: 14px;
     }
     input[type="checkbox"]:checked + span {
-        text-decoration:line-through;
+        text-decoration: line-through;
     }
     hr {
         border-block-color : $line-color;
@@ -76,7 +70,7 @@ body {
         padding-left: 5px;
         width: 18%;
         background-color: $left-right-container-color;
-        #back-button {
+        .toggle-button {
             padding-top: 29px;
             font-size: 21px;
             padding-left: 10px;
@@ -84,7 +78,7 @@ body {
                 color : $top-container-color;
             }
         }
-        #category {
+        .category-block {
             font-size: 15px;
             ul {
                 line-height: 38px;
@@ -95,7 +89,7 @@ body {
                 }
             }
         }
-        #category-input {
+        .category-input-field {
             .add-catogory-button {
                 display: inline-block;
                 i {
@@ -138,7 +132,7 @@ body {
             margin-left: 20px;
             margin-top: 29px;
             height: 40px;
-            width: 131px;
+            width: 133px;
         }
         .task-block {
             padding-left: 23px;
@@ -161,8 +155,7 @@ body {
             .task-ul {
                 line-height: 31px;
                 list-style-type:none;
-                padding-top: 0px;
-                padding-left: 25px;
+                padding-top: 0px 0px 0px 25px;
                 li {
                     span {
                         margin-left: 13px;
@@ -174,7 +167,16 @@ body {
             }
         }
     }   
+    .center-container-half {
+        width: 58%;
+    }
     .right-container {
+        .file-input {
+            height: 78px;
+            margin: 10px;
+            background-color: $white-color;
+            padding: 10px 0px 10px 17px;
+        }
         display: inline-block;
         background-color: $left-right-container-color;
         width:22.5%;
@@ -182,7 +184,7 @@ body {
         i {
             padding-top: 2px;
         }
-        .right-part1 {
+        .right-head-part {
             width: 88%;
             margin-left: 10px;
             padding-right: 10px;
@@ -200,8 +202,7 @@ body {
                 }
             }
             .step-input-block {
-                padding-top: 10px;
-                padding-bottom: 15px;
+                padding: 10px 0px 15px 0px;
                 i {
                     padding-left: 5px;
                     display: inline-block;
@@ -230,63 +231,22 @@ body {
                 }
             }
         }
-        .right-part2 {
-            margin: 10px;
-            background-color: $white-color;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-left: 17px;
-            span {
-                color: $top-container-color;
+        .right-contents {
+            .content-span {
                 margin-left: 8px;
             }
-        }
-        .right-part3 {
             margin: 10px;
             background-color: $white-color;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-left: 17px;
+            padding : 15px 0px 15px 17px;
             .header {
                 span {
                     margin-left: 8px;
                     hr {
-                        margin-left: 8.5%;
-                        width: 91%;
-                        margin-top: 20px;
-                        margin-bottom: 20px;
+                        width: 97%;
+                        margin: 20px 0px  20px 8.5px;
                     }
                 }
             }
-        }
-        .right-part4 {
-            margin-right: 10px;
-            margin-left: 10px;
-            background-color:$white-color;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-left: 17px;
-            span {
-                margin-left: 10px;
-            }
-        }
-        .right-part5 {
-            margin: 10px;
-            background-color: $white-color;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-left: 17px;
-            span {
-                margin-left: 10px;
-            }
-        }
-        .right-part6 {
-            height: 78px;
-            margin: 10px;
-            background-color: $white-color;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            padding-left: 17px;
         }
     }
 }

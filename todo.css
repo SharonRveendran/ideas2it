@@ -86,39 +86,39 @@ body .left-container {
   background-color: #f4f4f4;
 }
 
-body .left-container #back-button {
+body .left-container .toggle-button {
   padding-top: 29px;
   font-size: 21px;
   padding-left: 10px;
 }
 
-body .left-container #back-button i {
+body .left-container .toggle-button i {
   color: #0079d3;
 }
 
-body .left-container #category {
+body .left-container .category-block {
   font-size: 15px;
 }
 
-body .left-container #category ul {
+body .left-container .category-block ul {
   line-height: 38px;
   list-style-type: none;
   padding-left: 10px;
 }
 
-body .left-container #category ul span {
+body .left-container .category-block ul span {
   padding-left: 15px;
 }
 
-body .left-container #category-input .add-catogory-button {
+body .left-container .category-input-field .add-catogory-button {
   display: inline-block;
 }
 
-body .left-container #category-input .add-catogory-button i {
+body .left-container .category-input-field .add-catogory-button i {
   padding-left: 10px;
 }
 
-body .left-container #category-input input {
+body .left-container .category-input-field input {
   display: inline-block;
   background-color: #f4f4f4;
   height: 10px;
@@ -157,7 +157,7 @@ body .center-container .title {
   margin-left: 20px;
   margin-top: 29px;
   height: 40px;
-  width: 131px;
+  width: 133px;
 }
 
 body .center-container .task-block {
@@ -186,8 +186,7 @@ body .center-container .tasks {
 body .center-container .tasks .task-ul {
   line-height: 31px;
   list-style-type: none;
-  padding-top: 0px;
-  padding-left: 25px;
+  padding-top: 0px 0px 0px 25px;
 }
 
 body .center-container .tasks .task-ul li span {
@@ -198,6 +197,10 @@ body .center-container .tasks .task-ul li i {
   float: right;
 }
 
+body .center-container-half {
+  width: 58%;
+}
+
 body .right-container {
   display: inline-block;
   background-color: #f4f4f4;
@@ -205,11 +208,18 @@ body .right-container {
   min-height: 739px;
 }
 
+body .right-container .file-input {
+  height: 78px;
+  margin: 10px;
+  background-color: #ffffff;
+  padding: 10px 0px 10px 17px;
+}
+
 body .right-container i {
   padding-top: 2px;
 }
 
-body .right-container .right-part1 {
+body .right-container .right-head-part {
   width: 88%;
   margin-left: 10px;
   padding-right: 10px;
@@ -220,25 +230,24 @@ body .right-container .right-part1 {
   background-color: #ffffff;
 }
 
-body .right-container .right-part1 .sub-task-header span {
+body .right-container .right-head-part .sub-task-header span {
   padding-left: 5px;
 }
 
-body .right-container .right-part1 .sub-task-header i {
+body .right-container .right-head-part .sub-task-header i {
   float: right;
 }
 
-body .right-container .right-part1 .step-input-block {
-  padding-top: 10px;
-  padding-bottom: 15px;
+body .right-container .right-head-part .step-input-block {
+  padding: 10px 0px 15px 0px;
 }
 
-body .right-container .right-part1 .step-input-block i {
+body .right-container .right-head-part .step-input-block i {
   padding-left: 5px;
   display: inline-block;
 }
 
-body .right-container .right-part1 .step-input-block input {
+body .right-container .right-head-part .step-input-block input {
   margin-left: 7px;
   display: inline-block;
   border: none;
@@ -246,88 +255,41 @@ body .right-container .right-part1 .step-input-block input {
   width: 200px;
 }
 
-body .right-container .right-part1 .step-list {
+body .right-container .right-head-part .step-list {
   margin-left: 0px;
   padding-left: 0px;
 }
 
-body .right-container .right-part1 .step-list li {
+body .right-container .right-head-part .step-list li {
   list-style-type: none;
 }
 
-body .right-container .right-part1 .step-list li span {
+body .right-container .right-head-part .step-list li span {
   margin-left: 13px;
 }
 
-body .right-container .right-part1 .step-list li i {
+body .right-container .right-head-part .step-list li i {
   padding-top: 9px;
   float: right;
   font-size: 13px;
 }
 
-body .right-container .right-part2 {
+body .right-container .right-contents {
   margin: 10px;
   background-color: #ffffff;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 17px;
+  padding: 15px 0px 15px 17px;
 }
 
-body .right-container .right-part2 span {
-  color: #0079d3;
+body .right-container .right-contents .content-span {
   margin-left: 8px;
 }
 
-body .right-container .right-part3 {
-  margin: 10px;
-  background-color: #ffffff;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 17px;
-}
-
-body .right-container .right-part3 .header span {
+body .right-container .right-contents .header span {
   margin-left: 8px;
 }
 
-body .right-container .right-part3 .header span hr {
-  margin-left: 8.5%;
-  width: 91%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-body .right-container .right-part4 {
-  margin-right: 10px;
-  margin-left: 10px;
-  background-color: #ffffff;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 17px;
-}
-
-body .right-container .right-part4 span {
-  margin-left: 10px;
-}
-
-body .right-container .right-part5 {
-  margin: 10px;
-  background-color: #ffffff;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 17px;
-}
-
-body .right-container .right-part5 span {
-  margin-left: 10px;
-}
-
-body .right-container .right-part6 {
-  height: 78px;
-  margin: 10px;
-  background-color: #ffffff;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 17px;
+body .right-container .right-contents .header span hr {
+  width: 97%;
+  margin: 20px 0px  20px 8.5px;
 }
 /*# sourceMappingURL=todo.css.map */
