@@ -1,0 +1,26 @@
+.main-container {
+    font-family:Arial, Helvetica, sans-serif ;
+    background-color: #585757;
+}
+.row {
+    img {
+        height: 716px;
+        width: 100%;
+    }
+    .header {
+        margin-top: 30px;
+        color: white;
+        font-weight: bolder;
+        font-size: 18px;
+        span{
+            margin-left: 10px;
+            color: rgb(161, 148, 148);
+        }
+    }
+    .container {
+        background-color: #bdbdbd;
+        margin-top: 80px;
+        width: 95%;
+        margin-right: 50px;
+    }
+}
