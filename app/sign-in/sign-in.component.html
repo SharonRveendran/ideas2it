@@ -4,41 +4,45 @@
     <div class="col-md-8 image-block">
         <img src="https://www.theladders.com/wp-content/uploads/time_190405.jpg" alt="">
     </div>
-    <div class="col-md-4 ">
-        <div class="header">
-            LOGIN <span>SIGNUP</span>
+    <div class="col-md-4">
+        <div class="header mt-5">
+            LOGIN <span class="ml-3">SIGNUP</span>
         </div>
-        <div class="container">
+        <div class="container  mt-5 mr-4 p-3">
             <div class="alert alert-danger" *ngIf="error">
                 <h3>{{ error }}</h3>
               </div>
             <form #form="ngForm" (ngSubmit)="onsubmit(form)">
                 <label>Email</label>
-                <input type="email" class="form-control" name="email" required email #email="ngModel" [(ngModel)]="data.email"
+                <input type="email" spellcheck="false" class="form-control" name="email" required email #email="ngModel" [(ngModel)]="data.email"
                     pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
                 <label class="text-danger" *ngIf="form.submitted&&email.errors?.required" for="email">Email is required</label>
                 <label class="text-danger" *ngIf="form.submitted&&email.errors?.pattern" for="email">Invalid Email</label>
                 <br><label>Password</label>
-                <input type="text" class="form-control" name="password" required #password="ngModel"
+                <input type="text" spellcheck="false" class="form-control" name="password" required #password="ngModel"
                     [(ngModel)]="data.password">
                 <label class="text-danger" *ngIf="form.submitted&&password.errors?.required" for="password">Pasword is
                     required</label>
                     <br>
                 <div>
-                    <button type="submit" class="btn btn-dark">Login</button>
+                    <button type="submit" class="btn btn-dark ml-5">Login</button>
+                    <button type="button" class="btn btn-dark ml-5">Register</button>
                 </div>
             </form>
+        </div>
+        <div class="mt-4 pl-2 ">
+            <a href="#" class="text-white">Forgot password ?</a>
         </div>
     </div>
  </div>
 </div>
+<!-- 
 
-
-<!-- <div class="container">
+<div class="container">
     <div class="alert alert-danger" *ngIf="error">
         <h3>{{ error }}</h3>
       </div>
-    <form #form="ngForm" (ngSubmit)="onsubmit()">
+    <form #form="ngForm" (ngSubmit)="onsubmit(form)">
         <label>Email</label>
         <input type="email" class="form-control" name="email" required email #email="ngModel" [(ngModel)]="data.email"
             pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
