@@ -3,15 +3,19 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { CategoryComponent } from './category/category.component';
 import { TodoRoutingModule } from './todo-routing.module';
+import { FormsModule } from '@angular/forms';
+import { ToDoComponent } from './todo.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    CategoryComponent
+    CategoryComponent, 
+    ToDoComponent
   ],
   imports: [
     CommonModule,
-    TodoRoutingModule
+    TodoRoutingModule,
+    FormsModule
   ]
 })
 export class TodoModule { }

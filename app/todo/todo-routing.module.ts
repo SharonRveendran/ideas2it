@@ -1,14 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { CategoryComponent } from "./category/category.component";
-import { HeaderComponent } from "./header/header.component";
+import { ToDoComponent } from "./todo.component";
 
 const routes: Routes = [
   { 
-    path: 'category', component: CategoryComponent 
-  },
-  { 
-    path: 'header', component: HeaderComponent 
+    path: 'home', component: ToDoComponent 
   }
 ];
 

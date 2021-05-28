@@ -20,7 +20,7 @@ export class SignInComponent implements OnInit {
     //if(this.signInService.isExist(this.data.email)) {
     if (this.signInService.isExist(form.value.email, form.value.password)) {
       if (form.value.email != "" && form.value.password != "") {
-      this.router.navigate(["todo/header"]);
+      this.router.navigate(["todo/home"]);
       console.log(form);
       }
     } else {

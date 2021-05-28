@@ -1,0 +1,11 @@
+.row {
+    //height: 732px;
+}.col-md-3 {
+    width: 10%;
+    background-color: #f4f4f4;
+} 
+li{
+    &:hover {
+        background-color: white;
+  }
+}

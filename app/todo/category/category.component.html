@@ -1,1 +1,15 @@
-
+<div class="row">
+    <div class="col-md-3 pt-4 pl-5 pb-4">
+        <div class="ul">
+            <div class="li mb-3" *ngFor="let category of categoryList">
+                <i class="{{category.icon}} text-secondary"></i>
+                <span id="{{category.id}}" class="pl-3">{{category.name}}</span>
+            </div>
+        </div>
+        <div>
+            <i class="fa fa-plus text-secondary "></i>
+            <input type="text" class="ml-3 pl-2 border-0" (keyup.enter)="addCategory()" 
+            [(ngModel)]="newCategoryName" value="newCategoryName" placeholder="New list" />
+        </div>
+    </div>
+</div>
