@@ -1,0 +1,14 @@
+<div class="title m-3">{{currentCategoryName}}</div>
+<ul class="pl-3">
+    <li>
+        <i class="fa fa-plus m-0 p-0"></i>
+        <input type="text" class="border-0 m-0 ml-2" placeholder="Add a task" (keyup.enter) = "addTask()"
+        [(ngModel)]="newTaskName" value="newTaskName">
+    </li>
+    <li *ngFor="let task of taskList">
+        <input type="checkbox" name="" id="">
+        <span class="ml-3" (click) = "renderSubtask(task.id, task.name) " [routerLink]="['/home']">{{task.name}}</span>
+        <i class="fa fa-star float-right mt-3"></i>
+    </li>
+</ul>
+<router-outlet></router-outlet>

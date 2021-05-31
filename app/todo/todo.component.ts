@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TodoService } from './todo.service';
 
 @Component({
   selector: 'app-todo',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./todo.component.scss']
 })
 export class ToDoComponent implements OnInit {
-
-  constructor() { }
-
+  constructor(private todoService: TodoService) { }
+  taskContainerVisibility : any;
+  subTaskContainerVisibility : any;
   ngOnInit(): void {
+    this.taskContainerVisibility = this.todoService.taskContainerVisibility;
+    this.subTaskContainerVisibility =  this.todoService.subTaskContainerVisibility;
   }
-
 }

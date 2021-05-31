@@ -1,11 +1,14 @@
-.row {
-    //height: 732px;
-}.col-md-3 {
-    width: 10%;
+ul{
+    padding-inline-start :0px;
+     li{
+        cursor: pointer;
+        list-style-type:none;
+        &:hover {
+            background-color: white;
+      }
+    }
+}
+input {
     background-color: #f4f4f4;
-} 
-li{
-    &:hover {
-        background-color: white;
-  }
+    outline: none;
 }

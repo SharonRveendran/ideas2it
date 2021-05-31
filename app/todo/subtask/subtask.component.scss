@@ -1,0 +1,14 @@
+.right-part {
+    background-color: white;
+    ul {
+        li {
+            list-style-type : none;
+            .sub-task-input {
+                outline: none;
+            }
+        }
+    }
+}
+i {
+    color: grey;
+}

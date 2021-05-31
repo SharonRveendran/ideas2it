@@ -5,12 +5,14 @@ import { CategoryComponent } from './category/category.component';
 import { TodoRoutingModule } from './todo-routing.module';
 import { FormsModule } from '@angular/forms';
 import { ToDoComponent } from './todo.component';
+import { TaskComponent } from './task/task.component';
+import { SubtaskComponent } from './subtask/subtask.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     CategoryComponent, 
-    ToDoComponent
+    ToDoComponent, TaskComponent, SubtaskComponent
   ],
   imports: [
     CommonModule,
