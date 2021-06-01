@@ -14,9 +14,10 @@
     </div>
 </div> -->
 <ul class="ml-0">
-    <li class="pb-3 ml-0" *ngFor="let category of categoryList" [routerLink]="['/home']">
+    <li class="pb-3 ml-0" *ngFor="let category of categoryList" >
         <i class="{{category.icon}} text-secondary"></i>
-        <span id="{{category.id}}" class="pl-3" (click) = "renderTask(category.id, category.name)">{{category.name}}</span>
+        <span id="{{category.id}}" class="pl-3" (click) = "renderTask(category.id, category.name)" 
+       >{{category.name}}</span>
     </li>
 </ul>
 <div>
@@ -25,3 +26,4 @@
     [(ngModel)]="newCategoryName" value="newCategoryName" placeholder="New list" />
 </div>
 <router-outlet></router-outlet>
+<!-- [routerLink]="['/home']" -->

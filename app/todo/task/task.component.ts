@@ -1,7 +1,12 @@
 import { AnimationStyleMetadata } from '@angular/animations';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { never } from 'rxjs';
+import { SubtaskComponent } from '../subtask/subtask.component';
+import { TodoModule } from '../todo.module';
 import { TodoService } from '../todo.service';
+
 
 @Component({
   selector: 'app-task',
@@ -9,15 +14,30 @@ import { TodoService } from '../todo.service';
   styleUrls: ['./task.component.scss']
 })
 export class TaskComponent implements OnInit {
-
-  constructor(private todoService : TodoService, private router:Router) { }
+  //private x !:SubtaskComponent;
+  constructor(private todoService : TodoService, private router:Router,private route : ActivatedRoute) {
+    // this.x = new SubtaskComponent();
+   }
   taskId = 1;
-  taskList : any; 
+  taskList=[{id:'rsh',name : 'eag',subTaskList :[]}]
   newTaskName ="";
   currentCategoryName :any;
   ngOnInit(): void {
+    alert(this.todoService.currentCategoryId)
     this.taskList = this.todoService.getTaskList();
-    this.currentCategoryName = this.todoService.currentCategoryName;
+    console.log(this.taskList);
+
+    this.route.queryParams.subscribe(category => {
+      // alert(category.id);
+      // alert(category.name);
+     
+      this.todoService.currentCategoryId =category.id;
+      this.todoService.currentCategoryName = category.name;
+      this.todoService.currentCategoryId =category.id;
+      this.currentCategoryName = category.name;
+      });
+
+      this.currentCategoryName = this.todoService.currentCategoryName;
   }
   addTask() {if("" !=  this.newTaskName) {
     const obj = {
@@ -28,10 +48,13 @@ export class TaskComponent implements OnInit {
     this.taskList.push(obj);
     this.newTaskName = "";}
   }
-  renderSubtask(taskId: any, taskName: any) {
-    this.todoService.currentTaskId = taskId;
+  renderSubtask(task_Id: any, taskName: any) {
+    alert(task_Id)
+    alert(taskName)
+    this.todoService.currentTaskId = task_Id;
     this.todoService.currentTask = taskName;
-    //this.router.navigate(["todo/home"]);
-    //this.todoService.subTaskContainerVisibility = true;
+    this.router.navigate(["todo/home1"]);//, {queryParams:{id:task_Id}});
+    this.todoService.subTaskContainerVisibility = true;
+    
   }
 }

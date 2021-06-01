@@ -1,3 +1,4 @@
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,17 +8,29 @@ export class TodoService {
   constructor() { }
   taskContainerVisibility = false;
   currentCategoryName:any;
-  currentCategoryId : any;
+  currentCategoryId !: string;
   currentTaskList :any;
-  currentTask :any;
+  currentTask = "temp";//:any;
   currentTaskId :any;
-  subTaskContainerVisibility = true;
+  subTaskContainerVisibility = false;
+  currentSubTaskList:{
+    id: string;
+    name: string;
+  }[] = [];
+
+
+  allSubTaskList: {
+    id: string;
+    name: string;
+  }[]=[];
+
+
   categoryList =[
     {
       id : "category1",
       icon : "fa fa-home",//sun
       name : "My Day",
-      taskList : []
+      taskList :[]
   },
   {
       id : "category2",
@@ -50,12 +63,67 @@ export class TodoService {
   addCategory(obj: { id: string; icon: string; name: string; taskList: never[]; }) {
     this.categoryList.push(obj);
   }
-  getTaskList() {
+  getTaskList() { 
+    alert(this.currentCategoryId);
     for(const obj of this.categoryList) {
       if(obj.id == this.currentCategoryId) {
         this.currentTaskList = obj.taskList;
       }
     }
     return this.currentTaskList;
+    //return [{id: "ergergh",name : 'wedjnr',subTaskList :[]}]
   }
+  getSubTaskList() { 
+// let x:any;
+
+
+    // let subTaskList: {
+    //   id: string;
+    //   name: string;
+    // }[] = [];
+
+
+
+    // for(let obj of this.categoryList) {
+    //   console.log("111111")
+    //   console.log(obj.taskList);
+    //   x = obj.taskList;
+      // for(const tslist of obj.taskList) {
+      //    console.log(tslist);
+      //    console.log("22222222")
+      //    //subTaskList = tslist.subTaskList;
+      // }
+      this.allSubTaskList.push({
+        id :"earg",
+        name :"wrg"
+      })
+      return this.allSubTaskList;
+    }
+
+
+// return [{
+//   id: 'mu id',
+//   name: 'my name'
+// }]
+// return subTaskList;
+
+
+
+
+    // console.log("cat list   ="+this.categoryList+"\n currnt tasklist   ="+ 
+    // this.currentTaskList+"\ncurrent category id"+this.currentCategoryId);
+    // this.currentTaskList = this.getTaskList() ;
+    // //this.getTaskList()
+    // for(const obj of this.categoryList) {
+    //   if(obj.id == 'category1') {
+    //     this.currentTaskList = obj.taskList;
+    //   }
+    // }
+    // for(const taskList of this.currentTaskList) {
+    //   if(this.currentTask == taskList.name) {
+    //     this.currentSubTaskList = taskList.subTaskList;
+    //   }
+    // }
+    // return this.currentSubTaskList;
+  
 }
