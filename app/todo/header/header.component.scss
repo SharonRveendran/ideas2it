@@ -1,9 +1,25 @@
 nav {
     height: 48px;
 }
+i {
+    color: rgb(168, 182, 214);
+}
 input {
     height: 32px;
     width: 380px;
     background-color: rgb(187, 216, 248);
     border: none;
+    outline: none;
+    &:hover {
+        background-color: white;
+    }
 }
+.user-icon {
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    padding: 5px;
+    border-style: solid;
+    border-width: thin;
+    border-radius: 50%;
+  }

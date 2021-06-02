@@ -9,15 +9,18 @@ import { SignInService } from "./sign-in.service"
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-
   constructor(private signInService: SignInService, private router: Router) { }
   error: string = "";
   data = {
     email: "",
     password: ""
   }
+
+  /**
+   * click method for form submit
+   * @param form  ng formm object
+   */
   onsubmit(form: NgForm) {
-    //if(this.signInService.isExist(this.data.email)) {
     if (this.signInService.isExist(form.value.email, form.value.password)) {
       if (form.value.email != "" && form.value.password != "") {
       this.router.navigate(["home"]);
@@ -25,11 +28,12 @@ export class SignInComponent implements OnInit {
       }
     } else {
       if (form.value.email != "" && form.value.password != "") {
-        this.error = "Create new account...!!!";
+        this.error = "Email id is incorrect...!!!";
         form.reset();
       }
     }
   }
+  
   ngOnInit(): void {
   }
 

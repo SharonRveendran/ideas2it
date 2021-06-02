@@ -8,8 +8,7 @@
     <li *ngFor="let task of taskList">
         <input type="checkbox" name="" id="">
         <span class="ml-3" (click) = "renderSubtask(task.id, task.name) ">{{task.name}}</span>
-        <i class="fa fa-star float-right mt-3"></i>
+        <i class="far fa-star float-right mt-3"></i>
     </li>
 </ul>
 <router-outlet></router-outlet>
-<!-- [routerLink]="['todo/home1']" -->

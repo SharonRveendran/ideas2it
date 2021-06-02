@@ -1,4 +1,3 @@
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,123 +6,151 @@ import { Injectable } from '@angular/core';
 export class TodoService {
   constructor() { }
   taskContainerVisibility = false;
-  currentCategoryName:any;
+  currentCategoryName: any;
   currentCategoryId !: string;
-  currentTaskList :any;
-  currentTask = "temp";//:any;
-  currentTaskId :any;
+  currentTaskList: any;
+  currentTask: any;
+  currentTaskId: any;
   subTaskContainerVisibility = false;
-  currentSubTaskList:{
+  currentSubTaskList: {
     id: string;
     name: string;
   }[] = [];
+  categoryList: Array<{
+    id: string; icon: string; name: string;
+    taskList: Array<{ id: string; name: string; subTaskList: Array<{ id: string; name: string; }>; }>;
+  }> = [
+      {
+        id: "category1",
+        icon: "fas fa-sun",
+        name: "My Day",
+        taskList: []
+      },
+      {
+        id: "category2",
+        icon: "far fa-star",
+        name: "Important",
+        taskList: []
+      },
+      {
+        id: "category3",
+        icon: "fa fa-calendar",
+        name: 'Planned',
+        taskList: []
+      },
+      {
+        id: "category4",
+        icon: "fa fa-user",
+        name: "Assign to you",
+        taskList: []
+      },
+      {
+        id: "category5",
+        icon: "fa fa-home",
+        name: "Task",
+        taskList: []
+      }
+    ]
 
-
-  allSubTaskList: {
-    id: string;
-    name: string;
-  }[]=[];
-
-
-  categoryList =[
-    {
-      id : "category1",
-      icon : "fa fa-home",//sun
-      name : "My Day",
-      taskList :[]
-  },
-  {
-      id : "category2",
-      icon : "fa fa-star",
-      name : "Important",
-      taskList : []
-  },
-  {
-      id : "category3",
-      icon : "fa fa-calendar",
-      name : 'Planned',
-      taskList : []
-  },
-  {
-      id : "category4",
-      icon : "fa fa-user",
-      name : "Assign to you",
-      taskList : []
-  },
-  {
-      id : "category5",
-      icon : "fa fa-home",
-      name : "Task",
-      taskList : []
-  }
-  ]
+  /**
+   * Methode to return category list
+   * @returns category list
+   */
   getCategoryList() {
     return this.categoryList;
   }
-  addCategory(obj: { id: string; icon: string; name: string; taskList: never[]; }) {
-    this.categoryList.push(obj);
+
+  /**
+   * Methode to set current category id
+   * @param categoryId category id
+   */
+  setCategoryId(categoryId: string) {
+    this.currentCategoryId = categoryId;
   }
-  getTaskList() { 
-    alert(this.currentCategoryId);
-    for(const obj of this.categoryList) {
-      if(obj.id == this.currentCategoryId) {
+
+  /**
+   * Methode to get current category name
+   * @param categoryId  current category id
+   * @returns current category name
+   */
+  getCategoryName(categoryId: string) {
+    for (let category of this.categoryList) {
+      if (category.id == categoryId) {
+        this.currentCategoryName = category.name;
+      }
+    }
+    return this.currentCategoryName;
+  }
+  
+  /**
+   * Method to add category
+   * @param newCategory new category object
+   */
+  addCategory(newCategory: { id: string; icon: string; name: string; taskList: never[]; }) {
+    this.categoryList.push(newCategory);
+  }
+
+  /**
+   * Method to add task
+   * @param newTask new task object 
+   */
+  addTask(newTask: any) {
+    for (const obj of this.categoryList) {
+      if (obj.id == this.currentCategoryId) {
+        obj.taskList.push(newTask);
+      }
+    }
+  }
+
+  /**
+   * Method to add sub task
+   * @param newSubTask new task object
+   * @param task_id  task id
+   * @param category_id category id
+   */
+  addSubTask(newSubTask: { id: any; name: any; }, task_id: string, category_id: string) {
+    for (const obj of this.categoryList) {
+      if (obj.id == category_id) {
+        for (let task of obj.taskList) {
+          if (task.id == task_id) {
+            task.subTaskList.push(newSubTask);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Method to get current task ist
+   * @returns current task list
+   */
+  getTaskList() {
+    for (const obj of this.categoryList) {
+      if (obj.id == this.currentCategoryId) {
         this.currentTaskList = obj.taskList;
       }
     }
+    console.log("inside getTaskLIST");
+    console.log(this.currentTaskList)
     return this.currentTaskList;
-    //return [{id: "ergergh",name : 'wedjnr',subTaskList :[]}]
   }
-  getSubTaskList() { 
-// let x:any;
 
-
-    // let subTaskList: {
-    //   id: string;
-    //   name: string;
-    // }[] = [];
-
-
-
-    // for(let obj of this.categoryList) {
-    //   console.log("111111")
-    //   console.log(obj.taskList);
-    //   x = obj.taskList;
-      // for(const tslist of obj.taskList) {
-      //    console.log(tslist);
-      //    console.log("22222222")
-      //    //subTaskList = tslist.subTaskList;
-      // }
-      this.allSubTaskList.push({
-        id :"earg",
-        name :"wrg"
-      })
-      return this.allSubTaskList;
+  /**
+   * 
+   * @param task_id task id
+   * @param category_id category id
+   * @returns current subtask list
+   */
+  getSubTaskList(task_id: string, category_id: string) {
+    for (let i = 0; i < this.categoryList.length; i++) {
+      if (category_id == this.categoryList[i].id) {
+        for (let j = 0; j < this.categoryList[i].taskList.length; j++) {
+          if (task_id == this.categoryList[i].taskList[j].id) {
+            this.currentSubTaskList = this.categoryList[i].taskList[j].subTaskList;
+          }
+        }
+      }
     }
-
-
-// return [{
-//   id: 'mu id',
-//   name: 'my name'
-// }]
-// return subTaskList;
-
-
-
-
-    // console.log("cat list   ="+this.categoryList+"\n currnt tasklist   ="+ 
-    // this.currentTaskList+"\ncurrent category id"+this.currentCategoryId);
-    // this.currentTaskList = this.getTaskList() ;
-    // //this.getTaskList()
-    // for(const obj of this.categoryList) {
-    //   if(obj.id == 'category1') {
-    //     this.currentTaskList = obj.taskList;
-    //   }
-    // }
-    // for(const taskList of this.currentTaskList) {
-    //   if(this.currentTask == taskList.name) {
-    //     this.currentSubTaskList = taskList.subTaskList;
-    //   }
-    // }
-    // return this.currentSubTaskList;
-  
+    return this.currentSubTaskList;
+  }
 }

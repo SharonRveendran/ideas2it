@@ -35,25 +35,3 @@
     </div>
  </div>
 </div>
-<!-- 
-
-<div class="container">
-    <div class="alert alert-danger" *ngIf="error">
-        <h3>{{ error }}</h3>
-      </div>
-    <form #form="ngForm" (ngSubmit)="onsubmit(form)">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" required email #email="ngModel" [(ngModel)]="data.email"
-            pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">
-        <label class="text-danger" *ngIf="form.submitted&&email.errors?.required" for="email">Email is required</label>
-        <label class="text-danger" *ngIf="form.submitted&&email.errors?.pattern" for="email">Invalid Email</label>
-        <br><label>Password</label>
-        <input type="text" class="form-control" name="password" required #password="ngModel"
-            [(ngModel)]="data.password">
-        <label class="text-danger" *ngIf="form.submitted&&password.errors?.required" for="password">Pasword is
-            required</label>
-        <div>
-            <button type="submit" class="btn btn-primary">submit</button>
-        </div>
-    </form>
-</div> -->

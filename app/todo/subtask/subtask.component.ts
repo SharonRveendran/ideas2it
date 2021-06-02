@@ -7,33 +7,40 @@ import { TodoService } from '../todo.service';
   templateUrl: './subtask.component.html',
   styleUrls: ['./subtask.component.scss']
 })
+
 export class SubtaskComponent implements OnInit {
   subTaskId = 1;
-  currentTaskName : any;
-  currentSubTaskName :any;
+  currentTaskId: any
+  currentTaskName: any;
+  currentSubTaskName: any;
+  currentCategoryId: any
   subTaskList: {
     id: string;
     name: string;
   }[] = [];
-  private todoService !:TodoService;
-  constructor(private route: ActivatedRoute) { 
-    this.todoService = new TodoService();
+
+  constructor(private route: ActivatedRoute, private todoService: TodoService) {
   }
+
   ngOnInit(): void {
     this.currentTaskName = this.todoService.currentTask;
-    this.subTaskList = this.todoService.getSubTaskList();
-    // alert("sub task on init");
-    // this.route.queryParams.subscribe(data => {
-    //   this.subTaskList = this.todoService.getSubTaskList(data.id);
-    //    });
+    this.route.queryParams.subscribe(data => {
+      this.currentTaskName = data.taskName;
+      this.subTaskList = this.todoService.getSubTaskList(data.task_id, data.id);
+      this.currentTaskId = data.task_id;
+      this.currentCategoryId = data.id
+    });
   }
+
+  /**
+   * Method to add subtask
+   */
   addSubTask() {
     const obj = {
       id: this.todoService.currentTaskId + this.subTaskId++,
       name: this.currentSubTaskName,
     }
-    this.subTaskList.push(obj);//this.todoService.allSubTaskList.push(obj);
     this.currentSubTaskName = '';
+    this.todoService.addSubTask(obj, this.currentTaskId, this.currentCategoryId);
   }
-  
 }
