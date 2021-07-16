@@ -26,7 +26,7 @@ import com.ideas2it.exceptions.EmployeeManagementException;
 import com.ideas2it.loggers.EmployeeManagementLogger;
 
 /**
- * Employee controller servlet class
+ * Employee control
  * @author Sharon V
  * @created 21-04-2021
  */
